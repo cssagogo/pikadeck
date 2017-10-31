@@ -1,0 +1,19 @@
+{
+  "name": "pikadeck",
+  "version": "00.00.01",
+  "description": "A Pokemon deck builder application",
+  "main": "index.html",
+  "author": "Adam Youngers <adamyoungers@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.1.0"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta.2",
+    "jquery": "^3.2.1",
+    "popper.js": "^1.12.6"
+  },
+  "private": true
+}
