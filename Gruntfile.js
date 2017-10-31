@@ -25,9 +25,7 @@ module.exports = function (grunt) {
                     jQuery: true
                 }
             },
-            test: {
-                files: ['src/js/**/*.js']
-            }
+            test: ['src/js/**/*.js']
         },
         clean: {
             assets: ['app/assets/**/*'],
