@@ -1,3 +1,10 @@
+# App Specific
+/app/assets
+
+# PHP Storm Files
+.idea
+
+
 # Logs
 logs
 *.log

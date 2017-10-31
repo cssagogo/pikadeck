@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mocha Tests</title>
+    <link rel="stylesheet" href="../lib/mocha.css" />
+</head>
+<body>
+
+<!-- SITE FILES -->
+<!------------------------------------------->
+<script type="text/javascript" src="../../../../dist/js/analytics/plugins.js"></script>
+<script type="text/javascript" src="../../../../dist/js/analytics/global.js"></script>
+
+<!-- TEST SETUP -->
+<!------------------------------------------->
+<script type="text/javascript" src="../lib/mocha.js"></script>
+<script type="text/javascript" src="../lib/chai.js"></script>
+<script type="text/javascript">
+    mocha.setup('bdd');
+    mocha.reporter('html');
+    var expect = chai.expect;
+    var assert = chai.assert;
+</script>
+<!-- Note: *.test.js files are concatenated into this file -->
+<script type="text/javascript" src="index.js"></script>
+<div id="mocha"></div>
+<script type="text/javascript">
+    // Only tests run in real browser, injected script run if options.run == true
+    if (navigator.userAgent.indexOf('PhantomJS') < 0) {
+        mocha.run();
+    }
+</script>
+
+</body>
+</html>
+
