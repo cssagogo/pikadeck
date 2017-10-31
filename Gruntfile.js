@@ -32,7 +32,13 @@ module.exports = function (grunt) {
             js:     ['app/assets/js/**/*'],
             css:    ['app/assets/css/**/*'],
             img:    ['app/assets/img/**/*'],
-            test:   ['test/index.js', 'test/index.js.map']
+            test:   [
+                'test/mocha.js',
+                'test/mocha.css',
+                'test/chai.js',
+                'test/index.js',
+                'test/index.js.map'
+            ]
         },
         concat: {
             options: {
@@ -52,6 +58,29 @@ module.exports = function (grunt) {
                     'src/js/**/*.test.js'
                 ],
                 dest: 'test/index.js'
+            }
+        },
+        copy: {
+            mocha: {
+                files: [{
+                    expand: true,
+                    cwd: 'node_modules/mocha/',
+                    src: [
+                        'mocha.js',
+                        'mocha.css'
+                    ],
+                    dest: 'test/'
+                }]
+            },
+            chai: {
+                files: [{
+                    expand: true,
+                    cwd: 'node_modules/chai/',
+                    src: [
+                        'chai.js'
+                    ],
+                    dest: 'test/'
+                }]
             }
         },
         sass: {
@@ -128,7 +157,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
     //grunt.loadNpmTasks('grunt-sass-lint');
-    //grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-mocha');
@@ -144,6 +173,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test_js', [
         'clean:test',
+        'copy:mocha',
+        'copy:chai',
         'concat:test',
         'mocha:test'
     ]);

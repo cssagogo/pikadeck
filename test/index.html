@@ -3,19 +3,18 @@
 <head>
     <meta charset="utf-8">
     <title>Mocha Tests</title>
-    <link rel="stylesheet" href="../lib/mocha.css" />
+    <link rel="stylesheet" href="mocha.css" />
 </head>
 <body>
 
 <!-- SITE FILES -->
 <!------------------------------------------->
-<script type="text/javascript" src="../../../../dist/js/analytics/plugins.js"></script>
-<script type="text/javascript" src="../../../../dist/js/analytics/global.js"></script>
+<script type="text/javascript" src="../app/assets/js/global.js"></script>
 
 <!-- TEST SETUP -->
 <!------------------------------------------->
-<script type="text/javascript" src="../lib/mocha.js"></script>
-<script type="text/javascript" src="../lib/chai.js"></script>
+<script type="text/javascript" src="mocha.js"></script>
+<script type="text/javascript" src="chai.js"></script>
 <script type="text/javascript">
     mocha.setup('bdd');
     mocha.reporter('html');

@@ -1,9 +1,14 @@
 # App Specific
 /app/assets
+/test/mocha.js
+/test/mocha.css
+/test/chai.js
+/test/index.js
+/test/index.js.map
+/test/index.out
 
 # PHP Storm Files
 .idea
-
 
 # Logs
 logs
