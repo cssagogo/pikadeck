@@ -14,7 +14,9 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^3.1.0",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-express": "^1.4.1",
     "grunt-mocha": "^1.0.4",
+    "grunt-parallel": "^0.5.1",
     "grunt-sass": "^2.0.0",
     "grunt-sass-lint": "^0.2.4",
     "mocha": "^4.0.1"

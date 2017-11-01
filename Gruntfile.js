@@ -83,6 +83,16 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        express: {
+            server: {
+                options: {
+                    port: 9000,
+                    bases: 'app',
+                    hostname: 'localhost',
+                    livereload: true // if you just specify `true`, default port `35729` will be used
+                }
+            }
+        },
         sass: {
             dev: {
                 options: {
@@ -130,6 +140,9 @@ module.exports = function (grunt) {
             }
         },
         watch: {
+            options: {
+                livereload: true
+            },
             js: {
                 files: ['src/js/**/*.js', '!src/js/**/*.test.js'],
                 tasks: ['build_js']
@@ -155,12 +168,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-sass');
     //grunt.loadNpmTasks('grunt-sass-lint');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-express');
     grunt.loadNpmTasks('grunt-mocha');
+    grunt.loadNpmTasks('grunt-sass');
+
 
     grunt.registerTask('build_js', [
         'clean:js',
@@ -189,9 +204,9 @@ module.exports = function (grunt) {
         'build_js',
         'lint_js',
         //'test_js',
-        'build_css'
-        //'lint_css',
-        //'copy_img'
+        'build_css',
+        'express',
+        'express-keepalive'
     ]);
 
     grunt.registerTask('production', [

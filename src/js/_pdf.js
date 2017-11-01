@@ -8,5 +8,5 @@ unitTest.pdf = function () {
         init: function () {
             return 10;
         }
-    }
+    };
 };
