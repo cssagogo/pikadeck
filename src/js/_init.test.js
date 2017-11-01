@@ -11,7 +11,7 @@
 
         it("Sample Unit test 1", function () {
 
-            assert.equal(path.init(), '6');
+            assert.equal(path.init(), '5');
 
         });
 

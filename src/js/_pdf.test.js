@@ -1,7 +1,7 @@
 /**
  * Created by adamyoungers on 10/31/17.
  */
-alert('PDF Test Loaded');
+//alert('PDF Test Loaded');
 
 (function () {
     "use strict";
@@ -12,7 +12,7 @@ alert('PDF Test Loaded');
 
         it("Sample Unit test 2", function () {
 
-            assert.equal(path.init(), '6');
+            assert.equal(path.init(), '10');
 
         });
 

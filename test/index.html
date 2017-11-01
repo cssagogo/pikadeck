@@ -3,18 +3,33 @@
 <head>
     <meta charset="utf-8">
     <title>Mocha Tests</title>
-    <link rel="stylesheet" href="mocha.css" />
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
 </head>
 <body>
 
 <!-- SITE FILES -->
 <!------------------------------------------->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js" integrity="sha256-OphUEk5ASNjOp2E8I46x+Gb0d7K+2CNKX4YbY9skKts=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/store.js/1.3.20/store.min.js" integrity="sha256-0jgHNEQo7sIScbcI/Pc5GYJ+VosKM1mJ+fI0iuQ1a9E=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js" integrity="sha256-YHd/E8OX5o5GcqyHHas3xH3i7aP8z8KmMrL3WLMJfIY=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/3.0.0/lazysizes.min.js" integrity="sha256-3aNzF0qAl+dcYi1jq/8xNvw6wR5tzgo4AOAacEleQVk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js" integrity="sha256-0JaDbGZRXlzkFbV8Xi8ZhH/zZ6QQM0Y3dCkYZ7JYq34=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha256-DHF4zGyjT7GOMPBwpeehwoey18z8uiz98G4PRu2lV0A=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+
+
 <script type="text/javascript" src="../app/assets/js/global.js"></script>
 
 <!-- TEST SETUP -->
 <!------------------------------------------->
-<script type="text/javascript" src="mocha.js"></script>
-<script type="text/javascript" src="chai.js"></script>
+<script type="text/javascript" src="../node_modules/mocha/mocha.js"></script>
+<script type="text/javascript" src="../node_modules/chai/chai.js"></script>
 <script type="text/javascript">
     mocha.setup('bdd');
     mocha.reporter('html');
@@ -24,7 +39,9 @@
 <!-- Note: *.test.js files are concatenated into this file -->
 <script type="text/javascript" src="index.js"></script>
 <div id="mocha"></div>
-<script type="text/javascript">
+
+<!-- run mocha after all test are loaded -->
+<script type="text/javascript" charset="utf-8">
     // Only tests run in real browser, injected script run if options.run == true
     if (navigator.userAgent.indexOf('PhantomJS') < 0) {
         mocha.run();

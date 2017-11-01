@@ -1,17 +1,21 @@
 /**
  * Created by adamyoungers on 10/31/17.
  */
+
 module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         mocha: {
             test: {
-                urls: ['test/index.html'],
-                dest: 'test/index.out',
-                run: true,
-                log: true,
-                reporter: 'Spec',
+                src: ['test/index.html'],
+                options: {
+                    urls: [ 'http://localhost:8888/test/index.html' ],
+                    growlOnSuccess: false,
+                    log: true,
+                    run: true,
+                    logErrors: true,
+                },
                 timeout: 10000
             }
         },
@@ -60,6 +64,18 @@ module.exports = function (grunt) {
                 dest: 'test/index.js'
             }
         },
+        connect: {
+           test: {
+               server: {
+                   options: {
+                       port: 8000,
+                       base: '.',
+                   },
+               },
+           }
+        },
+
+
         copy: {
             mocha: {
                 files: [{
@@ -81,16 +97,6 @@ module.exports = function (grunt) {
                     ],
                     dest: 'test/'
                 }]
-            }
-        },
-        express: {
-            server: {
-                options: {
-                    port: 9000,
-                    bases: 'app',
-                    hostname: 'localhost',
-                    livereload: true // if you just specify `true`, default port `35729` will be used
-                }
             }
         },
         sass: {
@@ -168,11 +174,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    //grunt.loadNpmTasks('grunt-sass-lint');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-sass-lint');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-express');
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-sass');
 
@@ -191,6 +197,7 @@ module.exports = function (grunt) {
         'copy:mocha',
         'copy:chai',
         'concat:test',
+        'connect:test',
         'mocha:test'
     ]);
 
@@ -199,14 +206,19 @@ module.exports = function (grunt) {
         'sass:dev'
     ]);
 
+
+
+
     grunt.registerTask('default', [
         'clean',
         'build_js',
         'lint_js',
         //'test_js',
+        // 'lint_scss',
         'build_css',
         'express',
-        'express-keepalive'
+        'express-keepalive',
+        'watch'
     ]);
 
     grunt.registerTask('production', [
