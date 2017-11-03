@@ -6,6 +6,7 @@
   "author": "Adam Youngers <adamyoungers@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "autoprefixer": "^7.1.6",
     "chai": "^4.1.2",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
@@ -17,8 +18,9 @@
     "grunt-contrib-uglify": "^3.1.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha": "^1.0.0",
+    "grunt-postcss": "^0.9.0",
     "grunt-scss-lint": "^0.5.0",
-    "mocha": "^2.4.5"
+    "mocha": "^3.5.3"
   },
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",

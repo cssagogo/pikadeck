@@ -7,7 +7,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         mocha: {
-            test2: {
+            test: {
                 options: {
                     urls: ['test/index.html'],
                     dest: 'test/index.out',
@@ -135,6 +135,17 @@ module.exports = function (grunt) {
             },
             src: ['src/scss/**/*.scss']
         },
+        postcss: {
+            options: {
+                map: true,
+                processors: [
+                    require('autoprefixer')({browsers: 'last 2 versions'})
+                ]
+            },
+            dist: {
+                src: 'app/assets/css/global.css'
+            }
+        },
 
         uglify: {
             js: {
@@ -188,7 +199,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-mocha');
+    grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-scss-lint');
+
 
 
     grunt.registerTask('build_js', [
@@ -207,13 +220,13 @@ module.exports = function (grunt) {
         'copy:mocha',
         'copy:chai',
         'concat:test',
-        //'connect:test',
-        'mocha:test2'
+        'mocha:test'
     ]);
 
     grunt.registerTask('build_css', [
         'clean:css',
-        'sass:dev'
+        'sass:dev',
+        'postcss'
     ]);
 
     grunt.registerTask('lint_scss', [
@@ -227,7 +240,7 @@ module.exports = function (grunt) {
         'build_js',
         'lint_js',
         'test_js',
-        // 'lint_scss',
+        'lint_scss',
         'build_css',
         //'connect',
         //'watch'
@@ -236,7 +249,8 @@ module.exports = function (grunt) {
     grunt.registerTask('production', [
         'default',
         'uglify:js',
-        'sass:prod'
+        'sass:prod',
+        'postcss'
     ]);
 
 };
