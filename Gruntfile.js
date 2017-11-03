@@ -63,16 +63,19 @@ module.exports = function (grunt) {
                 dest: 'test/index.js'
             }
         },
-        // connect: {
-        //    test: {
-        //        server: {
-        //            options: {
-        //                port: 8000,
-        //                base: '.',
-        //            },
-        //        },
-        //    }
-        // },
+        connect: {
+           server: {
+               options: {
+                   port: 9000,
+                   base: 'app',
+                   keepalive: true,
+                   livereload: true,
+                   open: {
+                       target: 'http://localhost:9000'
+                   }
+               }
+           }
+        },
 
 
         copy: {
@@ -193,7 +196,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    //grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -201,8 +204,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-scss-lint');
-
-
 
     grunt.registerTask('build_js', [
         'clean:js',
@@ -212,8 +213,6 @@ module.exports = function (grunt) {
     grunt.registerTask('lint_js', [
         'jshint:test'
     ]);
-
-
 
     grunt.registerTask('test_js', [
         'clean:test',
@@ -233,8 +232,6 @@ module.exports = function (grunt) {
         'scsslint'
     ]);
 
-
-
     grunt.registerTask('default', [
         'clean',
         'build_js',
@@ -242,11 +239,17 @@ module.exports = function (grunt) {
         'test_js',
         'lint_scss',
         'build_css',
-        //'connect',
-        //'watch'
+        'connect',
+        'watch'
     ]);
 
-    grunt.registerTask('production', [
+    grunt.registerTask('dev', [
+        'default',
+        'connect',
+        'watch'
+    ]);
+
+    grunt.registerTask('prod', [
         'default',
         'uglify:js',
         'sass:prod',
