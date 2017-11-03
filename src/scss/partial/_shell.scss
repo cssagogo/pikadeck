@@ -1,14 +1,14 @@
+$boom: #ffa500;
+
 body {
-  background: orange !important;
+  background: $boom;
 }
 
 .cat.dog {
-  border:0;
+  border: 0;
 }
+
 .mouse {
-  font-weight: bold
+  font-weight: bold;
 }
 
-.mouse2 {
-
-}

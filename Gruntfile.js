@@ -63,16 +63,16 @@ module.exports = function (grunt) {
                 dest: 'test/index.js'
             }
         },
-        connect: {
-           test: {
-               server: {
-                   options: {
-                       port: 8000,
-                       base: '.',
-                   },
-               },
-           }
-        },
+        // connect: {
+        //    test: {
+        //        server: {
+        //            options: {
+        //                port: 8000,
+        //                base: '.',
+        //            },
+        //        },
+        //    }
+        // },
 
 
         copy: {
@@ -101,8 +101,8 @@ module.exports = function (grunt) {
         sass: {
             dev: {
                 options: {
-                    outputStyle: 'expanded',
-                    sourceMap: true,
+                    style: 'expanded',
+                    sourcemap: 'auto',
                     precision: 5
                 },
                 files: [{
@@ -115,7 +115,8 @@ module.exports = function (grunt) {
             },
             prod: {
                 options: {
-                    outputStyle: 'compressed',
+                    style: 'compressed',
+                    sourcemap: 'auto',
                     precision: 5
                 },
                 files: [{
@@ -127,6 +128,14 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        scsslint: {
+            options: {
+                colorizeOutput: true,
+                config: null
+            },
+            src: ['src/scss/**/*.scss']
+        },
+
         uglify: {
             js: {
                 options: {
@@ -173,13 +182,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-sass-lint');
+    //grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-mocha');
-    grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-scss-lint');
 
 
     grunt.registerTask('build_js', [
@@ -190,6 +199,8 @@ module.exports = function (grunt) {
     grunt.registerTask('lint_js', [
         'jshint:test'
     ]);
+
+
 
     grunt.registerTask('test_js', [
         'clean:test',
@@ -205,6 +216,9 @@ module.exports = function (grunt) {
         'sass:dev'
     ]);
 
+    grunt.registerTask('lint_scss', [
+        'scsslint'
+    ]);
 
 
 
@@ -212,11 +226,11 @@ module.exports = function (grunt) {
         'clean',
         'build_js',
         'lint_js',
-        //'test_js',
+        'test_js',
         // 'lint_scss',
         'build_css',
-        'connect',
-        'watch'
+        //'connect',
+        //'watch'
     ]);
 
     grunt.registerTask('production', [
