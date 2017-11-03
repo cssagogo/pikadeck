@@ -7,16 +7,15 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         mocha: {
-            test: {
-                src: ['test/index.html'],
+            test2: {
                 options: {
-                    urls: [ 'http://localhost:8888/test/index.html' ],
-                    growlOnSuccess: false,
-                    log: true,
+                    urls: ['test/index.html'],
+                    dest: 'test/index.out',
                     run: true,
-                    logErrors: true,
-                },
-                timeout: 10000
+                    log: true,
+                    reporter: 'Spec',
+                    timeout: 10000
+                }
             }
         },
         jshint: {
@@ -197,8 +196,8 @@ module.exports = function (grunt) {
         'copy:mocha',
         'copy:chai',
         'concat:test',
-        'connect:test',
-        'mocha:test'
+        //'connect:test',
+        'mocha:test2'
     ]);
 
     grunt.registerTask('build_css', [
@@ -216,8 +215,7 @@ module.exports = function (grunt) {
         //'test_js',
         // 'lint_scss',
         'build_css',
-        'express',
-        'express-keepalive',
+        'connect',
         'watch'
     ]);
 
