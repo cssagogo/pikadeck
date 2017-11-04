@@ -6,30 +6,6 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        mocha: {
-            test: {
-                options: {
-                    urls: ['test/index.html'],
-                    dest: 'test/index.out',
-                    run: true,
-                    log: true,
-                    reporter: 'Spec',
-                    timeout: 10000
-                }
-            }
-        },
-        jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                eqnull: true,
-                browser: true,
-                globals: {
-                    jQuery: true
-                }
-            },
-            test: ['src/js/**/*.js']
-        },
         clean: {
             assets: ['app/assets/**/*'],
             js:     ['app/assets/js/**/*'],
@@ -64,16 +40,16 @@ module.exports = function (grunt) {
             }
         },
         connect: {
-           server: {
-               options: {
-                   port: 9000,
-                   base: 'app',
-                   livereload: true,
-                   open: {
-                       target: 'http://localhost:9000'
-                   }
-               }
-           }
+            server: {
+                options: {
+                    port: 9000,
+                    base: 'app',
+                    livereload: true,
+                    open: {
+                        target: 'http://localhost:9000'
+                    }
+                }
+            }
         },
         copy: {
             mocha: {
@@ -96,6 +72,51 @@ module.exports = function (grunt) {
                     ],
                     dest: 'test/'
                 }]
+            }
+        },
+        imagemin: {
+            smush: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/img/',
+                    src: ['**/*.{png,jpg,gif,svg}'],
+                    dest: 'app/assets/img'
+                }]
+            }
+        },
+        jshint: {
+            options: {
+                curly: true,
+                eqeqeq: true,
+                eqnull: true,
+                browser: true,
+                globals: {
+                    jQuery: true
+                }
+            },
+            test: ['src/js/**/*.js']
+        },
+        mocha: {
+            test: {
+                options: {
+                    urls: ['test/index.html'],
+                    dest: 'test/index.out',
+                    run: true,
+                    log: true,
+                    reporter: 'Spec',
+                    timeout: 10000
+                }
+            }
+        },
+        postcss: {
+            options: {
+                map: true,
+                processors: [
+                    require('autoprefixer')({browsers: 'last 2 versions'})
+                ]
+            },
+            dist: {
+                src: 'app/assets/css/global.css'
             }
         },
         sass: {
@@ -135,17 +156,6 @@ module.exports = function (grunt) {
             },
             src: ['src/scss/**/*.scss']
         },
-        postcss: {
-            options: {
-                map: true,
-                processors: [
-                    require('autoprefixer')({browsers: 'last 2 versions'})
-                ]
-            },
-            dist: {
-                src: 'app/assets/css/global.css'
-            }
-        },
         uglify: {
             js: {
                 options: {
@@ -166,6 +176,10 @@ module.exports = function (grunt) {
         watch: {
             options: {
                 livereload: true
+            },
+            img: {
+                files: ['src/img/**/*.{png,jpg,gif,svg}'],
+                tasks: ['imagemin:smush']
             },
             js: {
                 files: ['src/js/**/*.js', '!src/js/**/*.test.js'],
@@ -193,16 +207,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-scss-lint');
-
-    grunt.registerTask('lint_js', [
-        'jshint:test'
-    ]);
 
     grunt.registerTask('test_js', [
         'clean:test',
@@ -212,22 +223,23 @@ module.exports = function (grunt) {
         'mocha:test'
     ]);
 
-    grunt.registerTask('lint_scss', [
-        'scsslint'
-    ]);
-
     grunt.registerTask('build_js', [
         'clean:js',
         'concat:js',
-        'lint_js',
+        'jshint:test',
         'test_js'
     ]);
 
     grunt.registerTask('build_css', [
-        'lint_scss',
+        'scsslint',
         'clean:css',
         'sass:dev',
         'postcss'
+    ]);
+
+    grunt.registerTask('build_img', [
+        'clean:img',
+        'imagemin:smush'
     ]);
 
     grunt.registerTask('development', [
@@ -240,11 +252,13 @@ module.exports = function (grunt) {
         'development',
         'uglify:js',
         'sass:prod',
-        'postcss'
+        'postcss',
+        'build_img'
     ]);
 
     grunt.registerTask('default', [
         'development',
+        'build_img',
         'connect',
         'watch'
     ]);
