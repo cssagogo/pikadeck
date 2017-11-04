@@ -68,7 +68,6 @@ module.exports = function (grunt) {
                options: {
                    port: 9000,
                    base: 'app',
-                   keepalive: true,
                    livereload: true,
                    open: {
                        target: 'http://localhost:9000'
@@ -76,8 +75,6 @@ module.exports = function (grunt) {
                }
            }
         },
-
-
         copy: {
             mocha: {
                 files: [{
@@ -149,7 +146,6 @@ module.exports = function (grunt) {
                 src: 'app/assets/css/global.css'
             }
         },
-
         uglify: {
             js: {
                 options: {
@@ -187,10 +183,9 @@ module.exports = function (grunt) {
                 files: [
                     'src/js/**/*.test.js'
                 ],
-                tasks: ['test']
+                tasks: ['test_js']
             }
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -205,11 +200,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-scss-lint');
 
-    grunt.registerTask('build_js', [
-        'clean:js',
-        'concat:js'
-    ]);
-
     grunt.registerTask('lint_js', [
         'jshint:test'
     ]);
@@ -222,38 +212,41 @@ module.exports = function (grunt) {
         'mocha:test'
     ]);
 
+    grunt.registerTask('lint_scss', [
+        'scsslint'
+    ]);
+
+    grunt.registerTask('build_js', [
+        'clean:js',
+        'concat:js',
+        'lint_js',
+        'test_js'
+    ]);
+
     grunt.registerTask('build_css', [
+        'lint_scss',
         'clean:css',
         'sass:dev',
         'postcss'
     ]);
 
-    grunt.registerTask('lint_scss', [
-        'scsslint'
-    ]);
-
-    grunt.registerTask('default', [
+    grunt.registerTask('development', [
         'clean',
         'build_js',
-        'lint_js',
-        'test_js',
-        'lint_scss',
-        'build_css',
-        'connect',
-        'watch'
+        'build_css'
     ]);
 
-    grunt.registerTask('dev', [
-        'default',
-        'connect',
-        'watch'
-    ]);
-
-    grunt.registerTask('prod', [
-        'default',
+    grunt.registerTask('production', [
+        'development',
         'uglify:js',
         'sass:prod',
         'postcss'
+    ]);
+
+    grunt.registerTask('default', [
+        'development',
+        'connect',
+        'watch'
     ]);
 
 };
