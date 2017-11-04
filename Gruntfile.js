@@ -40,7 +40,8 @@ module.exports = function (grunt) {
                     'node_modules/jquery/dist/jquery.slim.min.js',
                     'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
                     'src/js/_init.js',
-                    'src/js/**/_*.js'
+                    'src/js/**/_*.js',
+                    '!src/js/**/*.test.js'
                 ],
                 dest: 'app/assets/js/global.js'
             },
