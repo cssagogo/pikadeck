@@ -20,19 +20,35 @@ module.exports = function (grunt) {
             ]
         },
         concat: {
-            options: {
-                separator: ';\n',
-                sourceMap: true
+            css: {
+                options: {
+                    separator: '\n\n',
+                    sourceMap: true
+                },
+                src: [
+                    'node_modules/bootstrap/dist/css/bootstrap.min.css',
+                    'app/assets/css/global.css'
+                ],
+                dest: 'app/assets/css/global.css'
             },
             js: {
+                options: {
+                    separator: ';\n',
+                    sourceMap: true
+                },
                 src: [
+                    'node_modules/jquery/dist/jquery.slim.min.js',
+                    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
                     'src/js/_init.js',
-                    'src/js/**/_*.js',
-                    '!src/js/**/*.test.js'
+                    'src/js/**/_*.js'
                 ],
                 dest: 'app/assets/js/global.js'
             },
             test: {
+                options: {
+                    separator: ';\n',
+                    sourceMap: true
+                },
                 src: [
                     'src/js/**/*.test.js'
                 ],
@@ -234,7 +250,8 @@ module.exports = function (grunt) {
         'scsslint',
         'clean:css',
         'sass:dev',
-        'postcss'
+        'postcss',
+        'concat:css'
     ]);
 
     grunt.registerTask('build_img', [
@@ -253,6 +270,7 @@ module.exports = function (grunt) {
         'uglify:js',
         'sass:prod',
         'postcss',
+        'concat:css',
         'build_img'
     ]);
 
