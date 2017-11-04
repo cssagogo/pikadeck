@@ -1,20 +1,407 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>PikeDeck</title>
 
-    <title>PokeDeck</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ranchers">
 
-    <link rel="stylesheet" href="/assets/css/global.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.min.css" integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha256-ENFZrbVzylNbgnXx0n3I1g//2WeO47XxoPe0vkp3NC8=" crossorigin="anonymous" />
 
-    <script src="/assets/js/global.js"></script>
+    <link rel="stylesheet" href="assets/css/plugins.css" />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
 
 </head>
+
 <body>
-<div>
-    <h2>Hello World</h2>
+
+<div class="wrapper">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-8">
+
+                <a href="index.html" class="logo">
+                    <svg class="logo__bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+                        <g>
+                            <path id="logo-bg-fill" class="fill" fill="#F0AD4E" d="M117,117c0,0,0.2-67.2,57.5-112c0,0,12.5,31.5-28.8,101.5c0,0,36.1-9,73.3,15.9c0,0,53.7-24.4,115.4-2.4
+              		c0,0-15.2,17.6-96,25l1.8,14c0,0,58.9-24.4,116.2-33.3c0,0-2,61.3-6.5,84.1l-91.5,5.5L289,248l-29.5,30.3l18.6,15.9L251.4,327
+              		l-4.1-18.8l9.2-10.2l-14.7-9.9l-2.4-14.9l13.5-18.1l-18.6-18.9c0,0,0.4,26.3,3.7,33c3.3,6.7,2.2,18.7,7.6,34s12.5,48-11.3,67.8
+              		c0,0,14.9,7.3,14.6,6c-0.3-1.2,7.9,6.9,7.9,6.9v5.5c0,0-5.1,5.1-33,0s-24.5-11.1-24.5-11.1l3-4.4c0,0-20.2-6.2-53.1-3.6l3,4.8
+              		c0,0-19.9,18.1-52.5,15.2l-3.3-0.2l-1-2.5l-2-1.1c0,0-0.3-4.8,23.2-17c0,0-31.6-10.3-8.6-47.2c0,0,9.3-15.6,8.6-30.9
+              		c0,0-15.4-2.2-20.5-20c0,0-7.1-15.6,22.3-35.9c0,0-32.8-21.1-30.9-42c0,0,2-10,7.2-16.3c5.3-6.3,5.9-19.8,5.9-19.8
+              		s-2.8-9.1,7.3-26.9L117,117z"/>
+                        </g>
+                    </svg>
+                    <h1 class="logo__text">PikaDeck</h1>
+                </a>
+
+            </div>
+            <div class="col-4 text-right">
+
+          <span>
+            <a href="#" class="text-secondary" data-toggle="modal" data-target=".modal--donate">
+              <i class="fa fa-coffee" aria-hidden="true"></i> Donate
+            </a>
+          </span>
+
+                <span>
+            <a href="#" class="text-secondary" data-toggle="modal" data-target=".modal--help">
+              <i class="fa fa-question-circle" aria-hidden="true"></i> Help
+            </a>
+          </span>
+
+            </div>
+        </div>
+
+        <div id="browse">
+
+            <form id="pika_filters">
+
+                <div class="row gutter-16">
+                    <div class="col">
+
+                        <div class="input-group">
+                            <input name="name" id="poke_search" type="text" class="form-control form-control-lg" placeholder="Search by Card Name">
+                            <span class="input-group-btn">
+                  <button id="pika_search" class="btn btn-primary btn-lg btn--icon-tada" type="button">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </span>
+                        </div>
+
+                    </div>
+                    <div class="col-auto" >
+
+                        <button id="view_deck" class="btn btn-primary btn-lg btn--icon-tada" type="button">
+                            <i class="fa fa-th" aria-hidden="true"></i> Deck
+                            <span class="count"></span>
+                        </button>
+
+                    </div>
+                </div>
+
+                <a class="" data-toggle="collapse" href="#search_options" aria-expanded="false" aria-controls="xxx">
+                    <small>Search Options <span id="search_options_count"></span></small>
+                </a>
+
+                <div class="collapse multi-collapse" id="search_options">
+                    <div class="search-options rounded">
+
+                        <div class="form-group mb-2">
+                            <label for="poke_set">Set</label>
+                            <select name="setCode" id="poke_set" class="form-control" multiple="multiple" style="width: 100%">
+                                <option>Loading...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="poke_type">Type</label>
+                            <select name="types" id="poke_type" class="form-control" multiple="multiple" style="width: 100%">
+                                <option>Loading...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="poke_supertype">Supertype</label>
+                            <select name="supertype" id="poke_supertype" class="form-control" multiple="multiple" style="width: 100%">
+                                <option>Loading...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-0">
+                            <label for="poke_subtype">Subtype</label>
+                            <select name="subtype" id="poke_subtype" class="form-control" multiple="multiple" style="width: 100%">
+                                <option>Loading...</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+
+            <div id="poke_cards" class="row gutter-16 mt-3"></div>
+
+        </div>
+
+    </div>
 </div>
 
+<!-- Handlebars: Card Tile -->
+<script id="hb_card_tile" type="text/x-handlebars-template">
+    {{#each .}}
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+        <div class="card card--tile p-1">
+            <a href="#" data-info="{{id}}" data-toggle="modal" data-target=".modal--info">
+                <img class="lazyload card-img-top" data-src="{{imageUrl}}" src="https://images.pokemontcg.io/xy0/symbol.png">
+            </a>
+            <div class="card__btn-group btn-group mt-1" role="group" aria-label="...">
+
+                <button data-add="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Add to Deck">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </button>
+
+                <button data-print="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Print Play Set">
+                    <i class="fa fa-print" aria-hidden="true"></i>
+                </button>
+
+                <button data-zoom="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="modal" data-target=".modal--zoomed" data-toggle="tooltip" title="Detialed View">
+                    <i class="fa fa-search-plus" aria-hidden="true"></i>
+                </button>
+
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+
+<!-- Handlebars: No Matches -->
+<script id="hp_no_results" type="text/x-handlebars-template">
+    <div class="col-12 text-center">
+        <h1><small>Nothing Found</small></h1>
+        <img class="rounded-circle bg-primary" src="https://1.bp.blogspot.com/-SC_s2eSLONM/WSYyeNTZoZI/AAAAAAAHrXo/R40duxNw4Ego7Gy6eC7WTWBj2T2ysNAhACLcB/s1600/AS002653_13.gif">
+        <h2>Noooo!!!!</h2>
+    </div>
+</script>
+
+<!-- Handlebars: No Matches -->
+<script id="hp_loading_cards" type="text/x-handlebars-template">
+    <div class="col-12 text-center">
+        <img class="rounded-circle" src="https://cdn-enterprise.discourse.org/gethopscotch1/uploads/default/original/2X/b/ba7205fa30058920f98195c0d79a98eeeb00029c.gif">
+    </div>
+</script>
+
+<!-- Handlebars: Info Modal Content -->
+<script id="hb_card_info" type="text/x-handlebars-template">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="card text-white bg-secondary mb-3">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-8">
+                        {{#if supertype}}
+                        <h4 class="card-title">
+                            {{supertype}}{{#if subtype}}-{{subtype}}{{/if}}
+                        </h4>
+                        {{/if}}
+                    </div>
+                    <div class="col-4 text-right">
+                        {{#if hp}}
+                        <h4 class="card-title">
+                            <small>HP</small>{{hp}}
+                            {{#if types}}
+                            {{#each types}}{{energyType this}}{{/each}}
+                            {{/if}}
+                        </h4>
+                        {{/if}}
+                    </div>
+                </div>
+
+                {{#if evolvesFrom}}
+                <div class="card-text">Evolves From: {{evolvesFrom}}</div>
+                {{/if}}
+
+            </div>
+        </div>
+
+        {{#if text}}
+        <div class="mb-4">
+            <small class="text-secondary">{{#each text}}{{this}} {{/each}}</small>
+        </div>
+        {{/if}}
+
+        {{#if ability}}
+        <div class="mb-4">
+            <strong class="text-success">{{ability.type}}</strong>
+            <h4>{{ability.name}}</h4>
+            {{ability.text}}
+        </div>
+        {{/if}}
+
+        {{#if attacks}}
+        {{#each attacks}}
+        <div class="mb-4">
+            <div class="row">
+                <h4 class="col-8">
+                    {{#if cost}}{{#each cost}}{{energyType this}}{{/each}}{{/if}}
+                    {{name}}
+                </h4>
+                {{#if damage}}
+                <h4 class="col-4 text-right">{{damage}}</h4>
+                {{/if}}
+            </div>
+            {{text}}
+        </div>
+        {{/each}}
+        {{/if}}
+
+
+        {{#ifAny weaknesses resistances retreatCost}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        Weaknesses<br>
+                        {{#each weaknesses}}{{energyType type}} {{value}}{{/each}}
+                    </div>
+                    <div class="col-4">
+                        Resistances<br>
+                        {{#each resistances}}{{energyType type}} {{value}}{{/each}}
+                    </div>
+                    <div class="col-4">
+                        Retreat Cost<br>
+                        {{#each retreatCost}}{{energyType this}}{{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/ifAny}}
+
+        <div class="row">
+            <div class="col-8">
+                <h5 class="mb-0">
+                    <img class="icon-set" src="{{setSymbolUrl setCode}}">
+                    {{set}}
+                </h5>
+            </div>
+            <div class="col-4 text-right">
+                <h5 class="mb-0">
+                    {{number}}/{{setData setCode "totalCards"}}
+                </h5>
+            </div>
+        </div>
+
+        <div>
+            <small class="text-secondary">
+                {{series}}
+                | Set Code: {{setCode}}
+                | PTCGO Code: {{setData setCode "ptcgoCode"}}
+            </small>
+        </div>
+
+        <div>
+            <small class="text-secondary">
+                Released: {{setData setCode "releaseDate"}}
+                | Tournament Type: {{tournamentType setCode}}
+            </small>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-6">
+                <small class="text-secondary">
+                    Artist: {{artist}}
+                </small>
+            </div>
+            {{#if nationalPokedexNumber}}
+            <div class="col-6 text-right">
+                <small class="text-secondary">
+                    National Pokedex: {{nationalPokedexNumber}}
+                </small>
+            </div>
+            {{/if}}
+        </div>
+
+    </div>
+</script>
+
+<!-- Modal: Image Zoom -->
+<div class="modal fade modal--zoomed" tabindex="-1" role="dialog" aria-labelledby="imageZoomed" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <img class="image-hi-res" data-zoomed>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Info -->
+<div class="modal fade modal--info" tabindex="-1" role="dialog" aria-labelledby="cardInfo" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">Loading...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Help -->
+<div class="modal fade modal--help" tabindex="-1" role="dialog" aria-labelledby="modalHelp" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">How to use PikaProxy</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Donate -->
+<div class="modal fade modal--donate" tabindex="-1" role="dialog" aria-labelledby="modalDonate" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Support a great cause, then support PikaProxy!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.min.js" integrity="sha256-OphUEk5ASNjOp2E8I46x+Gb0d7K+2CNKX4YbY9skKts=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/store.js/1.3.20/store.min.js" integrity="sha256-0jgHNEQo7sIScbcI/Pc5GYJ+VosKM1mJ+fI0iuQ1a9E=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js" integrity="sha256-YHd/E8OX5o5GcqyHHas3xH3i7aP8z8KmMrL3WLMJfIY=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/3.0.0/lazysizes.min.js" integrity="sha256-3aNzF0qAl+dcYi1jq/8xNvw6wR5tzgo4AOAacEleQVk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js" integrity="sha256-0JaDbGZRXlzkFbV8Xi8ZhH/zZ6QQM0Y3dCkYZ7JYq34=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha256-DHF4zGyjT7GOMPBwpeehwoey18z8uiz98G4PRu2lV0A=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha256-3blsJd4Hli/7wCQ+bmgXfOdK7p/ZUMtPXY08jmxSSgk=" crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bubbly-bg@0.2.3/dist/bubbly-bg.js"></script>
+<script>
+    // bubbly({
+    //   colorStart: "#FDEB71",
+    //   colorStop: "#F8D800",
+    //   blur: 4,
+    //   compose: "lighten",
+    //   bubbleFunc: () => `hsla(${Math.random() * 50}, 100%, 50%, .3)`
+    // });
+</script>
+
+<script src="assets/js/plugins.js"></script>
+
+<script src="assets/js/main.js"></script>
+
 </body>
+
 </html>

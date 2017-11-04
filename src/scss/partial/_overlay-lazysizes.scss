@@ -1,0 +1,16 @@
+// = Lazyloader
+// ---------------------------------
+
+.lazyload,
+.lazyloading {
+  opacity: 0;
+}
+
+.lazyload {
+  background: url('/assets/img/pika-loader.gif');
+}
+
+.lazyloaded {
+  opacity: 1;
+  transition: opacity 300ms;
+}

@@ -1,0 +1,10 @@
+// = Tada Icons
+// ---------------------------------
+
+.btn--icon-tada:hover {
+  i {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-name: rubberBand;
+  }
+}

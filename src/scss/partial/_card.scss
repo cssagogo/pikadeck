@@ -1,0 +1,60 @@
+// = Local Variables
+// ---------------------------------
+
+@import 'variables';
+
+$card-shadow-color: rgba(255, 136, 136, .5);
+
+$card-btn-background: #fff8d1;
+$card-btn-border: $card-btn-background;
+$card-btn-text: #f0ad4e;
+
+$card-btn-background-hover: #f0ad4e;
+$card-btn-border-hover: $card-btn-background;
+$card-btn-text-hover: #fff8d1;
+
+
+// = Card Tile
+// ---------------------------------
+
+.card--tile {
+  animation-duration: .5s;
+  border-radius: 10px;
+  box-shadow: 0 2px 2px 0 $card-shadow-color;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: .35s cubic-bezier(.4, 0, .2, 1);
+
+  &:hover {
+    box-shadow: 0 6px 12px 0 $card-shadow-color;
+    transform: translateY(-5px);
+  }
+
+  .card__btn-group {
+    border-collapse: separate;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .card__btn-group-btn {
+    background: $card-btn-background;
+    border-color: $card-btn-border;
+    color: $card-btn-text;
+    display: table-cell;
+    float: none;
+    width: 33.3%;
+
+    &:first-child {
+      width: 33.4%;
+    }
+
+    &:hover {
+      background: $card-btn-background-hover;
+      border-color: $card-btn-border-hover;
+      color: $card-btn-text-hover;
+    }
+
+  }
+
+}

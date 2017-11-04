@@ -26,24 +26,25 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 src: [
-                    'node_modules/bootstrap/dist/css/bootstrap.min.css',
-                    'app/assets/css/global.css'
+                    'node_modules/animate.css/animate.min.css'
                 ],
-                dest: 'app/assets/css/global.css'
+                dest: 'app/assets/css/plugins.css'
             },
             js: {
                 options: {
                     separator: ';\n',
                     sourceMap: true
                 },
-                src: [
-                    'node_modules/jquery/dist/jquery.slim.min.js',
-                    'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
-                    'src/js/_init.js',
-                    'src/js/**/_*.js',
-                    '!src/js/**/*.test.js'
-                ],
-                dest: 'app/assets/js/global.js'
+                files: {
+                    'app/assets/js/main.js': [
+                        'src/js/_init.js',
+                        'src/js/**/_*.js',
+                        '!src/js/**/*.test.js'
+                    ],
+                    'app/assets/js/plugins.js': [
+                        'src/lib/querystring/dist/querystring.js'
+                    ]
+                }
             },
             test: {
                 options: {
@@ -168,6 +169,7 @@ module.exports = function (grunt) {
         },
         scsslint: {
             options: {
+                configFile: '.scss-lint.yml',
                 colorizeOutput: true,
                 config: null
             },

@@ -1,0 +1,11 @@
+// = Remove Focus Styling
+// ---------------------------------
+
+a:focus,
+.btn-primary.focus,
+.btn-primary:focus,
+.btn.focus,
+.btn:focus {
+  box-shadow: none;
+  outline: 0;
+}
