@@ -309,20 +309,27 @@ var tcgPrinter = {
         }
 
         // Else get new data...
-        $.getJSON(this.apiPath + 'sets', function(data) {
+        $.ajax({
+            dataType: "json",
+            url: this.apiPath + 'sets',
+            success: function(data) {
 
-            // Show latest set first...
-            if (data && data.sets && data.sets.length > 0) {
-                data.sets.reverse();
+                // Show latest set first...
+                if (data && data.sets && data.sets.length > 0) {
+                    data.sets.reverse();
+                }
+
+                // Save response to localStore...
+                store.set('sets', data);
+
+                // Call getSets again, data should be in localStore now...
+                // TODO: This is a bit dangerous.  Need to consider better method.
+                that.getSets();
+
+            },
+            error: function(xhr, status, error) {
+                console.log([xhr, status, error]);
             }
-
-            // Save response to localStore...
-            store.set('sets', data);
-
-            // Call getSets again, data should be in localStore now...
-            // TODO: This is a bit dangerous.  Need to consider better method.
-            that.getSets();
-
         });
 
     },
@@ -339,16 +346,22 @@ var tcgPrinter = {
 
         }
 
-        // Else get new data...
-        $.getJSON(this.apiPath + endpoint, function(data) {
+        $.ajax({
+            dataType: "json",
+            url: this.apiPath + endpoint,
+            success: function(data) {
 
-            // Save response to localStore...
-            store.set(endpoint, data);
+                // Save response to localStore...
+                store.set(endpoint, data);
 
-            // Call getSets again, data should be in localStore now...
-            // TODO: This is a bit dangerous.  Need to consider better method.
-            that.getSimpleData(endpoint);
+                // Call getSets again, data should be in localStore now...
+                // TODO: This is a bit dangerous.  Need to consider better method.
+                that.getSimpleData(endpoint);
 
+            },
+            error: function(xhr, status, error) {
+                console.log([xhr, status, error]);
+            }
         });
 
     },
@@ -362,16 +375,26 @@ var tcgPrinter = {
 
         var that = this;
 
+
+        // TODO: Pass params as data...
         var endpoint = this.apiPath + 'cards' + '?pageSize=60&' + params;
 
+
         // Else get new data...
-        $.getJSON(endpoint, function(data) {
+        $.ajax({
+            dataType: "json",
+            url: endpoint,
+            success: function(data) {
 
-            // Create lookup table...
-            var lookup = that.getLookupTable(data.cards, 'id');
+                // Create lookup table...
+                var lookup = that.getLookupTable(data.cards, 'id');
 
-            $(document).trigger('get_cards_done', [data.cards, lookup]);
+                $(document).trigger('get_cards_done', [data.cards, lookup]);
 
+            },
+            error: function(xhr, status, error) {
+                console.log([xhr, status, error]);
+            }
         });
 
     },

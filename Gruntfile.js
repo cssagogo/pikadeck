@@ -26,7 +26,9 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 src: [
-                    'node_modules/animate.css/animate.min.css'
+                    'node_modules/animate.css/animate.min.css',
+                    'node_modules/select2/dist/css/select2.min.css',
+                    'node_modules/toastr/build/toastr.min.css'
                 ],
                 dest: 'app/assets/css/plugins.css'
             },
@@ -42,7 +44,13 @@ module.exports = function (grunt) {
                         '!src/js/**/*.test.js'
                     ],
                     'app/assets/js/plugins.js': [
-                        'src/lib/querystring/dist/querystring.js'
+                        'src/lib/querystring/dist/querystring.js',
+                        'node_modules/select2/dist/js/select2.min.js',
+                        'node_modules/toastr/build/toastr.min.js',
+                        'node_modules/store/dist/store.modern.min.js',
+                        'node_modules/jspdf/dist/jspdf.min.js',
+                        'node_modules/lazysizes/lazysizes.min.js',
+                        'node_modules/handlebars/dist/handlebars.min.js'
                     ]
                 }
             },
@@ -262,14 +270,15 @@ module.exports = function (grunt) {
         'imagemin:smush'
     ]);
 
-    grunt.registerTask('development', [
+    grunt.registerTask('default', [
         'clean',
         'build_js',
-        'build_css'
+        'build_css',
+        'build_img'
     ]);
 
     grunt.registerTask('production', [
-        'development',
+        'default',
         'uglify:js',
         'sass:prod',
         'postcss',
@@ -277,9 +286,8 @@ module.exports = function (grunt) {
         'build_img'
     ]);
 
-    grunt.registerTask('default', [
-        'development',
-        'build_img',
+    grunt.registerTask('serve', [
+        'default',
         'connect',
         'watch'
     ]);
