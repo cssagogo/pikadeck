@@ -1,0 +1,141 @@
+<!-- Handlebars: Info Modal Content -->
+<script id="hb_card_info" type="text/x-handlebars-template">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <div class="card text-white bg-secondary mb-3">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-8">
+                        {{#if supertype}}
+                        <h4 class="card-title">
+                            {{supertype}}{{#if subtype}}-{{subtype}}{{/if}}
+                        </h4>
+                        {{/if}}
+                    </div>
+                    <div class="col-4 text-right">
+                        {{#if hp}}
+                        <h4 class="card-title">
+                            <small>HP</small>{{hp}}
+                            {{#if types}}
+                            {{#each types}}{{energyType this}}{{/each}}
+                            {{/if}}
+                        </h4>
+                        {{/if}}
+                    </div>
+                </div>
+
+                {{#if evolvesFrom}}
+                <div class="card-text">Evolves From: {{evolvesFrom}}</div>
+                {{/if}}
+
+            </div>
+        </div>
+
+        {{#if text}}
+        <div class="mb-4">
+            <small class="text-secondary">{{#each text}}{{this}} {{/each}}</small>
+        </div>
+        {{/if}}
+
+        {{#if ability}}
+        <div class="mb-4">
+            <strong class="text-success">{{ability.type}}</strong>
+            <h4>{{ability.name}}</h4>
+            {{ability.text}}
+        </div>
+        {{/if}}
+
+        {{#if attacks}}
+        {{#each attacks}}
+        <div class="mb-4">
+            <div class="row">
+                <h4 class="col-8">
+                    {{#if cost}}{{#each cost}}{{energyType this}}{{/each}}{{/if}}
+                    {{name}}
+                </h4>
+                {{#if damage}}
+                <h4 class="col-4 text-right">{{damage}}</h4>
+                {{/if}}
+            </div>
+            {{text}}
+        </div>
+        {{/each}}
+        {{/if}}
+
+
+        {{#ifAny weaknesses resistances retreatCost}}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        Weaknesses<br>
+                        {{#each weaknesses}}{{energyType type}} {{value}}{{/each}}
+                    </div>
+                    <div class="col-4">
+                        Resistances<br>
+                        {{#each resistances}}{{energyType type}} {{value}}{{/each}}
+                    </div>
+                    <div class="col-4">
+                        Retreat Cost<br>
+                        {{#each retreatCost}}{{energyType this}}{{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/ifAny}}
+
+        <div class="row">
+            <div class="col-8">
+                <h5 class="mb-0">
+                    <img class="icon-set" src="{{setSymbolUrl setCode}}">
+                    {{set}}
+                </h5>
+            </div>
+            <div class="col-4 text-right">
+                <h5 class="mb-0">
+                    {{number}}/{{setData setCode "totalCards"}}
+                </h5>
+            </div>
+        </div>
+
+        <div>
+            <small class="text-secondary">
+                {{series}}
+                | Set Code: {{setCode}}
+                | PTCGO Code: {{setData setCode "ptcgoCode"}}
+            </small>
+        </div>
+
+        <div>
+            <small class="text-secondary">
+                Released: {{setData setCode "releaseDate"}}
+                | Tournament Type: {{tournamentType setCode}}
+            </small>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-6">
+                <small class="text-secondary">
+                    Artist: {{artist}}
+                </small>
+            </div>
+            {{#if nationalPokedexNumber}}
+            <div class="col-6 text-right">
+                <small class="text-secondary">
+                    National Pokedex: {{nationalPokedexNumber}}
+                </small>
+            </div>
+            {{/if}}
+        </div>
+
+    </div>
+</script>

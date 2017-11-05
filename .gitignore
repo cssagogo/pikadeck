@@ -1,5 +1,5 @@
 # App Specific
-/app/assets
+/app/
 /test/mocha.js
 /test/mocha.css
 /test/chai.js
@@ -7,7 +7,7 @@
 /test/index.js.map
 /test/index.out
 
-/.sass-cache
+/.sass-cache/
 
 # PHP Storm Files
 .idea
@@ -71,4 +71,4 @@ typings/
 # dotenv environment variables file
 .env
 
-/.sass-cache/
+

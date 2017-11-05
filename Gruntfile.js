@@ -100,6 +100,36 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        htmlbuild: {
+            dist: {
+                src: 'src/html/index.html',
+                dest: 'app/',
+                options: {
+                    beautify: true,
+                    relative: true,
+                    basePath: false,
+                    scripts: {
+                        main: 'app/assets/js/main.js'
+                    },
+                    styles: {
+                        main: 'app/assets/css/style.css'
+                    },
+                    sections: {
+                        views: 'src/html/views/**/*.html',
+                        templates: 'src/html/partials/templates/**/*.html',
+                        modals: 'src/html/partials/modals/**/*.html',
+                        layout: {
+                            header: 'src/html/partials/layout/_header.html',
+                            footer: 'src/html/partials/layout/_footer.html'
+                        }
+                    },
+                    data: {
+                        // Data to pass to templates
+                        version: '<%= pkg.version %>'
+                    }
+                }
+            }
+        },
         imagemin: {
             smush: {
                 files: [{
@@ -216,6 +246,10 @@ module.exports = function (grunt) {
                 files: ['src/scss/**/*.scss'],
                 tasks: ['build_css']
             },
+            html: {
+                files: ['src/html/**/*.html'],
+                tasks: ['build_html']
+            },
             grunt_file: {
                 files: ['Gruntfile.js'],
                 tasks: ['default']
@@ -238,6 +272,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-html-build');
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-scss-lint');
@@ -265,6 +300,10 @@ module.exports = function (grunt) {
         'concat:css'
     ]);
 
+    grunt.registerTask('build_html', [
+        'htmlbuild'
+    ]);
+
     grunt.registerTask('build_img', [
         'clean:img',
         'imagemin:smush'
@@ -274,6 +313,7 @@ module.exports = function (grunt) {
         'clean',
         'build_js',
         'build_css',
+        'build_html',
         'build_img'
     ]);
 
@@ -283,6 +323,7 @@ module.exports = function (grunt) {
         'sass:prod',
         'postcss',
         'concat:css',
+        'build_html',
         'build_img'
     ]);
 

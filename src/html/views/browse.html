@@ -1,0 +1,70 @@
+<div id="browse">
+
+    <form id="pika_filters">
+
+        <div class="row gutter-16">
+            <div class="col">
+
+                <div class="input-group">
+                    <input name="name" id="poke_search" type="text" class="form-control form-control-lg" placeholder="Search by Card Name">
+                    <span class="input-group-btn">
+                      <button id="pika_search" class="btn btn-primary btn-lg btn--icon-tada" type="button">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                      </button>
+                    </span>
+                </div>
+
+            </div>
+            <div class="col-auto" >
+
+                <button id="view_deck" class="btn btn-primary btn-lg btn--icon-tada" type="button">
+                    <i class="fa fa-th" aria-hidden="true"></i> Deck
+                    <span class="count"></span>
+                </button>
+
+            </div>
+        </div>
+
+        <a class="" data-toggle="collapse" href="#search_options" aria-expanded="false" aria-controls="xxx">
+            <small>Search Options <span id="search_options_count"></span></small>
+        </a>
+
+        <div class="collapse multi-collapse" id="search_options">
+            <div class="search-options rounded">
+
+                <div class="form-group mb-2">
+                    <label for="poke_set">Set</label>
+                    <select name="setCode" id="poke_set" class="form-control" multiple="multiple" style="width: 100%">
+                        <option>Loading...</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="poke_type">Type</label>
+                    <select name="types" id="poke_type" class="form-control" multiple="multiple" style="width: 100%">
+                        <option>Loading...</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-2">
+                    <label for="poke_supertype">Supertype</label>
+                    <select name="supertype" id="poke_supertype" class="form-control" multiple="multiple" style="width: 100%">
+                        <option>Loading...</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-0">
+                    <label for="poke_subtype">Subtype</label>
+                    <select name="subtype" id="poke_subtype" class="form-control" multiple="multiple" style="width: 100%">
+                        <option>Loading...</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+    <div id="poke_cards" class="row gutter-16 mt-3"></div>
+
+</div>

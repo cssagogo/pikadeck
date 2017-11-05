@@ -1,0 +1,27 @@
+<!-- Handlebars: Card Tile -->
+<script id="hb_card_tile" type="text/x-handlebars-template">
+    {{#each .}}
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+        <div class="card card--tile p-1">
+            <a href="#" data-info="{{id}}" data-toggle="modal" data-target=".modal--info">
+                <img class="lazyload card-img-top" data-src="{{imageUrl}}" src="https://images.pokemontcg.io/xy0/symbol.png">
+            </a>
+            <div class="card__btn-group btn-group mt-1" role="group" aria-label="...">
+
+                <button data-add="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Add to Deck">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </button>
+
+                <button data-print="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Print Play Set">
+                    <i class="fa fa-print" aria-hidden="true"></i>
+                </button>
+
+                <button data-zoom="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="modal" data-target=".modal--zoomed" data-toggle="tooltip" title="Detialed View">
+                    <i class="fa fa-search-plus" aria-hidden="true"></i>
+                </button>
+
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
