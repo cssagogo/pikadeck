@@ -7,12 +7,9 @@ pikaDeck.pdf = function () {
         },
         printPlaySet: function (card) {
 
-            this.getImage(card);
-
-        },
-        getImage: function (card) {
-
             var imgUrl = card.imageUrlHiRes;
+
+            var that = this;
 
             this.imgToBase64(imgUrl, function(dataUrl) {
 
@@ -64,62 +61,68 @@ pikaDeck.pdf = function () {
 
                 doc.save('PikaDeck.pdf');
 
-                $(document).trigger('card_ready', [dataUrl]);
+                //$(document).trigger('card_ready', [dataUrl]);
 
             });
 
         },
-        imgToBase64: function (url, callback) {
+        imgToBase64: function (imgUrl, callback) {
 
             var xhr = new XMLHttpRequest();
+
             xhr.onload = function() {
+
                 var reader = new FileReader();
+
                 reader.onloadend = function() {
+
                     callback(reader.result);
+
                 };
+
                 reader.readAsDataURL(xhr.response);
             };
-            xhr.open('GET', url);
+
+            xhr.open('GET', imgUrl);
+
             xhr.responseType = 'blob';
+
             xhr.send();
 
         },
-        getDeckImages: function (deck) {
-
-            // $(document).trigger('getting_cards');
-            //
-            // this.drawDeckButtonDisabled();
-            //
-            // // TODO: Look at stripping duplicate items from deck here.
-            // var that = this;
-            // var promises = [];
-            // var cards = [];
-            //
-            // for (var i = 0; i < deck.length; i++){
-            //
-            //     var endpoint = this.apiPath + 'cards/' + deck[i];
-            //
-            //     var request = $.getJSON(endpoint, function (data) {
-            //
-            //         that.lookup.cards = that.lookup.cards || {};
-            //
-            //         that.lookup.cards[data.card.id] = data.card;
-            //
-            //         cards.push(data.card);
-            //
-            //         //$(document).trigger('get_cards_done', [data.cards, lookup]);
-            //
-            //     });
-            //
-            //     promises.push(request);
-            // }
-            //
-            // $.when.apply(null, promises).done(function(){
-            //
-            //     that.drawCards(cards);
-            //
-            // });
-
-        }
+        // getDeckImages: function (deck) {
+        //
+        //     //$(document).trigger('getting_cards');
+        //
+        //     var that = this;
+        //     var promises = [];
+        //     var cards = [];
+        //
+        //     for (var i = 0; i < deck.length; i++){
+        //
+        //         var endpoint = this.apiPath + 'cards/' + deck[i];
+        //
+        //         var request = $.getJSON(endpoint, function (data) {
+        //
+        //             that.lookup.cards = that.lookup.cards || {};
+        //
+        //             that.lookup.cards[data.card.id] = data.card;
+        //
+        //             cards.push(data.card);
+        //
+        //             //$(document).trigger('get_cards_done', [data.cards, lookup]);
+        //
+        //         });
+        //
+        //         promises.push(request);
+        //     }
+        //
+        //     $.when.apply(null, promises).done(function(){
+        //
+        //         that.drawCards(cards);
+        //
+        //     });
+        //
+        // }
     };
 };
