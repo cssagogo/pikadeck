@@ -105,7 +105,7 @@ module.exports = function (grunt) {
                 src: 'src/html/index.html',
                 dest: 'app/',
                 options: {
-                    beautify: true,
+                    beautify: false,
                     relative: true,
                     basePath: false,
                     scripts: {
@@ -130,6 +130,21 @@ module.exports = function (grunt) {
                 }
             }
         },
+        htmlmin: {
+            dist: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    processScripts: ['text/x-handlebars-template']
+                },
+                files: [{
+                    expand: true,
+                    cwd: 'app',
+                    src: ['**/*.html', '*.html'],
+                    dest: 'app'
+                }]
+            }
+        },
         imagemin: {
             smush: {
                 files: [{
@@ -146,6 +161,7 @@ module.exports = function (grunt) {
                 eqeqeq: true,
                 eqnull: true,
                 browser: true,
+                debug: true,
                 globals: {
                     jQuery: true
                 }
@@ -222,12 +238,7 @@ module.exports = function (grunt) {
                         drop_debugger: false
                     }
                 },
-                files: [
-                    {
-                        src: '<%= concat.js.src %>',
-                        dest: '<%= concat.js.dest %>'
-                    }
-                ]
+                files: '<%= concat.js.files %>'
             }
         },
         watch: {
@@ -240,11 +251,11 @@ module.exports = function (grunt) {
             },
             js: {
                 files: ['src/js/**/*.js', '!src/js/**/*.test.js'],
-                tasks: ['build_js']
+                tasks: ['build_js','build_html']
             },
             css: {
                 files: ['src/scss/**/*.scss'],
-                tasks: ['build_css']
+                tasks: ['build_css','build_html']
             },
             html: {
                 files: ['src/html/**/*.html'],
@@ -268,6 +279,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -324,6 +336,7 @@ module.exports = function (grunt) {
         'postcss',
         'concat:css',
         'build_html',
+        'htmlmin',
         'build_img'
     ]);
 

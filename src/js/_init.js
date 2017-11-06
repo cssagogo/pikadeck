@@ -1,7 +1,7 @@
 // TODO: Look into sorting cards by number.
 // TODO: Using local store across sessions is problematic.  Need to flush localstore on startup?
 
-var tcgPrinter = {
+var pikaDeck = {
     apiPath: 'https://api.pokemontcg.io/v1/',
     lookup: {},
     init: function() {
@@ -134,70 +134,12 @@ var tcgPrinter = {
         });
 
         $(document).on('click', 'button[data-add]', function() {
-
-            that.lookup.cart = that.lookup.cart || [];
-
-            var id = $(this).data().add;
-
-            var data = that.lookup.cards[id];
-            var inCart = that.countInArray(that.lookup.cart, id);
-            var isBasicEnergy = (data.supertype === "Energy" && data.subtype === "Basic");
-
-            var isCartMaxReached = that.lookup.cart.length >= 60;
-            var isItemMaxReached = (!isBasicEnergy && inCart >= 4);
-
-            // if isCartMax
-            // Alert: You can only add 60 cards to a deck.
-
-            // if notBasicEngery && isItemMax
-            // Alert: Only 4 copies allowed
-
-            // Else add to deck and alert user.
-
-            if (isCartMaxReached) {
-                toastr.warning("You have 60 cards selected which is the max allowed within a deck.");
-                return;
-            }
-
-            if (isItemMaxReached) {
-                toastr.warning("When you are building a deck, you can have only 4 copies of a card with the same name in it, except for basic Energy cards.");
-                return;
-            }
-
-
-            // TODO: Look over animate.css docs. Look for reusable way of doing this...
-            $(this).closest('.card--tile').addClass('fadeOutDownBig animated super-z').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-                $(this).removeClass('fadeOutDownBig animated super-z').addClass('rotateIn animated super-z').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-                    $(this).removeClass('rotateIn animated super-z');
-                });
-            });
-
-
-            that.lookup.cart.push(id);
-            inCart = inCart + 1;
-
-            $('.count', '#view_deck').html('(' + that.lookup.cart.length + ')');
-
-            var text = "Added " + data.name;
-            if (!isBasicEnergy) {
-                text = text + " (" + inCart + " of 4)";
-            } else {
-                text = text + " (" + inCart + " in deck)";
-            }
-
-            toastr.success(text);
-
-            $('img', '.proxy-cart__card').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-                $(this).removeClass('bounceInUp animated');
-            });
-
-
-
-
+            that.addCardToDeck($(this));
         });
 
         $(document).on('click', 'button[data-print]', function() {
-            console.log($(this).data().print);
+            var card = pikaDeck.lookup.cards[$(this).data().print];
+            that.pdf().printPlaySet(card);
         });
 
         $(document).on('click', '[data-info]', function() {
@@ -286,6 +228,59 @@ var tcgPrinter = {
         // $('#pika_filters').on('change', 'select', function() {
         //   $(document).trigger('form_upated');
         // });
+
+    },
+
+    addCardToDeck: function ($target) {
+
+        this.lookup.cart = this.lookup.cart || [];
+
+        var id = $target.data().add;
+
+        var data = this.lookup.cards[id];
+        var inCart = this.countInArray(this.lookup.cart, id);
+        var isBasicEnergy = (data.supertype === "Energy" && data.subtype === "Basic");
+
+        var isCartMaxReached = this.lookup.cart.length >= 60;
+        var isItemMaxReached = (!isBasicEnergy && inCart >= 4);
+
+        if (isCartMaxReached) {
+            toastr.warning("You have 60 cards selected which is the max allowed within a deck.");
+            return;
+        }
+
+        if (isItemMaxReached) {
+            toastr.warning("When you are building a deck, you can have only 4 copies of a card with the same name in it, except for basic Energy cards.");
+            return;
+        }
+
+
+        // TODO: Look over animate.css docs. Look for reusable way of doing this...
+        $target.closest('.card--tile').addClass('fadeOutDownBig animated super-z').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass('fadeOutDownBig animated super-z').addClass('rotateIn animated super-z').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                $(this).removeClass('rotateIn animated super-z');
+            });
+        });
+
+
+        this.lookup.cart.push(id);
+        inCart = inCart + 1;
+
+        $('.count', '#view_deck').html('(' + this.lookup.cart.length + ')');
+
+        var text = "Added " + data.name;
+        if (!isBasicEnergy) {
+            text = text + " (" + inCart + " of 4)";
+        } else {
+            text = text + " (" + inCart + " in deck)";
+        }
+
+        toastr.success(text);
+
+        $('img', '.proxy-cart__card').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass('bounceInUp animated');
+        });
+
 
     },
 
@@ -400,39 +395,37 @@ var tcgPrinter = {
     },
     getDeck: function (deck) {
 
-        // $(document).trigger('getting_cards');
-        //
-        // this.drawDeckButtonDisabled();
-        //
-        // // TODO: Look at stripping duplicate items from deck here.
-        // var that = this;
-        // var promises = [];
-        // var cards = [];
-        //
-        // for (var i = 0; i < deck.length; i++){
-        //
-        //     var endpoint = this.apiPath + 'cards/' + deck[i];
-        //
-        //     var request = $.getJSON(endpoint, function (data) {
-        //
-        //         that.lookup.cards = that.lookup.cards || {};
-        //
-        //         that.lookup.cards[data.card.id] = data.card;
-        //
-        //         cards.push(data.card);
-        //
-        //         //$(document).trigger('get_cards_done', [data.cards, lookup]);
-        //
-        //     });
-        //
-        //     promises.push(request);
-        // }
-        //
-        // $.when.apply(null, promises).done(function(){
-        //
-        //     that.drawCards(cards);
-        //
-        // });
+        $(document).trigger('getting_cards');
+
+        this.drawDeckButtonDisabled();
+
+        var that = this;
+
+        // TODO: Look at stripping duplicate items from deck here.
+        // TODO: Look into how to handle when no IDs are passed in.
+        deck = (deck) ? deck.join('|') : '';
+
+        // TODO: Pass params as data...
+        var endpoint = this.apiPath + 'cards?id=' + deck;
+
+        // Else get new data...
+        $.ajax({
+            dataType: "json",
+            url: endpoint,
+            success: function(data) {
+
+                // Create lookup table...
+                var lookup = that.getLookupTable(data.cards, 'id');
+
+                $(document).trigger('get_cards_done', [data.cards, lookup]);
+
+                //that.drawCards(data.cards);
+
+            },
+            error: function(xhr, status, error) {
+                console.log([xhr, status, error]);
+            }
+        });
 
     },
 
@@ -618,10 +611,7 @@ var tcgPrinter = {
         });
 
         Handlebars.registerHelper('ifAny', function(v1, v2, v3, options) {
-            if (v1 || v2 || v3) {
-                return options.fn(this);
-            }
-            return options.inverse(this);
+            return (v1 || v2 || v3) ? options.fn(this) : options.inverse(this);
         });
 
     },
@@ -652,45 +642,8 @@ var tcgPrinter = {
 
     },
 
-    getImage: function (card) {
-
-        this.imgToBase64(card, function(dataUrl) {
 
 
-            //6.3 cm x 8.8 cm
-            //2.48031 in X 3.46457 in
-
-            // var doc = new jsPDF({
-            //   orientation: 'portrait',
-            //   unit: 'in',
-            //   format: [11, 8.5]
-            // });
-
-            //doc.text('Hello world!', 1, 1);
-            //doc.addImage(dataUrl, 'PNG', 1, 1, 2.48, 3.46)
-            //doc.save('poke-proxy.pdf');
-
-            //$(document).trigger('card_ready', [dataUrl]);
-
-        });
-
-    },
-    imgToBase64: function (url, callback) {
-
-        var proxy = 'https://galvanize-cors-proxy.herokuapp.com/';
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-            var reader = new FileReader();
-            reader.onloadend = function() {
-                callback(reader.result);
-            };
-            reader.readAsDataURL(xhr.response);
-        };
-        xhr.open('GET', proxy + url);
-        xhr.responseType = 'blob';
-        xhr.send();
-
-    },
 
 
     // TODO: Add Unit Tests
@@ -851,5 +804,5 @@ var tcgPrinter = {
 };
 
 $(function() {
-    tcgPrinter.init();
+    pikaDeck.init();
 });
