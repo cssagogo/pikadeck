@@ -79,10 +79,10 @@ linters:
     enabled: true
 
   IdSelector:
-    enabled: true
+    enabled: false # TODO: Consider turning this back on?
 
   ImportantRule:
-    enabled: false # TODO: Consider turning this back on.
+    enabled: false # TODO: Consider turning this back on?
 
   ImportPath:
     enabled: true

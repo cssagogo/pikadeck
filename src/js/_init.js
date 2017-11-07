@@ -618,7 +618,7 @@ var pikaDeck = {
     initToaster: function () {
 
         toastr.options = {
-            "closeButton": false,
+            "closeButton": true,
             "debug": false,
             "newestOnTop": false,
             "progressBar": false,
