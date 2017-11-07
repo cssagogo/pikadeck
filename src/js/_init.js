@@ -10,54 +10,7 @@ var pikaDeck = {
         this.initBootstrap();
         this.initHandlebarsHelpers();
         this.bindEvents();
-        this.storeQuery();
-
-        //var card ='https://images.pokemontcg.io/base1/31.png';
-        //this.getImage(card);
-
-    },
-
-    pushQuery: function (params) {
-
-        // TODO: Need to test back button behavior and see if I need to
-        // do any history cleanup.
-
-        queryString.removeAll();
-
-        // TODO: What about a single query item? No & just =?
-        params = params.split('&');
-
-        for (var i = 0; i < params.length; i++) {
-
-            var item = params[i].split('=');
-
-            var name = item[0];
-
-            var value = decodeURIComponent(item[1]);
-
-            queryString.push(name, value);
-
-        }
-
-    },
-    getQuery: function () {
-
-        var query = window.location.search;
-
-        if (query.indexOf('?') === 0) {
-            query = query.replace('?', '');
-        }
-
-        return query;
-
-    },
-    storeQuery: function () {
-
-        var query = this.queryToObject(this.getQuery());
-
-        this.lookup.query = query;
-
-        $(document).trigger('store_query_done', [query]);
+        this.query().store();
 
     },
 
@@ -71,9 +24,9 @@ var pikaDeck = {
 
             var params = that.getParams();
 
-            that.pushQuery(params);
+            that.query().push(params);
 
-            that.storeQuery();
+            that.query().store();
 
             that.getCards(params);
 
@@ -118,7 +71,7 @@ var pikaDeck = {
 
         $(document).on('draw_sets_done', function() {
 
-            var params = that.getQuery();
+            var params = that.query().get();
 
             if (params.indexOf('deck=') !== -1) {
 
@@ -148,7 +101,7 @@ var pikaDeck = {
             var id = $(this).data().info;
             var data = that.lookup.cards[id];
 
-            var template = Handlebars.compile($("#hb_card_info").html());
+            var template = Handlebars.compile($('#hb_card_info').html());
             $('.modal-content', '.modal--info').html(template(data));
 
         });
@@ -159,13 +112,6 @@ var pikaDeck = {
             var imageUrlHiRes = that.lookup.cards[id].imageUrlHiRes;
             $('[data-zoomed]', '.modal--zoomed').attr('src', imageUrlHiRes);
 
-        });
-
-        $(document).on('shown.bs.collapse', function() {
-
-            //$('select', '#pika_search').trigger('change');
-
-            $('.proxy-cart__slider').slick('setPosition');
         });
 
         $(document).on('get_sets_done', function(e, data, lookup, tournamentSets) {
@@ -217,7 +163,7 @@ var pikaDeck = {
 
         $(document).on('getting_cards', function () {
 
-            var nodata = Handlebars.compile($("#hp_loading_cards").html());
+            var nodata = Handlebars.compile($('#hp_loading_cards').html());
             $('#poke_cards').html(nodata());
 
         });
@@ -239,25 +185,25 @@ var pikaDeck = {
 
         var data = this.lookup.cards[id];
         var inCart = this.countInArray(this.lookup.cart, id);
-        var isBasicEnergy = (data.supertype === "Energy" && data.subtype === "Basic");
+        var isBasicEnergy = (data.supertype === 'Energy' && data.subtype === 'Basic');
 
         var isCartMaxReached = this.lookup.cart.length >= 60;
-        var isItemMaxReached = (!isBasicEnergy && inCart >= 4);
-
         if (isCartMaxReached) {
-            toastr.warning("You have 60 cards selected which is the max allowed within a deck.");
+            toastr.warning('You have 60 cards selected which is the max allowed within a deck.');
             return;
         }
 
+        var isItemMaxReached = (!isBasicEnergy && inCart >= 4);
         if (isItemMaxReached) {
-            toastr.warning("When you are building a deck, you can have only 4 copies of a card with the same name in it, except for basic Energy cards.");
+            toastr.warning('When you are building a deck, you can have only 4 copies of a card with the same name in it, except for basic Energy cards.');
             return;
         }
 
 
         // TODO: Look over animate.css docs. Look for reusable way of doing this...
         $target.closest('.card--tile').addClass('fadeOutDownBig animated super-z').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-            $(this).removeClass('fadeOutDownBig animated super-z').addClass('rotateIn animated super-z').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass('fadeOutDownBig animated super-z');
+            $(this).addClass('rotateIn animated super-z').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
                 $(this).removeClass('rotateIn animated super-z');
             });
         });
@@ -268,19 +214,14 @@ var pikaDeck = {
 
         $('.count', '#view_deck').html('(' + this.lookup.cart.length + ')');
 
-        var text = "Added " + data.name;
+        var text = data.name + ' Added';
         if (!isBasicEnergy) {
-            text = text + " (" + inCart + " of 4)";
+            text = text + ' <br><small>(' + inCart + ' of 4)</small>';
         } else {
-            text = text + " (" + inCart + " in deck)";
+            text = text + ' <br><small>(' + inCart + ' in deck)</small>';
         }
 
         toastr.success(text);
-
-        $('img', '.proxy-cart__card').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-            $(this).removeClass('bounceInUp animated');
-        });
-
 
     },
 
@@ -305,7 +246,7 @@ var pikaDeck = {
 
         // Else get new data...
         $.ajax({
-            dataType: "json",
+            dataType: 'json',
             url: this.apiPath + 'sets',
             success: function(data) {
 
@@ -342,7 +283,7 @@ var pikaDeck = {
         }
 
         $.ajax({
-            dataType: "json",
+            dataType: 'json',
             url: this.apiPath + endpoint,
             success: function(data) {
 
@@ -377,7 +318,7 @@ var pikaDeck = {
 
         // Else get new data...
         $.ajax({
-            dataType: "json",
+            dataType: 'json',
             url: endpoint,
             success: function(data) {
 
@@ -410,7 +351,7 @@ var pikaDeck = {
 
         // Else get new data...
         $.ajax({
-            dataType: "json",
+            dataType: 'json',
             url: endpoint,
             success: function(data) {
 
@@ -470,7 +411,7 @@ var pikaDeck = {
         var items = this.getSetOptions(data);
 
         $('#poke_set').html(items).select2({
-            placeholder: "Select a set",
+            placeholder: 'Select a set',
             allowClear: true,
             templateResult: this.getSelect2SetOptions,
             templateSelection: this.getSelect2SetOptions
@@ -482,7 +423,7 @@ var pikaDeck = {
     drawTypes: function (items) {
 
         $('#poke_type').html(items).select2({
-            placeholder: "Select a Type",
+            placeholder: 'Select a Type',
             allowClear: true
         });
 
@@ -492,7 +433,7 @@ var pikaDeck = {
     drawSubtypes: function (items) {
 
         $('#poke_subtype').html(items).select2({
-            placeholder: "Select a Subtype",
+            placeholder: 'Select a Subtype',
             allowClear: true
         });
 
@@ -502,7 +443,7 @@ var pikaDeck = {
     drawSupertypes: function (items) {
 
         $('#poke_supertype').html(items).select2({
-            placeholder: "Select a Supertype",
+            placeholder: 'Select a Supertype',
             allowClear: true
         });
 
@@ -513,12 +454,12 @@ var pikaDeck = {
 
         if (data.length !== 0) {
 
-            var template = Handlebars.compile($("#hb_card_tile").html());
+            var template = Handlebars.compile($('#hb_card_tile').html());
             $('#poke_cards').html(template(data));
 
         } else {
 
-            var nodata = Handlebars.compile($("#hp_no_results").html());
+            var nodata = Handlebars.compile($('#hp_no_results').html());
             $('#poke_cards').html(nodata());
 
         }
@@ -618,21 +559,21 @@ var pikaDeck = {
     initToaster: function () {
 
         toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": false,
-            "progressBar": false,
-            "positionClass": "toast-bottom-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
+            'closeButton': true,
+            'debug': false,
+            'newestOnTop': false,
+            'progressBar': false,
+            'positionClass': 'toast-bottom-right',
+            'preventDuplicates': false,
+            'onclick': null,
+            'showDuration': '300',
+            'hideDuration': '1000',
+            'timeOut': '5000',
+            'extendedTimeOut': '1000',
+            'showEasing': 'swing',
+            'hideEasing': 'linear',
+            'showMethod': 'fadeIn',
+            'hideMethod': 'fadeOut'
         };
 
     },
@@ -742,45 +683,7 @@ var pikaDeck = {
 
         return html;
     },
-    queryToObject: function (query) {
 
-        var queryObj = {};
-
-        if (query === "") {
-            return queryObj;
-        }
-
-        if (query.indexOf('?') === 0) {
-            query = query.replace('?', '');
-        }
-
-        if (query.indexOf('&') >= 0) {
-            query = query.split('&');
-        } else {
-            query = [query];
-        }
-
-        for (var i = 0; i < query.length; i++) {
-
-            var item = query[i].split('=');
-
-            var name = item[0];
-
-            var value = decodeURIComponent(item[1]);
-
-            if (value.indexOf('|') >= 0) {
-                value = value.split('|');
-            } else {
-                value = [value];
-            }
-
-            queryObj[name] = value;
-
-        }
-
-        return queryObj;
-
-    },
     countInArray: function (array, what) {
         var count = 0;
         for (var i = 0; i < array.length; i++) {
