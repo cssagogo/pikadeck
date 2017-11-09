@@ -11,7 +11,11 @@ var pikaDeck = {
         this.initToaster();
         this.initBootstrap();
         this.initHandlebarsHelpers();
+
+
         this.bindEvents();
+
+
         this.query().store();
 
     },
