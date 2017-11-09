@@ -1,11 +1,7 @@
 pikaDeck.query = function () {
     return {
         get: function () {
-
-            var query = window.location.search;
-
-            return (query.indexOf('?') === 0) ? query.replace('?', '') : query;
-
+            return this.stripQuestionMark(window.location.search);
         },
         store: function () {
 
@@ -18,13 +14,15 @@ pikaDeck.query = function () {
         },
         push: function (params) {
 
+            // TODO: Look at params coming in.  This might be the place to convert multiple items to single with ~NUM?
+
             queryString.removeAll();
 
-            params = params.split('&');
+            params = this.splitOn(params, '&');
 
             for (var i = 0; i < params.length; i++) {
 
-                var item = params[i].split('=');
+                var item = this.splitOn(params[i], '=');
 
                 var name = item[0];
 
@@ -34,8 +32,12 @@ pikaDeck.query = function () {
 
             }
 
+            $(document).trigger('push_query_done');
+
         },
         toObject: function (query) {
+
+            // TODO: Handle ~NUM passed in via query here.
 
             var queryObj = {};
 
@@ -43,29 +45,19 @@ pikaDeck.query = function () {
                 return queryObj;
             }
 
-            if (query.indexOf('?') === 0) {
-                query = query.replace('?', '');
-            }
+            query = this.stripQuestionMark(query);
 
-            if (query.indexOf('&') >= 0) {
-                query = query.split('&');
-            } else {
-                query = [query];
-            }
+            query = this.splitOn(query, '&');
 
             for (var i = 0; i < query.length; i++) {
 
-                var item = query[i].split('=');
+                var item = this.splitOn(query[i], '=');
 
                 var name = item[0];
 
                 var value = decodeURIComponent(item[1]);
 
-                if (value.indexOf('|') >= 0) {
-                    value = value.split('|');
-                } else {
-                    value = [value];
-                }
+                value = this.splitOn(value, '|');
 
                 queryObj[name] = value;
 
@@ -73,6 +65,12 @@ pikaDeck.query = function () {
 
             return queryObj;
 
+        },
+        stripQuestionMark: function (query) {
+            return (query.indexOf('?') === 0) ? query.replace('?', '') : query;
+        },
+        splitOn: function (string, point) {
+            return (string.indexOf(point) >= 0) ? string.split(point) : [string];
         }
 
     };

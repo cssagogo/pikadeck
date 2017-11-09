@@ -6,11 +6,44 @@ var pikaDeck = {
     lookup: {},
     init: function() {
 
+        this.router().init();
+
         this.initToaster();
         this.initBootstrap();
         this.initHandlebarsHelpers();
         this.bindEvents();
         this.query().store();
+
+    },
+    getSearchResults: function () {
+
+        $('#search_options').collapse('hide');
+
+        var params = this.getParams();
+
+        this.query().push(params);
+
+        this.query().store();
+
+        this.getCards(params);
+
+    },
+    getCurrentDeck: function () {
+
+        if (this.lookup && this.lookup.cart && this.lookup.cart.length > 0) {
+
+            var cart = this.lookup.cart.join('|');
+
+            queryString.removeAll();
+            queryString.push('deck', cart);
+
+            this.getDeck(this.lookup.cart);
+
+        } else {
+
+            toastr.warning('No cards have been added to your deck!');
+
+        }
 
     },
 
@@ -19,35 +52,11 @@ var pikaDeck = {
         var that = this;
 
         $(document).on('click', 'button#pika_search', function() {
-
-            $('#search_options').collapse('hide');
-
-            var params = that.getParams();
-
-            that.query().push(params);
-
-            that.query().store();
-
-            that.getCards(params);
-
+            that.getSearchResults();
         });
 
         $(document).on('click', 'button#view_deck', function() {
-
-            if (that.lookup && that.lookup.cart && that.lookup.cart.length > 0) {
-
-                var cart = that.lookup.cart.join('|');
-                queryString.removeAll();
-                queryString.push('deck', cart);
-
-                that.getDeck(that.lookup.cart);
-
-            } else {
-
-                toastr.warning('No cards have been added to your deck!');
-
-            }
-
+            that.getCurrentDeck();
         });
 
         $(document).on('store_query_done', function(e, query) {
@@ -65,6 +74,7 @@ var pikaDeck = {
             that.getSimpleData('types');
             that.getSimpleData('subtypes');
             that.getSimpleData('supertypes');
+
             that.getSets();
 
         });
@@ -150,32 +160,25 @@ var pikaDeck = {
 
 
         $(document).on('draw_types_done', function() {
-            $('#poke_type').val(that.lookup.query.types).trigger('change');
+            that.drawSelectedTypesFromQuery(that.lookup.query.types);
         });
 
         $(document).on('draw_subtypes_done', function() {
-            $('#poke_subtype').val(that.lookup.query.subtype).trigger('change');
+            that.drawSelectedSubtypesFromQuery(that.lookup.query.subtype);
         });
 
         $(document).on('draw_supertypes_done', function() {
-            $('#poke_supertype').val(that.lookup.query.supertype).trigger('change');
+            that.drawSelectedSupertypesFromQuery(that.lookup.query.supertype);
         });
 
         $(document).on('getting_cards', function () {
-
-            var nodata = Handlebars.compile($('#hp_loading_cards').html());
-            $('#poke_cards').html(nodata());
-
+            that.drawPageLoader($('#poke_cards'));
         });
 
-        // $(document).on('card_ready', function(e, data) {
-        //   console.log(data);
-        // });
-        // $('#pika_filters').on('change', 'select', function() {
-        //   $(document).trigger('form_upated');
-        // });
-
     },
+
+
+
 
     addCardToDeck: function ($target) {
 
@@ -406,6 +409,8 @@ var pikaDeck = {
 
     },
 
+
+
     drawSets: function (data) {
 
         var items = this.getSetOptions(data);
@@ -418,36 +423,6 @@ var pikaDeck = {
         });
 
         $(document).trigger('draw_sets_done');
-
-    },
-    drawTypes: function (items) {
-
-        $('#poke_type').html(items).select2({
-            placeholder: 'Select a Type',
-            allowClear: true
-        });
-
-        $(document).trigger('draw_types_done');
-
-    },
-    drawSubtypes: function (items) {
-
-        $('#poke_subtype').html(items).select2({
-            placeholder: 'Select a Subtype',
-            allowClear: true
-        });
-
-        $(document).trigger('draw_subtypes_done');
-
-    },
-    drawSupertypes: function (items) {
-
-        $('#poke_supertype').html(items).select2({
-            placeholder: 'Select a Supertype',
-            allowClear: true
-        });
-
-        $(document).trigger('draw_supertypes_done');
 
     },
     drawCards: function (data) {
@@ -484,6 +459,9 @@ var pikaDeck = {
         }
 
     },
+
+    // TODO: Pure DOM updates
+    // ------------------------------------------
     drawDeckButtonDisabled: function () {
 
         $('button#view_deck')
@@ -500,6 +478,50 @@ var pikaDeck = {
             .addClass('btn-primary btn--icon-tada');
 
     },
+    drawSelectedTypesFromQuery: function (types) {
+        $('#poke_type').val(types).trigger('change');
+    },
+    drawSelectedSubtypesFromQuery: function (subtypes) {
+        $('#poke_subtype').val(subtypes).trigger('change');
+    },
+    drawSelectedSupertypesFromQuery: function (supertypes) {
+        $('#poke_supertype').val(supertypes).trigger('change');
+    },
+    drawTypes: function (items) {
+
+        $('#poke_type').html(items).select2({
+            placeholder: 'Select a Type',
+            allowClear: true
+        });
+
+        $(document).trigger('draw_types_done');
+
+    },
+    drawSubtypes: function (items) {
+
+        $('#poke_subtype').html(items).select2({
+            placeholder: 'Select a Subtype',
+            allowClear: true
+        });
+
+        $(document).trigger('draw_subtypes_done');
+
+    },
+    drawSupertypes: function (items) {
+
+        $('#poke_supertype').html(items).select2({
+            placeholder: 'Select a Supertype',
+            allowClear: true
+        });
+
+        $(document).trigger('draw_supertypes_done');
+
+    },
+    drawPageLoader: function ($target) {
+        var loader = Handlebars.compile($('#hp_loading_cards').html());
+        $target.html(loader());
+    },
+
 
     initHandlebarsHelpers: function() {
 
@@ -509,7 +531,7 @@ var pikaDeck = {
 
             type = type.toLowerCase();
 
-            type = Handlebars.Utils.escapeExpression(type.toLowerCase());
+            type = Handlebars.Utils.escapeExpression(type);
 
             var result = '<i class="icon-energy icon-' + type + '"></i>';
 
