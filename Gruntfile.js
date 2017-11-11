@@ -115,13 +115,8 @@ module.exports = function (grunt) {
                         main: 'app/assets/css/style.css'
                     },
                     sections: {
-                        views: 'src/html/partials/views/**/*.html',
                         templates: 'src/html/partials/templates/**/*.html',
-                        modals: 'src/html/partials/modals/**/*.html',
-                        layout: {
-                            header: 'src/html/partials/layout/_header.html',
-                            footer: 'src/html/partials/layout/_footer.html'
-                        }
+                        modals: 'src/html/partials/modals/**/*.html'
                     },
                     data: {
                         // Data to pass to templates

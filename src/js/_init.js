@@ -303,7 +303,7 @@ var pikaDeck = pikaDeck || {};
 
         } else {
 
-            var nodata = Handlebars.compile($('#hp_no_results').html());
+            var nodata = Handlebars.compile($('#hb_no_results').html());
             $('#poke_cards').html(nodata());
 
         }
@@ -388,7 +388,7 @@ var pikaDeck = pikaDeck || {};
 
     };
     this.drawPageLoader = function ($target) {
-        var loader = Handlebars.compile($('#hp_loading_cards').html());
+        var loader = Handlebars.compile($('#hb_loading_cards').html());
         $target.html(loader());
     };
 

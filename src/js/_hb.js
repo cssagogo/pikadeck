@@ -11,8 +11,14 @@ pikaDeck.hb = {};
 
     this.drawView = function(id) {
 
-        var template = Handlebars.compile($(id).html());
-        $('#app').html(template());
+        var view = Handlebars.compile($(id).html());
+        $('#app').html(view());
+
+        var header = Handlebars.compile($('#hb_header_main').html());
+        $('#header_main').html(header());
+
+        var footer = Handlebars.compile($('#hb_footer_main').html());
+        $('#footer_main').html(footer());
 
     };
 
