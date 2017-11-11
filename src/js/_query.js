@@ -1,77 +1,82 @@
-pikaDeck.query = function () {
-    return {
-        get: function () {
-            return this.stripQuestionMark(window.location.search);
-        },
-        store: function () {
+pikaDeck.query = {};
 
-            var query = this.toObject(this.get());
+(function() {
+    "use strict";
 
-            pikaDeck.lookup.query = query;
+    this.get = function () {
+        return this._stripQuestionMark(window.location.search);
+    };
 
-            $(document).trigger('store_query_done', [query]);
+    this.store = function () {
 
-        },
-        push: function (params) {
+        var query = this._toObject(this.get());
 
-            // TODO: Look at params coming in.  This might be the place to convert multiple items to single with ~NUM?
+        pikaDeck.store.push('query', query);
 
-            queryString.removeAll();
-
-            params = this.splitOn(params, '&');
-
-            for (var i = 0; i < params.length; i++) {
-
-                var item = this.splitOn(params[i], '=');
-
-                var name = item[0];
-
-                var value = decodeURIComponent(item[1]);
-
-                queryString.push(name, value);
-
-            }
-
-            $(document).trigger('push_query_done');
-
-        },
-        toObject: function (query) {
-
-            // TODO: Handle ~NUM passed in via query here.
-
-            var queryObj = {};
-
-            if (query === '') {
-                return queryObj;
-            }
-
-            query = this.stripQuestionMark(query);
-
-            query = this.splitOn(query, '&');
-
-            for (var i = 0; i < query.length; i++) {
-
-                var item = this.splitOn(query[i], '=');
-
-                var name = item[0];
-
-                var value = decodeURIComponent(item[1]);
-
-                value = this.splitOn(value, '|');
-
-                queryObj[name] = value;
-
-            }
-
-            return queryObj;
-
-        },
-        stripQuestionMark: function (query) {
-            return (query.indexOf('?') === 0) ? query.replace('?', '') : query;
-        },
-        splitOn: function (string, point) {
-            return (string.indexOf(point) >= 0) ? string.split(point) : [string];
-        }
+        $(document).trigger('store_query_done', [query]);
 
     };
-};
+
+    this.push = function (params) {
+
+        // TODO: Look at params coming in.  This might be the place to convert multiple items to single with ~NUM?
+
+        // TODO: Need to swap this out with router.
+        queryString.removeAll();
+
+        params = params.split('&');
+
+        for (var i = 0; i < params.length; i++) {
+
+            var item = params[i].split('=');
+
+            var name = item[0];
+
+            var value = decodeURIComponent(item[1]);
+
+            // TODO: Need to swap this out with router.
+            queryString.push(name, value);
+
+        }
+
+        $(document).trigger('push_query_done');
+
+    };
+
+    this._toObject = function (query) {
+
+        // TODO: Handle ~NUM passed in via query here.
+
+        var queryObj = {};
+
+        if (query === '') {
+            return queryObj;
+        }
+
+        query = this._stripQuestionMark(query);
+
+        query = query.split('&');
+
+        for (var i = 0; i < query.length; i++) {
+
+            var item = query[i].split('=');
+
+            var name = item[0];
+
+            var value = decodeURIComponent(item[1]);
+
+            value = value.split('|');
+
+            queryObj[name] = value;
+
+        }
+
+        return queryObj;
+
+    };
+
+    this._stripQuestionMark = function (query) {
+        return (query.indexOf('?') === 0) ? query.replace('?', '') : query;
+    };
+
+}).apply(pikaDeck.query);

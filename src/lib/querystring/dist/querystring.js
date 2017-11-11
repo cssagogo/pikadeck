@@ -1,10 +1,12 @@
-!function () {
-    "use strict";
-    var n = {};
-    n.delayedPush = "";
-    n.get = function (n) {
+(function() {
 
-        if (n === undefined || n === 'undefined') {
+    "use strict";
+
+    var queryString = {};
+
+    queryString.get = function(key) {
+
+        if (key === undefined || key === 'undefined') {
 
             var search = location.search;
 
@@ -14,7 +16,7 @@
 
             search = JSON.parse('{"' + decodeURI(search.substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
 
-            for (var key in search) {
+            for (key in search) {
                 if (search.hasOwnProperty(key)) {
                     search[key] = decodeURIComponent(search[key]);
                 }
@@ -24,71 +26,93 @@
 
         }
 
-        var e = new RegExp("[?&]" + n + "=([^&#]*)").exec(window.location.href);
-        return null === e ? null : decodeURIComponent(e[1]) || 0;
+        var target = new RegExp("[?&]" + key + "=([^&#]*)").exec(window.location.href);
+        return null === target ? null : decodeURIComponent(target[1]) || 0;
 
     };
-    n.parse = function (n) {
-        return "string" != typeof n ? {} : (n = n.trim().replace(/^\?/, ""), n ? n.trim().split("&").reduce(function (n, e) {
-            var o = e.replace(/\+/g, " ").split("="), r = o[0], t = o[1];
-            return r = decodeURIComponent(r), t = void 0 === t ? null : decodeURIComponent(t), n.hasOwnProperty(r) ? Array.isArray(n[r]) ? n[r].push(t) : n[r] = [n[r], t] : n[r] = t, n;
-        }, {}) : {});
+
+    queryString.parse = function(query) {
+        return "string" !== typeof query ? {} : (
+
+            query = query.trim().replace(/^\?/, ""),
+            query ? query.trim().split("&").reduce(function(query, e) {
+
+                var o = e.replace(/\+/g, " ").split("=");
+                var r = o[0];
+                var t = o[1];
+
+                return r = decodeURIComponent(r),
+                    t = void 0 === t ? null : decodeURIComponent(t),
+                    query.hasOwnProperty(r) ? Array.isArray(query[r]) ? query[r].push(t) : query[r] = [query[r], t] : query[r] = t, query;
+            }, {}) : {}
+
+        );
     };
-    n.stringify = function (n) {
-        return n ? Object.keys(n).map(function (e) {
-            var o = n[e];
-            return Array.isArray(o) ? o.map(function (n) {
-                return encodeURIComponent(e) + "=" + encodeURIComponent(n);
-            }).join("&") : encodeURIComponent(e) + "=" + encodeURIComponent(o);
+
+    queryString.stringify = function(queryObject) {
+        return queryObject ? Object.keys(queryObject).map(function(index) {
+            var item = queryObject[index];
+            return Array.isArray(item) ? item.map(function(queryObject) {
+                return encodeURIComponent(index) + "=" + encodeURIComponent(queryObject);
+            }).join("&") : encodeURIComponent(index) + "=" + encodeURIComponent(item);
         }).join("&") : "";
     };
-    n.clean = function (s) {
-        if (s) {
-            var t = s.split("&");
-            var u = [];
-            for (var i = 0; i < t.length; i++) {
-                if (t[i].indexOf('=') + 1 != t[i].length && t[i].indexOf('undefined') < 0) {
-                    u.push(t[i]);
+
+    queryString.clean = function (query) {
+        if (query) {
+            var params = query.split("&");
+            var keepers = [];
+            for (var i = 0; i < params.length; i++) {
+                if (params[i].indexOf('=') + 1 !== params[i].length && params[i].indexOf('undefined') < 0) {
+                    keepers.push(params[i]);
                 }
             }
-            return u.join("&");
+            return keepers.join("&");
         } else {
             return "";
         }
     };
-    n.remove = function (e) {
-        var u = [];
-        var t = location.search.replace("?", "").split("&");
-        for (var i = 0; i < t.length; i++) {
-            if (t[i].indexOf(e + "=") < 0) {
-                u.push(t[i]);
+
+    queryString.remove = function (target) {
+        var keepers = [];
+        var params = location.search.replace("?", "").split("&");
+        for (var i = 0; i < params.length; i++) {
+            if (params[i].indexOf(target + "=") < 0) {
+                keepers.push(params[i]);
             }
         }
-        u = n.clean(u.join("&"));
-        history.replaceState({}, "", window.location.pathname + "?" + u);
+        keepers = queryString.clean(keepers.join("&"));
+        history.replaceState({}, "", window.location.pathname + "?" + keepers);
     };
-    n.removeAll = function () {
+
+    queryString.removeAll = function () {
         history.replaceState({}, "", window.location.pathname);
     };
-    n.add = function (e, o) {
-        n.push(e, o);
-    };
-    n.push = function (e, o) {
-        var u = [];
-        var r = n.parse(location.search);
-        r[e] = o;
-        for (var v in r) {
-            u.push(v + "=" + encodeURIComponent(r[v]));
-        }
-        var t = n.clean(u.join("&"));
 
+    queryString.push = function (name, value) {
+        var newQuery = [];
+        var query = queryString.parse(location.search);
+        query[name] = value;
+        for (var key in query) {
+            if (query.hasOwnProperty(key)) {
+                newQuery.push(key + "=" + encodeURIComponent(query[key]));
+            }
+        }
+        newQuery = queryString.clean(newQuery.join("&"));
         try {
-            history.replaceState({}, "", window.location.pathname + "?" + t);
+            history.replaceState({}, "", window.location.pathname + "?" + newQuery);
         } catch(e) {
             if (e.toString().indexOf("DOM Exception 18") !== -1) {
                 window.location.reload();
             }
         }
     };
-    "undefined" != typeof module && module.exports ? module.exports = n : window.queryString = n;
-}();
+
+    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        module.exports = queryString;
+    } else {
+        window.queryString = queryString;
+    }
+
+
+})();

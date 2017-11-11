@@ -115,7 +115,7 @@ module.exports = function (grunt) {
                         main: 'app/assets/css/style.css'
                     },
                     sections: {
-                        views: 'src/html/views/**/*.html',
+                        views: 'src/html/partials/views/**/*.html',
                         templates: 'src/html/partials/templates/**/*.html',
                         modals: 'src/html/partials/modals/**/*.html',
                         layout: {
@@ -157,16 +157,9 @@ module.exports = function (grunt) {
         },
         jshint: {
             options: {
-                curly: true,
-                eqeqeq: true,
-                eqnull: true,
-                browser: true,
-                debug: true,
-                globals: {
-                    jQuery: true
-                }
+                jshintrc: true
             },
-            test: ['src/js/**/*.js']
+            test: ['src/js/**/*.js','src/lib/**/*.js']
         },
         mocha: {
             test: {
@@ -260,6 +253,10 @@ module.exports = function (grunt) {
             html: {
                 files: ['src/html/**/*.html'],
                 tasks: ['build_html']
+            },
+            lib: {
+                files: ['src/lib/**/*.js', '!src/lib/**/*.test.js'],
+                tasks: ['default']
             },
             grunt_file: {
                 files: ['Gruntfile.js'],

@@ -1,13 +1,17 @@
 pikaDeck.controller = pikaDeck.controller || {};
+pikaDeck.controller.index = {};
 
-pikaDeck.controller.index = function () {
-    return {
-        init: function (path) {
-            "use strict";
+(function() {
+    "use strict";
 
-            console.log('Homepage');
-            console.log(path);
+    this.init = function(path) {
 
-        }
+        console.log(path);
+
+        pikaDeck.hb.drawView('#hb_view_index');
+
+        pikaDeck.getSearchResults();
+
     };
-};
+
+}).apply(pikaDeck.controller.index);

@@ -1,47 +1,46 @@
-// TODO: Look into sorting cards by number.
-// TODO: Using local store across sessions is problematic.  Need to flush localstore on startup?
+var pikaDeck = pikaDeck || {};
 
-var pikaDeck = {
-    apiPath: 'https://api.pokemontcg.io/v1/',
-    lookup: {},
-    init: function() {
+(function() {
+    'use strict';
 
-        this.router().init();
+    this.apiPath = 'https://api.pokemontcg.io/v1/';
 
-        this.initToaster();
-        this.initBootstrap();
-        this.initHandlebarsHelpers();
+    this.init = function() {
+
+        pikaDeck.toastr.init();
+        pikaDeck.bootstrap.init();
+        pikaDeck.hb.init();
+        pikaDeck.events.init();
+        pikaDeck.router.init();
+
+    };
 
 
-        this.bindEvents();
-
-
-        this.query().store();
-
-    },
-    getSearchResults: function () {
+    this.getSearchResults = function () {
 
         $('#search_options').collapse('hide');
 
         var params = this.getParams();
 
-        this.query().push(params);
+        pikaDeck.query.push(params);
 
-        this.query().store();
+        pikaDeck.query.store();
 
         this.getCards(params);
 
-    },
-    getCurrentDeck: function () {
+    };
+    this.getCurrentDeck = function () {
 
-        if (this.lookup && this.lookup.cart && this.lookup.cart.length > 0) {
+        var cart = pikaDeck.store.get('cart');
 
-            var cart = this.lookup.cart.join('|');
+        if (cart && cart.length > 0) {
+
+            var cartQuery = cart.join('|');
 
             queryString.removeAll();
-            queryString.push('deck', cart);
+            queryString.push('deck', cartQuery);
 
-            this.getDeck(this.lookup.cart);
+            pikaDeck.getDeck(cart);
 
         } else {
 
@@ -49,152 +48,19 @@ var pikaDeck = {
 
         }
 
-    },
+    };
+    this.addCardToDeck = function ($target) {
 
-    bindEvents: function() {
-
-        var that = this;
-
-        $(document).on('click', 'button#pika_search', function() {
-            that.getSearchResults();
-        });
-
-        $(document).on('click', 'button#view_deck', function() {
-            that.getCurrentDeck();
-        });
-
-        $(document).on('store_query_done', function(e, query) {
-
-            $('#poke_search').val(that.lookup.query.name);
-
-            if (that.lookup.query.deck) {
-                that.lookup.cart = that.lookup.query.deck || [];
-                delete that.lookup.query.deck;
-                $('.count', '#view_deck').html('(' + that.lookup.cart.length + ')');
-            }
-
-            that.drawSearchOptionsCount(query);
-
-            that.getSimpleData('types');
-            that.getSimpleData('subtypes');
-            that.getSimpleData('supertypes');
-
-            that.getSets();
-
-        });
-
-        $(document).on('draw_sets_done', function() {
-
-            var params = that.query().get();
-
-            if (params.indexOf('deck=') !== -1) {
-
-                that.getDeck(that.lookup.cart);
-
-            } else {
-
-                that.getCards(params);
-                $('#poke_set').val(that.lookup.query.setCode).trigger('change');
-
-            }
-
-        });
-
-        $(document).on('click', 'button[data-add]', function() {
-            that.addCardToDeck($(this));
-        });
-
-        $(document).on('click', 'button[data-print]', function() {
-            var card = pikaDeck.lookup.cards[$(this).data().print];
-            that.pdf().printPlaySet(card);
-        });
-
-        $(document).on('click', '[data-info]', function() {
-
-            // TODO: Move this into a draw statement...
-            var id = $(this).data().info;
-            var data = that.lookup.cards[id];
-
-            var template = Handlebars.compile($('#hb_card_info').html());
-            $('.modal-content', '.modal--info').html(template(data));
-
-        });
-
-        $(document).on('click', '[data-zoom]', function() {
-
-            var id = $(this).data().zoom;
-            var imageUrlHiRes = that.lookup.cards[id].imageUrlHiRes;
-            $('[data-zoomed]', '.modal--zoomed').attr('src', imageUrlHiRes);
-
-        });
-
-        $(document).on('get_sets_done', function(e, data, lookup, tournamentSets) {
-            that.lookup.sets = lookup;
-            that.lookup.tournamentSets = tournamentSets;
-            that.drawSets(data);
-
-        });
-
-        $(document).on('get_types_done', function(e, data) {
-            var items = that.getTypeOptions(data);
-            if (items) {
-                that.drawTypes(items);
-            }
-        });
-
-        $(document).on('get_subtypes_done', function(e, data) {
-            var items = that.getTypeOptions(data);
-            if (items) {
-                that.drawSubtypes(items);
-            }
-        });
-
-        $(document).on('get_supertypes_done', function(e, data) {
-            var items = that.getTypeOptions(data);
-            if (items) {
-                that.drawSupertypes(items);
-            }
-        });
-
-        $(document).on('get_cards_done', function(e, data, lookup) {
-            that.lookup.cards = lookup;
-            that.drawCards(data);
-        });
-
-
-
-        $(document).on('draw_types_done', function() {
-            that.drawSelectedTypesFromQuery(that.lookup.query.types);
-        });
-
-        $(document).on('draw_subtypes_done', function() {
-            that.drawSelectedSubtypesFromQuery(that.lookup.query.subtype);
-        });
-
-        $(document).on('draw_supertypes_done', function() {
-            that.drawSelectedSupertypesFromQuery(that.lookup.query.supertype);
-        });
-
-        $(document).on('getting_cards', function () {
-            that.drawPageLoader($('#poke_cards'));
-        });
-
-    },
-
-
-
-
-    addCardToDeck: function ($target) {
-
-        this.lookup.cart = this.lookup.cart || [];
+        var cart = pikaDeck.store.get('cart') || [];
+        var cards = pikaDeck.store.get('cards');
 
         var id = $target.data().add;
 
-        var data = this.lookup.cards[id];
-        var inCart = this.countInArray(this.lookup.cart, id);
+        var data = cards[id];
+        var inCart = this.countInArray(cart, id);
         var isBasicEnergy = (data.supertype === 'Energy' && data.subtype === 'Basic');
 
-        var isCartMaxReached = this.lookup.cart.length >= 60;
+        var isCartMaxReached = cart.length >= 60;
         if (isCartMaxReached) {
             toastr.warning('You have 60 cards selected which is the max allowed within a deck.');
             return;
@@ -216,10 +82,13 @@ var pikaDeck = {
         });
 
 
-        this.lookup.cart.push(id);
+        cart.push(id);
+
+        pikaDeck.store.push('cart', cart);
+
         inCart = inCart + 1;
 
-        $('.count', '#view_deck').html('(' + this.lookup.cart.length + ')');
+        $('.count', '#view_deck').html('(' + cart.length + ')');
 
         var text = data.name + ' Added';
         if (!isBasicEnergy) {
@@ -230,9 +99,10 @@ var pikaDeck = {
 
         toastr.success(text);
 
-    },
+    };
 
-    getSets: function () {
+
+    this.getSets = function () {
 
         var that = this;
 
@@ -275,8 +145,8 @@ var pikaDeck = {
             }
         });
 
-    },
-    getSimpleData: function (endpoint) {
+    };
+    this.getSimpleData = function (endpoint) {
 
         var that = this;
 
@@ -307,21 +177,21 @@ var pikaDeck = {
             }
         });
 
-    },
-    getCards: function (params) {
+    };
+    this.getCards = function (params) {
 
         $(document).trigger('getting_cards');
 
         this.drawDeckButtonEnabled();
 
-        params = (params) ? params : this.getDefaultParams(this.lookup.tournamentSets.standard);
+        var tournamentSets = pikaDeck.store.get('tournamentSets');
+
+        params = (params) ? params : this.getDefaultParams(tournamentSets.standard);
 
         var that = this;
 
-
         // TODO: Pass params as data...
         var endpoint = this.apiPath + 'cards' + '?pageSize=60&' + params;
-
 
         // Else get new data...
         $.ajax({
@@ -340,8 +210,8 @@ var pikaDeck = {
             }
         });
 
-    },
-    getDeck: function (deck) {
+    };
+    this.getDeck = function (deck) {
 
         $(document).trigger('getting_cards');
 
@@ -367,18 +237,16 @@ var pikaDeck = {
 
                 $(document).trigger('get_cards_done', [data.cards, lookup]);
 
-                //that.drawCards(data.cards);
-
             },
             error: function(xhr, status, error) {
                 console.log([xhr, status, error]);
             }
         });
 
-    },
+    };
 
 
-    getParams: function () {
+    this.getParams = function () {
 
         var data = $('#pika_filters').serializeArray();
 
@@ -411,11 +279,8 @@ var pikaDeck = {
 
         return null;
 
-    },
-
-
-
-    drawSets: function (data) {
+    };
+    this.drawSets = function (data) {
 
         var items = this.getSetOptions(data);
 
@@ -428,8 +293,8 @@ var pikaDeck = {
 
         $(document).trigger('draw_sets_done');
 
-    },
-    drawCards: function (data) {
+    };
+    this.drawCards = function (data) {
 
         if (data.length !== 0) {
 
@@ -445,8 +310,8 @@ var pikaDeck = {
 
         $(document).trigger('draw_cards_done');
 
-    },
-    drawSearchOptionsCount: function (query) {
+    };
+    this.drawSearchOptionsCount = function (query) {
 
         var queryCount = Object.keys(query).length;
 
@@ -462,36 +327,37 @@ var pikaDeck = {
 
         }
 
-    },
+    };
+
 
     // TODO: Pure DOM updates
     // ------------------------------------------
-    drawDeckButtonDisabled: function () {
+    this.drawDeckButtonDisabled = function () {
 
         $('button#view_deck')
             .attr('disabled', 'disabled')
             .removeClass('btn-primary btn--icon-tada')
             .addClass('btn-secondary');
 
-    },
-    drawDeckButtonEnabled: function () {
+    };
+    this.drawDeckButtonEnabled = function () {
 
         $('button#view_deck')
             .removeAttr('disabled')
             .removeClass('btn-secondary')
             .addClass('btn-primary btn--icon-tada');
 
-    },
-    drawSelectedTypesFromQuery: function (types) {
+    };
+    this.drawSelectedTypesFromQuery = function (types) {
         $('#poke_type').val(types).trigger('change');
-    },
-    drawSelectedSubtypesFromQuery: function (subtypes) {
+    };
+    this.drawSelectedSubtypesFromQuery = function (subtypes) {
         $('#poke_subtype').val(subtypes).trigger('change');
-    },
-    drawSelectedSupertypesFromQuery: function (supertypes) {
+    };
+    this.drawSelectedSupertypesFromQuery = function (supertypes) {
         $('#poke_supertype').val(supertypes).trigger('change');
-    },
-    drawTypes: function (items) {
+    };
+    this.drawTypes = function (items) {
 
         $('#poke_type').html(items).select2({
             placeholder: 'Select a Type',
@@ -500,8 +366,8 @@ var pikaDeck = {
 
         $(document).trigger('draw_types_done');
 
-    },
-    drawSubtypes: function (items) {
+    };
+    this.drawSubtypes = function (items) {
 
         $('#poke_subtype').html(items).select2({
             placeholder: 'Select a Subtype',
@@ -510,8 +376,8 @@ var pikaDeck = {
 
         $(document).trigger('draw_subtypes_done');
 
-    },
-    drawSupertypes: function (items) {
+    };
+    this.drawSupertypes = function (items) {
 
         $('#poke_supertype').html(items).select2({
             placeholder: 'Select a Supertype',
@@ -520,102 +386,15 @@ var pikaDeck = {
 
         $(document).trigger('draw_supertypes_done');
 
-    },
-    drawPageLoader: function ($target) {
+    };
+    this.drawPageLoader = function ($target) {
         var loader = Handlebars.compile($('#hp_loading_cards').html());
         $target.html(loader());
-    },
-
-
-    initHandlebarsHelpers: function() {
-
-        var that = this;
-
-        Handlebars.registerHelper('energyType', function(type) {
-
-            type = type.toLowerCase();
-
-            type = Handlebars.Utils.escapeExpression(type);
-
-            var result = '<i class="icon-energy icon-' + type + '"></i>';
-
-            return new Handlebars.SafeString(result);
-
-        });
-
-        Handlebars.registerHelper('setData', function(setCode, key) {
-
-            setCode = Handlebars.Utils.escapeExpression(setCode);
-            key = Handlebars.Utils.escapeExpression(key);
-
-            // TODO: Should check for existence of nodes in object...
-            var value = that.lookup.sets[setCode][key];
-
-            return new Handlebars.SafeString(value);
-        });
-
-        Handlebars.registerHelper('tournamentType', function(setCode) {
-
-            setCode = Handlebars.Utils.escapeExpression(setCode);
-
-            // TODO: Should check for existence of nodes in object...
-            var standardLegal = that.lookup.sets[setCode].standardLegal;
-            var expandedLegal = that.lookup.sets[setCode].expandedLegal;
-
-            var value = (standardLegal) ? 'Standard' : (expandedLegal) ? 'Expanded' : 'Unlimited';
-
-            return new Handlebars.SafeString(value);
-        });
-
-        Handlebars.registerHelper('setSymbolUrl', function(setCode) {
-
-            setCode = Handlebars.Utils.escapeExpression(setCode);
-
-            // TODO: Should check for existence of nodes in object...
-            var symbolUrl = that.lookup.sets[setCode].symbolUrl;
-
-            return new Handlebars.SafeString(symbolUrl);
-        });
-
-        Handlebars.registerHelper('ifAny', function(v1, v2, v3, options) {
-            return (v1 || v2 || v3) ? options.fn(this) : options.inverse(this);
-        });
-
-    },
-    initToaster: function () {
-
-        toastr.options = {
-            'closeButton': true,
-            'debug': false,
-            'newestOnTop': false,
-            'progressBar': false,
-            'positionClass': 'toast-bottom-right',
-            'preventDuplicates': false,
-            'onclick': null,
-            'showDuration': '300',
-            'hideDuration': '1000',
-            'timeOut': '5000',
-            'extendedTimeOut': '1000',
-            'showEasing': 'swing',
-            'hideEasing': 'linear',
-            'showMethod': 'fadeIn',
-            'hideMethod': 'fadeOut'
-        };
-
-    },
-    initBootstrap: function () {
-
-        $('[data-toggle="tooltip"]').tooltip();
-
-    },
-
-
-
-
+    };
 
     // TODO: Add Unit Tests
     // ------------------------------------------
-    getLookupTable: function (data, lookupKey) {
+    this.getLookupTable = function (data, lookupKey) {
 
         var lookup = {};
 
@@ -625,8 +404,8 @@ var pikaDeck = {
 
         return lookup;
 
-    },
-    getTournamentSets: function (data) {
+    };
+    this.getTournamentSets = function (data) {
 
         var standard = [];
         var expanded = [];
@@ -648,8 +427,8 @@ var pikaDeck = {
             expanded: expanded
         };
 
-    },
-    getDefaultParams: function (standardSets) {
+    };
+    this.getDefaultParams = function (standardSets) {
 
         // SHAME: This is not pretty.
         // TODO: Ugh. Some of the cards in the DB do not include a rarity. So either need to live with it, or
@@ -664,8 +443,8 @@ var pikaDeck = {
             '&rarity=Rare%20Ultra|Rare%20Holo%20gx|Rare%20Holo%20EX' +
             '&setCode=' + standardSets;
 
-    },
-    getTypeOptions: function (data) {
+    };
+    this.getTypeOptions = function (data) {
 
         if (data && data.length > 0) {
 
@@ -680,8 +459,8 @@ var pikaDeck = {
 
         return null;
 
-    },
-    getSetOptions: function (data) {
+    };
+    this.getSetOptions = function (data) {
 
         var items = [];
 
@@ -691,8 +470,8 @@ var pikaDeck = {
 
         return items.join('');
 
-    },
-    getSelect2SetOptions: function(state) {
+    };
+    this.getSelect2SetOptions = function(state) {
 
         if (!state.id) {
             return state.text;
@@ -708,9 +487,8 @@ var pikaDeck = {
         );
 
         return html;
-    },
-
-    countInArray: function (array, what) {
+    };
+    this.countInArray = function (array, what) {
         var count = 0;
         for (var i = 0; i < array.length; i++) {
             if (array[i] === what) {
@@ -718,8 +496,8 @@ var pikaDeck = {
             }
         }
         return count;
-    },
-    removeFromArray: function (data, item) {
+    };
+    this.removeFromArray = function (data, item) {
 
         var index = data.indexOf(item);
 
@@ -728,10 +506,14 @@ var pikaDeck = {
         }
 
         return data;
-    }
+    };
 
-};
+}).apply(pikaDeck);
+
 
 $(function() {
+    'use strict';
+
     pikaDeck.init();
+
 });

@@ -1,13 +1,16 @@
 pikaDeck.controller = pikaDeck.controller || {};
+pikaDeck.controller.deck = {};
 
-pikaDeck.controller.deck = function () {
-    return {
-        init: function (path) {
-            "use strict";
+(function() {
+    "use strict";
 
-            console.log('Deck');
-            console.log(path);
+    this.init = function(path) {
 
-        }
+        console.log('Deck');
+        console.log(path);
+
+        pikaDeck.hb.drawView('#hb_view_deck');
+
     };
-};
+
+}).apply(pikaDeck.controller.deck);
