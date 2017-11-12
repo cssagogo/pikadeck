@@ -3,12 +3,33 @@ pikaDeck.router =  {};
 (function() {
     "use strict";
 
+    this.init = function(hash) {
+
+        hash = hash || window.location.hash;
+
+        hash = _removeQuery(hash);
+
+        if (!(_inRoutes(hash))) {
+            pikaDeck.ctrl.index.init();
+            return;
+        }
+
+        var route = _splitHash(hash)[0];
+        var path = _getPath(hash);
+
+        pikaDeck.store.push('route', route);
+        pikaDeck.store.push('path', path);
+
+        pikaDeck.ctrl[route].init(path);
+
+    };
+
     var _inRoutes = function (hash) {
 
         hash = hash || '';
 
         var route = _splitHash(hash)[0];
-        var ctrl = pikaDeck.controller;
+        var ctrl = pikaDeck.ctrl;
 
         return (_isRoute(hash) && ctrl && typeof ctrl[route].init === 'function') ? true : false;
 
@@ -36,23 +57,12 @@ pikaDeck.router =  {};
 
     };
 
-    this.init = function(hash) {
-
-        hash = hash || window.location.hash;
-
-        if (!(_inRoutes(hash))) {
-            pikaDeck.controller.index.init();
-            return;
+    var _removeQuery = function (hash) {
+        var queryStart = hash.indexOf('?');
+        if (queryStart) {
+            return hash.slice(0, queryStart);
         }
-
-        var route = _splitHash(hash)[0];
-        var path = _getPath(hash);
-
-        pikaDeck.store.push('route', route);
-        pikaDeck.store.push('path', path);
-
-        pikaDeck.controller[route].init(path);
-
+        return hash;
     };
 
     // Start - For Unit Testing Only

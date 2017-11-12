@@ -29,26 +29,239 @@ var pikaDeck = pikaDeck || {};
         this.getCards(params);
 
     };
-    this.getCurrentDeck = function () {
+    this.getCards = function (params) {
 
-        var cart = pikaDeck.store.get('cart');
+        $(document).trigger('getting_cards');
 
-        if (cart && cart.length > 0) {
+        this.drawDeckButtonEnabled();
 
-            var cartQuery = cart.join('|');
+        var tournamentSets = pikaDeck.store.get('tournamentSets');
 
-            queryString.removeAll();
-            queryString.push('deck', cartQuery);
+        params = (params) ? params : this.getDefaultParams(tournamentSets.standard);
 
-            pikaDeck.getDeck(cart);
+        var that = this;
+
+        // TODO: Pass params as data...
+        var endpoint = this.apiPath + 'cards' + '?pageSize=60&' + params;
+
+        // Else get new data...
+        $.ajax({
+            dataType: 'json',
+            url: endpoint,
+            success: function(data) {
+
+                // Create lookup table...
+                var lookup = that.getLookupTable(data.cards, 'id');
+
+                $(document).trigger('get_cards_done', [data.cards, lookup]);
+
+            },
+            error: function(xhr, status, error) {
+                console.log([xhr, status, error]);
+            }
+        });
+
+    };
+    this.drawCards = function (data) {
+
+        if (data.length !== 0) {
+
+            var template = Handlebars.compile($('#hb_card_tile').html());
+            $('#poke_cards').html(template(data));
 
         } else {
 
-            toastr.warning('No cards have been added to your deck!');
+            var nodata = Handlebars.compile($('#hb_no_results').html());
+            $('#poke_cards').html(nodata());
 
         }
 
+        $(document).trigger('draw_cards_done');
+
     };
+
+
+
+    this.getSets = function () {
+
+        var that = this;
+
+        // If exists in localstore...
+        var data = store.get('sets') || [];
+        if (data.sets && data.sets.length > 0) {
+
+            // Create lookup table...
+            var lookup = this.getLookupTable(data.sets, 'code');
+
+            // Get standard sets...
+            // TODO: Consider a combined loop with getLookupTable...
+            var tournamentSets = this.getTournamentSets(data.sets);
+
+            $(document).trigger('get_sets_done', [data.sets, lookup, tournamentSets]);
+            return;
+        }
+
+        // Else get new data...
+        $.ajax({
+            dataType: 'json',
+            url: this.apiPath + 'sets',
+            success: function(data) {
+
+                // Show latest set first...
+                if (data && data.sets && data.sets.length > 0) {
+                    data.sets.reverse();
+                }
+
+                // Save response to localStore...
+                store.set('sets', data);
+
+                // Call getSets again, data should be in localStore now...
+                // TODO: This is a bit dangerous.  Need to consider better method.
+                that.getSets();
+
+            },
+            error: function(xhr, status, error) {
+                console.log([xhr, status, error]);
+            }
+        });
+
+    };
+    this.getSetOptions = function (data) {
+
+        var items = [];
+
+        $.each(data, function(key, val) {
+            items.push('<option value="' + val.code + '">' + val.name + ' (' + val.ptcgoCode + ')</option>');
+        });
+
+        return items.join('');
+
+    };
+    this.getSelect2SetOptions = function(state) {
+
+        if (!state.id) {
+            return state.text;
+        }
+
+        var baseUrl = 'https://images.pokemontcg.io';
+
+        var html = $(
+            '<span class="img-set">' +
+            '<span><img src="' + baseUrl + '/' + state.element.value.toLowerCase() + '/symbol.png" /></span> ' +
+            state.text +
+            '</span>'
+        );
+
+        return html;
+    };
+    this.drawSets = function (data) {
+
+        var items = this.getSetOptions(data);
+
+        $('#poke_set').html(items).select2({
+            placeholder: 'Select a set',
+            allowClear: true,
+            templateResult: this.getSelect2SetOptions,
+            templateSelection: this.getSelect2SetOptions
+        });
+
+        $(document).trigger('draw_sets_done');
+
+    };
+    this.getSimpleData = function (endpoint) {
+
+        var that = this;
+
+        // If exists in localstore...
+        var data = store.get(endpoint) || [];
+        if (data[endpoint] && data[endpoint].length > 0) {
+
+            $(document).trigger('get_' + endpoint + '_done', [data[endpoint]]);
+            return;
+
+        }
+
+        $.ajax({
+            dataType: 'json',
+            url: this.apiPath + endpoint,
+            success: function(data) {
+
+                // Save response to localStore...
+                store.set(endpoint, data);
+
+                // Call getSets again, data should be in localStore now...
+                // TODO: This is a bit dangerous.  Need to consider better method.
+                that.getSimpleData(endpoint);
+
+            },
+            error: function(xhr, status, error) {
+                console.log([xhr, status, error]);
+            }
+        });
+
+    };
+    this.drawTypes = function (items) {
+
+        $('#poke_type').html(items).select2({
+            placeholder: 'Select a Type',
+            allowClear: true
+        });
+
+        $(document).trigger('draw_types_done');
+
+    };
+    this.getTypeOptions = function (data) {
+
+        if (data && data.length > 0) {
+
+            var items = [];
+
+            for (var i = 0; i < data.length; i++) {
+                items.push('<option value="' + data[i] + '">' + data[i] + '</option>');
+            }
+
+            return items.join('');
+        }
+
+        return null;
+
+    };
+    this.drawSelectedTypesFromQuery = function (types) {
+        $('#poke_type').val(types).trigger('change');
+    };
+    this.drawSubtypes = function (items) {
+
+        $('#poke_subtype').html(items).select2({
+            placeholder: 'Select a Subtype',
+            allowClear: true
+        });
+
+        $(document).trigger('draw_subtypes_done');
+
+    };
+    this.drawSelectedSubtypesFromQuery = function (subtypes) {
+        $('#poke_subtype').val(subtypes).trigger('change');
+    };
+    this.drawSupertypes = function (items) {
+
+        $('#poke_supertype').html(items).select2({
+            placeholder: 'Select a Supertype',
+            allowClear: true
+        });
+
+        $(document).trigger('draw_supertypes_done');
+
+    };
+    this.drawSelectedSupertypesFromQuery = function (supertypes) {
+        $('#poke_supertype').val(supertypes).trigger('change');
+    };
+
+
+
+
+
+
+
     this.addCardToDeck = function ($target) {
 
         var cart = pikaDeck.store.get('cart') || [];
@@ -100,152 +313,6 @@ var pikaDeck = pikaDeck || {};
         toastr.success(text);
 
     };
-
-
-    this.getSets = function () {
-
-        var that = this;
-
-        // If exists in localstore...
-        var data = store.get('sets') || [];
-        if (data.sets && data.sets.length > 0) {
-
-            // Create lookup table...
-            var lookup = this.getLookupTable(data.sets, 'code');
-
-            // Get standard sets...
-            // TODO: Consider a combined loop with getLookupTable...
-            var tournamentSets = this.getTournamentSets(data.sets);
-
-            $(document).trigger('get_sets_done', [data.sets, lookup, tournamentSets]);
-            return;
-        }
-
-        // Else get new data...
-        $.ajax({
-            dataType: 'json',
-            url: this.apiPath + 'sets',
-            success: function(data) {
-
-                // Show latest set first...
-                if (data && data.sets && data.sets.length > 0) {
-                    data.sets.reverse();
-                }
-
-                // Save response to localStore...
-                store.set('sets', data);
-
-                // Call getSets again, data should be in localStore now...
-                // TODO: This is a bit dangerous.  Need to consider better method.
-                that.getSets();
-
-            },
-            error: function(xhr, status, error) {
-                console.log([xhr, status, error]);
-            }
-        });
-
-    };
-    this.getSimpleData = function (endpoint) {
-
-        var that = this;
-
-        // If exists in localstore...
-        var data = store.get(endpoint) || [];
-        if (data[endpoint] && data[endpoint].length > 0) {
-
-            $(document).trigger('get_' + endpoint + '_done', [data[endpoint]]);
-            return;
-
-        }
-
-        $.ajax({
-            dataType: 'json',
-            url: this.apiPath + endpoint,
-            success: function(data) {
-
-                // Save response to localStore...
-                store.set(endpoint, data);
-
-                // Call getSets again, data should be in localStore now...
-                // TODO: This is a bit dangerous.  Need to consider better method.
-                that.getSimpleData(endpoint);
-
-            },
-            error: function(xhr, status, error) {
-                console.log([xhr, status, error]);
-            }
-        });
-
-    };
-    this.getCards = function (params) {
-
-        $(document).trigger('getting_cards');
-
-        this.drawDeckButtonEnabled();
-
-        var tournamentSets = pikaDeck.store.get('tournamentSets');
-
-        params = (params) ? params : this.getDefaultParams(tournamentSets.standard);
-
-        var that = this;
-
-        // TODO: Pass params as data...
-        var endpoint = this.apiPath + 'cards' + '?pageSize=60&' + params;
-
-        // Else get new data...
-        $.ajax({
-            dataType: 'json',
-            url: endpoint,
-            success: function(data) {
-
-                // Create lookup table...
-                var lookup = that.getLookupTable(data.cards, 'id');
-
-                $(document).trigger('get_cards_done', [data.cards, lookup]);
-
-            },
-            error: function(xhr, status, error) {
-                console.log([xhr, status, error]);
-            }
-        });
-
-    };
-    this.getDeck = function (deck) {
-
-        $(document).trigger('getting_cards');
-
-        this.drawDeckButtonDisabled();
-
-        var that = this;
-
-        // TODO: Look at stripping duplicate items from deck here.
-        // TODO: Look into how to handle when no IDs are passed in.
-        deck = (deck) ? deck.join('|') : '';
-
-        // TODO: Pass params as data...
-        var endpoint = this.apiPath + 'cards?id=' + deck;
-
-        // Else get new data...
-        $.ajax({
-            dataType: 'json',
-            url: endpoint,
-            success: function(data) {
-
-                // Create lookup table...
-                var lookup = that.getLookupTable(data.cards, 'id');
-
-                $(document).trigger('get_cards_done', [data.cards, lookup]);
-
-            },
-            error: function(xhr, status, error) {
-                console.log([xhr, status, error]);
-            }
-        });
-
-    };
-
-
     this.getParams = function () {
 
         var data = $('#pika_filters').serializeArray();
@@ -280,37 +347,6 @@ var pikaDeck = pikaDeck || {};
         return null;
 
     };
-    this.drawSets = function (data) {
-
-        var items = this.getSetOptions(data);
-
-        $('#poke_set').html(items).select2({
-            placeholder: 'Select a set',
-            allowClear: true,
-            templateResult: this.getSelect2SetOptions,
-            templateSelection: this.getSelect2SetOptions
-        });
-
-        $(document).trigger('draw_sets_done');
-
-    };
-    this.drawCards = function (data) {
-
-        if (data.length !== 0) {
-
-            var template = Handlebars.compile($('#hb_card_tile').html());
-            $('#poke_cards').html(template(data));
-
-        } else {
-
-            var nodata = Handlebars.compile($('#hb_no_results').html());
-            $('#poke_cards').html(nodata());
-
-        }
-
-        $(document).trigger('draw_cards_done');
-
-    };
     this.drawSearchOptionsCount = function (query) {
 
         var queryCount = Object.keys(query).length;
@@ -328,7 +364,6 @@ var pikaDeck = pikaDeck || {};
         }
 
     };
-
 
     // TODO: Pure DOM updates
     // ------------------------------------------
@@ -348,45 +383,7 @@ var pikaDeck = pikaDeck || {};
             .addClass('btn-primary btn--icon-tada');
 
     };
-    this.drawSelectedTypesFromQuery = function (types) {
-        $('#poke_type').val(types).trigger('change');
-    };
-    this.drawSelectedSubtypesFromQuery = function (subtypes) {
-        $('#poke_subtype').val(subtypes).trigger('change');
-    };
-    this.drawSelectedSupertypesFromQuery = function (supertypes) {
-        $('#poke_supertype').val(supertypes).trigger('change');
-    };
-    this.drawTypes = function (items) {
 
-        $('#poke_type').html(items).select2({
-            placeholder: 'Select a Type',
-            allowClear: true
-        });
-
-        $(document).trigger('draw_types_done');
-
-    };
-    this.drawSubtypes = function (items) {
-
-        $('#poke_subtype').html(items).select2({
-            placeholder: 'Select a Subtype',
-            allowClear: true
-        });
-
-        $(document).trigger('draw_subtypes_done');
-
-    };
-    this.drawSupertypes = function (items) {
-
-        $('#poke_supertype').html(items).select2({
-            placeholder: 'Select a Supertype',
-            allowClear: true
-        });
-
-        $(document).trigger('draw_supertypes_done');
-
-    };
     this.drawPageLoader = function ($target) {
         var loader = Handlebars.compile($('#hb_loading_cards').html());
         $target.html(loader());
@@ -444,50 +441,7 @@ var pikaDeck = pikaDeck || {};
             '&setCode=' + standardSets;
 
     };
-    this.getTypeOptions = function (data) {
 
-        if (data && data.length > 0) {
-
-            var items = [];
-
-            for (var i = 0; i < data.length; i++) {
-                items.push('<option value="' + data[i] + '">' + data[i] + '</option>');
-            }
-
-            return items.join('');
-        }
-
-        return null;
-
-    };
-    this.getSetOptions = function (data) {
-
-        var items = [];
-
-        $.each(data, function(key, val) {
-            items.push('<option value="' + val.code + '">' + val.name + ' (' + val.ptcgoCode + ')</option>');
-        });
-
-        return items.join('');
-
-    };
-    this.getSelect2SetOptions = function(state) {
-
-        if (!state.id) {
-            return state.text;
-        }
-
-        var baseUrl = 'https://images.pokemontcg.io';
-
-        var html = $(
-            '<span class="img-set">' +
-            '<span><img src="' + baseUrl + '/' + state.element.value.toLowerCase() + '/symbol.png" /></span> ' +
-            state.text +
-            '</span>'
-        );
-
-        return html;
-    };
     this.countInArray = function (array, what) {
         var count = 0;
         for (var i = 0; i < array.length; i++) {

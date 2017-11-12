@@ -39,21 +39,21 @@ pikaDeck.events = {};
 
             var params = pikaDeck.query.get();
 
-            if (params.indexOf('deck=') !== -1) {
+            // if (params.indexOf('deck=') !== -1) {
+            //
+            //     var cart = pikaDeck.store.get('cart');
+            //
+            //     pikaDeck.ctrl.deck.getDeck(cart);
+            //
+            // } else {
 
-                var cart = pikaDeck.store.get('cart');
+            pikaDeck.getCards(params);
 
-                pikaDeck.getDeck(cart);
+            var query = pikaDeck.store.get('query');
 
-            } else {
+            $('#poke_set').val(query.setCode).trigger('change');
 
-                pikaDeck.getCards(params);
-
-                var query = pikaDeck.store.get('query');
-
-                $('#poke_set').val(query.setCode).trigger('change');
-
-            }
+            //}
 
         });
 
@@ -92,6 +92,11 @@ pikaDeck.events = {};
             pikaDeck.drawCards(data);
         });
 
+        $(document).on('get_deck_done', function(e, data, lookup) {
+            pikaDeck.store.push('cards', lookup);
+            pikaDeck.ctrl.deck.draw(data);
+        });
+
         $(document).on('draw_types_done', function() {
             var query = pikaDeck.store.get('query');
             pikaDeck.drawSelectedTypesFromQuery(query.types);
@@ -120,7 +125,7 @@ pikaDeck.events = {};
         });
 
         $(document).on('click', 'button#view_deck', function() {
-            pikaDeck.getCurrentDeck();
+            pikaDeck.ctrl.deck.getCurrent();
         });
 
         $(document).on('click', 'button[data-add]', function() {

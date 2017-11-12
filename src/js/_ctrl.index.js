@@ -1,5 +1,5 @@
-pikaDeck.controller = pikaDeck.controller || {};
-pikaDeck.controller.index = {};
+pikaDeck.ctrl = pikaDeck.ctrl || {};
+pikaDeck.ctrl.index = {};
 
 (function() {
     "use strict";
@@ -14,4 +14,4 @@ pikaDeck.controller.index = {};
 
     };
 
-}).apply(pikaDeck.controller.index);
+}).apply(pikaDeck.ctrl.index);
