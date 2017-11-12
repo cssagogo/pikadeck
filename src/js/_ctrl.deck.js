@@ -10,7 +10,23 @@ pikaDeck.ctrl.deck = {};
 
         pikaDeck.hb.drawView('#hb_view_deck');
 
-        this.getCurrent();
+        var deck = this.getQuery();
+
+        this.get(deck);
+    };
+
+    this.getQuery = function () {
+
+        var query = window.location.hash;
+        query = query.slice((query.indexOf('?') + 1), query.length);
+
+        pikaDeck.query.store(query);
+
+        pikaDeck.store.get('cart');
+
+        return pikaDeck.store.get('cart');
+
+
     };
 
 
@@ -18,16 +34,14 @@ pikaDeck.ctrl.deck = {};
 
         $(document).trigger('getting_cards');
 
-        this.drawDeckButtonDisabled();
-
-        var that = this;
+        pikaDeck.drawDeckButtonDisabled();
 
         // TODO: Look at stripping duplicate items from deck here.
         // TODO: Look into how to handle when no IDs are passed in.
         deck = (deck) ? deck.join('|') : '';
 
         // TODO: Pass params as data...
-        var endpoint = this.apiPath + 'cards?id=' + deck;
+        var endpoint = pikaDeck.apiPath + 'cards?id=' + deck;
 
         // Else get new data...
         $.ajax({
@@ -36,7 +50,7 @@ pikaDeck.ctrl.deck = {};
             success: function(data) {
 
                 // Create lookup table...
-                var lookup = that.getLookupTable(data.cards, 'id');
+                var lookup = pikaDeck.getLookupTable(data.cards, 'id');
 
                 $(document).trigger('get_deck_done', [data.cards, lookup]);
 

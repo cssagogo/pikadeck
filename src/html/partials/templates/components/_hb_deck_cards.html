@@ -5,12 +5,11 @@
         <div class="card card--tile p-1">
             <a href="#" data-info="{{id}}" data-toggle="modal" data-target=".modal--info">
                 <img class="lazyload card-img-top" data-src="{{imageUrl}}" src="https://images.pokemontcg.io/xy0/symbol.png">
-                XXXXX
             </a>
             <div class="card__btn-group btn-group mt-1" role="group" aria-label="...">
 
-                <button data-add="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Add to Deck">
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                <button data-remove="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Remove from Deck">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
 
                 <button data-print="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Print Play Set">

@@ -39,8 +39,6 @@ var pikaDeck = pikaDeck || {};
 
         params = (params) ? params : this.getDefaultParams(tournamentSets.standard);
 
-        var that = this;
-
         // TODO: Pass params as data...
         var endpoint = this.apiPath + 'cards' + '?pageSize=60&' + params;
 
@@ -51,7 +49,7 @@ var pikaDeck = pikaDeck || {};
             success: function(data) {
 
                 // Create lookup table...
-                var lookup = that.getLookupTable(data.cards, 'id');
+                var lookup = pikaDeck.getLookupTable(data.cards, 'id');
 
                 $(document).trigger('get_cards_done', [data.cards, lookup]);
 

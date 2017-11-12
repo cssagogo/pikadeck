@@ -3,13 +3,16 @@ pikaDeck.query = {};
 (function() {
     "use strict";
 
-    this.get = function () {
-        return this._stripQuestionMark(window.location.search);
+    this.get = function (query) {
+        query = query || window.location.search;
+        return this._stripQuestionMark(query);
     };
 
-    this.store = function () {
+    this.store = function (query) {
 
-        var query = this._toObject(this.get());
+        query = query || this.get();
+
+        query = this._toObject(query);
 
         pikaDeck.store.push('query', query);
 
