@@ -3,25 +3,38 @@ pikaDeck.router =  {};
 (function() {
     "use strict";
 
-    this.init = function(hash) {
+    this.init = function() {
 
-        hash = hash || window.location.hash;
+        var hash   = window.location.hash.split('?');
+        var search = window.location.search.replace('?', '');
 
-        hash = _removeQuery(hash);
+        var query  = _getQuery(hash[1], search);
+        var route  = _getRoute(hash[0]);
+        var path   = _getPath(hash[0]);
 
-        if (!(_inRoutes(hash))) {
+        pikaDeck.store.push('route', route);
+        pikaDeck.store.push('path',  path);
+        pikaDeck.store.push('query', query);
+
+        if (!(_inRoutes(hash[0]))) {
             pikaDeck.ctrl.index.init();
             return;
         }
 
-        var route = _splitHash(hash)[0];
-        var path = _getPath(hash);
+        pikaDeck.ctrl[route].init();
 
-        pikaDeck.store.push('route', route);
-        pikaDeck.store.push('path', path);
+    };
 
-        pikaDeck.ctrl[route].init(path);
+    var _getRoute = function (hash) {
+        return _splitHash(hash)[0] || '';
+    };
 
+    var _getPath = function (hash) {
+        return _splitHash(hash)[1] || '';
+    };
+
+    var _getQuery = function (hash, search) {
+        return _queryToObject((hash) ? hash : search);
     };
 
     var _inRoutes = function (hash) {
@@ -31,39 +44,83 @@ pikaDeck.router =  {};
         var route = _splitHash(hash)[0];
         var ctrl = pikaDeck.ctrl;
 
-        return (_isRoute(hash) && ctrl && typeof ctrl[route].init === 'function') ? true : false;
+        return (_isRoute(hash) && ctrl && typeof ctrl[route] === 'object' && typeof ctrl[route].init === 'function') ? true : false;
 
+    };
+
+    var _queryToObject = function (query) {
+
+        // TODO: Handle ~NUM passed in via query here.
+
+        var queryObj = {};
+
+        if (query === '') {
+            return queryObj;
+        }
+
+        query = _stripQuestionMark(query);
+
+        query = query.split('&');
+
+        for (var i = 0; i < query.length; i++) {
+
+            var item = query[i].split('=');
+
+            var name = item[0];
+
+            var value = decodeURIComponent(item[1]);
+
+            value = value.split('|');
+
+            queryObj[name] = value;
+
+        }
+
+        return queryObj;
+
+    };
+
+    var _stripQuestionMark = function (query) {
+        return (query.indexOf('?') === 0) ? query.replace('?', '') : query;
     };
 
     var _isRoute = function (hash) {
-
-        hash = hash || '';
         return (hash && hash.indexOf('#!') === 0) ? true : false;
-
     };
 
     var _splitHash = function (hash) {
-
-        hash = hash || '';
-        return hash.toLowerCase().slice(2, hash.length).split('/');
-
+        return (hash) ? hash.toLowerCase().replace('#!','').split('/') : '';
     };
 
-    var _getPath = function (hash) {
+    // this.pushQuery = function (params) {
+    //
+    //     // TODO: Look at params coming in.  This might be the place to convert multiple items to single with ~NUM?
+    //
+    //     // TODO: Need to swap this out with router.
+    //     queryString.removeAll();
+    //
+    //     params = params.split('&');
+    //
+    //     for (var i = 0; i < params.length; i++) {
+    //
+    //         var item = params[i].split('=');
+    //
+    //         var name = item[0];
+    //
+    //         var value = decodeURIComponent(item[1]);
+    //
+    //         // TODO: Need to swap this out with router.
+    //         queryString.push(name, value);
+    //
+    //     }
+    //
+    //     $(document).trigger('push_query_done');
+    //
+    // };
 
-        hash = hash || '';
-        var path = _splitHash(hash)[1];
-        return (path) ? path : undefined;
 
-    };
 
-    var _removeQuery = function (hash) {
-        var queryStart = hash.indexOf('?');
-        if (queryStart) {
-            return hash.slice(0, queryStart);
-        }
-        return hash;
-    };
+
 
     // Start - For Unit Testing Only
     // this._inRoutes   = _inRoutes;

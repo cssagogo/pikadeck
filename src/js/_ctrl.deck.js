@@ -4,39 +4,23 @@ pikaDeck.ctrl.deck = {};
 (function() {
     "use strict";
 
-    this.init = function(path) {
-
-        console.log(path);
+    this.init = function() {
 
         pikaDeck.hb.drawView('#hb_view_deck');
 
-        var deck = this.getQuery();
+        pikaDeck.search.init();
+
+        var deck = pikaDeck.store.get('cart');
 
         this.get(deck);
     };
 
-    this.getQuery = function () {
-
-        var query = window.location.hash;
-        query = query.slice((query.indexOf('?') + 1), query.length);
-
-        pikaDeck.query.store(query);
-
-        pikaDeck.store.get('cart');
-
-        return pikaDeck.store.get('cart');
-
-
-    };
-
-
     this.get = function (deck) {
 
-        $(document).trigger('getting_cards');
+        $(document).trigger('getting_deck');
 
         pikaDeck.drawDeckButtonDisabled();
 
-        // TODO: Look at stripping duplicate items from deck here.
         // TODO: Look into how to handle when no IDs are passed in.
         deck = (deck) ? deck.join('|') : '';
 
@@ -62,27 +46,6 @@ pikaDeck.ctrl.deck = {};
 
     };
 
-    this.getCurrent = function () {
-
-        var cart = pikaDeck.store.get('cart');
-
-        if (cart && cart.length > 0) {
-
-            var cartQuery = cart.join('|');
-
-            queryString.removeAll();
-            queryString.push('deck', cartQuery);
-
-            this.get(cart);
-
-        } else {
-
-            toastr.warning('No cards have been added to your deck!');
-
-        }
-
-    };
-
     this.draw = function (data) {
 
         if (data.length !== 0) {
@@ -100,6 +63,61 @@ pikaDeck.ctrl.deck = {};
         $(document).trigger('draw_deck_done');
 
     };
+
+    this.getUniqueList = function (longList) {
+
+        return longList.filter(function(item, pos) {
+            return longList.indexOf(item) === pos;
+        });
+
+    };
+
+    // getShortList
+    this.getShortList = function (longList) {
+
+        return JSON.stringify(_getCounts(longList))
+            .replace(/,"/g,'|')
+            .replace(/":/g,'~')
+            .replace(/{"/g,'')
+            .replace(/}/g,'');
+
+    };
+
+    this.getLongList = function (shortList) {
+        return _getArray(JSON.parse('{"' + shortList.replace(/~/g,'":').replace(/[|]/g,',"')  + '}'));
+    };
+
+    var _getCounts = function (list) {
+
+        var counts = {};
+
+        for (var i = 0; i < list.length; i++) {
+            var num = list[i];
+            counts[num] = counts[num] ? counts[num] + 1 : 1;
+        }
+
+        return counts;
+
+    };
+
+    var _getArray = function (listObj) {
+
+        var list = [];
+
+        for (var prop in listObj) {
+            if (listObj.hasOwnProperty(prop)) {
+
+                for (var i = 0; i < listObj[prop]; i++) {
+                    list.push(prop);
+                }
+
+            }
+        }
+
+        return list;
+
+    };
+
 
 
 }).apply(pikaDeck.ctrl.deck);

@@ -5,127 +5,176 @@ pikaDeck.events = {};
 
     this.init = function() {
 
-        console.log('Binding Events');
-
         _clickEvents();
 
-        $(document).on('store_query_done', function(e, query) {
+        _storeEvents();
 
-            $('#poke_search').val(query.name);
+        _drawEvents();
 
-            if (query.deck) {
+        _loadingEvents();
 
-                pikaDeck.store.push('cart', query.deck);
+        // $(document).on('store_query_done', function(e, query) {
+        //
+        //     console.log(query);
+        //
+        //     $('#poke_search').val(query.name);
+        //
+        //     if (query.deck) {
+        //
+        //         pikaDeck.store.push('cart', query.deck);
+        //
+        //         delete query.deck;
+        //
+        //         pikaDeck.store.push('query', query);
+        //
+        //         var cart = pikaDeck.store.get('cart');
+        //
+        //         $('.count', '#view_deck').html('(' + cart.length + ')');
+        //     }
+        //
+        //     pikaDeck.drawSearchOptionsCount(query);
+        // });
 
-                delete query.deck;
+        // $(document).on('get_cards_done', function(e, data, lookup) {
+        //     pikaDeck.store.push('cards', lookup);
+        //     pikaDeck.ctrl.index.draw(data);
+        // });
 
-                pikaDeck.store.push('query', query);
+        // $(document).on('get_deck_done', function(e, data, lookup) {
+        //     pikaDeck.store.push('cards', lookup);
+        //     pikaDeck.ctrl.deck.draw(data);
+        // });
 
-                var cart = pikaDeck.store.get('cart');
 
-                $('.count', '#view_deck').html('(' + cart.length + ')');
-            }
 
-            pikaDeck.drawSearchOptionsCount(query);
 
-            pikaDeck.getSimpleData('types');
-            pikaDeck.getSimpleData('subtypes');
-            pikaDeck.getSimpleData('supertypes');
-            pikaDeck.getSets();
+    };
 
-        });
+
+
+    var _drawEvents = function () {
 
         $(document).on('draw_sets_done', function() {
-
-            var params = pikaDeck.query.get();
-
-            // if (params.indexOf('deck=') !== -1) {
-            //
-            //     var cart = pikaDeck.store.get('cart');
-            //
-            //     pikaDeck.ctrl.deck.getDeck(cart);
-            //
-            // } else {
-
-            pikaDeck.getCards(params);
-
-            var query = pikaDeck.store.get('query');
-
-            $('#poke_set').val(query.setCode).trigger('change');
-
-            //}
-
-        });
-
-        $(document).on('get_sets_done', function(e, data, lookup, tournamentSets) {
-
-            pikaDeck.store.push('sets', lookup);
-            pikaDeck.store.push('tournamentSets', tournamentSets);
-
-            pikaDeck.drawSets(data);
-
-        });
-
-        $(document).on('get_types_done', function(e, data) {
-            var items = pikaDeck.getTypeOptions(data);
-            if (items) {
-                pikaDeck.drawTypes(items);
-            }
-        });
-
-        $(document).on('get_subtypes_done', function(e, data) {
-            var items = pikaDeck.getTypeOptions(data);
-            if (items) {
-                pikaDeck.drawSubtypes(items);
-            }
-        });
-
-        $(document).on('get_supertypes_done', function(e, data) {
-            var items = pikaDeck.getTypeOptions(data);
-            if (items) {
-                pikaDeck.drawSupertypes(items);
-            }
-        });
-
-        $(document).on('get_cards_done', function(e, data, lookup) {
-            pikaDeck.store.push('cards', lookup);
-            pikaDeck.drawCards(data);
-        });
-
-        $(document).on('get_deck_done', function(e, data, lookup) {
-            pikaDeck.store.push('cards', lookup);
-            pikaDeck.ctrl.deck.draw(data);
+            var setCode = pikaDeck.store.get('query').setCode || [];
+            pikaDeck.search.drawQuerySet(setCode);
         });
 
         $(document).on('draw_types_done', function() {
-            var query = pikaDeck.store.get('query');
-            pikaDeck.drawSelectedTypesFromQuery(query.types);
+            var types = pikaDeck.store.get('query').types || [];
+            pikaDeck.search.drawQueryTypes(types);
         });
 
         $(document).on('draw_subtypes_done', function() {
-            var query = pikaDeck.store.get('query');
-            pikaDeck.drawSelectedSubtypesFromQuery(query.subtype);
+            var subtype = pikaDeck.store.get('query').subtype || [];
+            pikaDeck.search.drawQuerySubtype(subtype);
         });
 
         $(document).on('draw_supertypes_done', function() {
-            var query = pikaDeck.store.get('query');
-            pikaDeck.drawSelectedSupertypesFromQuery(query.supertype);
-        });
-
-        $(document).on('getting_cards', function () {
-            pikaDeck.drawPageLoader($('#poke_cards'));
+            var supertype = pikaDeck.store.get('query').supertype || [];
+            pikaDeck.search.drawQuerySupertype(supertype);
         });
 
     };
 
+    var _storeEvents = function () {
+
+        $(document).on('query.store_updated', function (e, key, value) {
+
+            var route = pikaDeck.store.get('route');
+
+            if (route === 'deck' && value && value.list && value.list.length > 0) {
+                // console.log('Stored List:');
+                // console.log(value.list);
+
+                // Store unique list
+                pikaDeck.store.push('deck', value.list);
+
+                var deckUnique = pikaDeck.ctrl.deck.getUniqueList(value.list);
+                pikaDeck.store.push('deckUnique', deckUnique);
+
+                var deckShort = pikaDeck.ctrl.deck.getShortList(value.list);
+                pikaDeck.store.push('deckShort', deckShort);
+
+
+                // var longList = pikaDeck.ctrl.deck.getLongList(shortList);
+                // console.log('Long List:');
+                // console.log(longList);
+
+
+
+            }
+
+
+            //console.log('query:' + JSON.stringify(value));
+
+
+
+
+        });
+
+        $(document).on('deck.store_updated', function (e, key, value) {
+            pikaDeck.ctrl.deck.draw(value);
+        });
+
+        $(document).on('cards.store_updated', function (e, key, value) {
+            pikaDeck.ctrl.index.draw(value);
+        });
+
+        $(document).on('types.store_updated', function (e, key, value) {
+            pikaDeck.search.drawTypes(value);
+        });
+
+        $(document).on('subtypes.store_updated', function (e, key, value) {
+            pikaDeck.search.drawSubtypes(value);
+        });
+
+        $(document).on('supertypes.store_updated', function (e, key, value) {
+            pikaDeck.search.drawSupertypes(value);
+        });
+
+        $(document).on('setsData.store_updated', function (e, key, value) {
+            pikaDeck.search.drawSets(value);
+        });
+
+        // $(document).on('cart.store_updated', function (e, key) {
+        //     console.log(key);
+        // });
+        //
+
+        // $(document).on('query.store_updated', function (e, key, value) {
+        //     console.log(key);
+        //     console.log(value);
+        // });
+
+        // $(document).on('route.store_updated', function (e, key) {
+        //     console.log(key);
+        // });
+        //
+
+        // $(document).on('sets.store_updated', function (e, key, value) {
+        //     console.log(key);
+        //     console.log(value);
+        // });
+
+        // $(document).on('tournamentSets.store_updated', function (e, key) {
+        //     console.log(key);
+        // });
+
+
+    };
+
+
     var _clickEvents = function () {
 
-        $(document).on('click', 'button#pika_search', function() {
-            pikaDeck.getSearchResults();
+        $(document).on('click', 'button#search_cards', function() {
+            //pikaDeck.hb.drawView('#hb_view_index');
+            pikaDeck.ctrl.index.getSearchResults();
         });
 
         $(document).on('click', 'button#view_deck', function() {
-            pikaDeck.ctrl.deck.getCurrent();
+            var cart = pikaDeck.store.get('cart');
+            cart = cart.join('|');
+            location.href = "/#!deck?deck=" + cart;
         });
 
         $(document).on('click', 'button[data-add]', function() {
@@ -166,5 +215,17 @@ pikaDeck.events = {};
         });
 
     };
+
+    var _loadingEvents = function () {
+
+        $(document).on('getting_cards', function () {
+            pikaDeck.drawPageLoader($('#index_cards'));
+        });
+
+        $(document).on('getting_deck', function () {
+            pikaDeck.drawPageLoader($('#deck_cards'));
+        });
+    };
+
 
 }).apply(pikaDeck.events);
