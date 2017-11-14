@@ -10,34 +10,22 @@ pikaDeck.ctrl.deck = {};
 
         pikaDeck.search.init();
 
-        var deck = pikaDeck.store.get('cart');
+        pikaDeck.drawDeckButtonDisabled();
 
-        this.get(deck);
     };
 
     this.get = function (deck) {
 
+        // TODO: loading_deck or deck.loading maybe?
         $(document).trigger('getting_deck');
 
-        pikaDeck.drawDeckButtonDisabled();
-
-        // TODO: Look into how to handle when no IDs are passed in.
-        deck = (deck) ? deck.join('|') : '';
-
-        // TODO: Pass params as data...
-        var endpoint = pikaDeck.apiPath + 'cards?id=' + deck;
-
-        // Else get new data...
+        // TODO: Handle when no IDs are passed.
+        // TODO: Pass params as data.
         $.ajax({
             dataType: 'json',
-            url: endpoint,
+            url: pikaDeck.apiPath + 'cards?id=' + ((deck) ? deck.join('|') : ''),
             success: function(data) {
-
-                // Create lookup table...
-                var lookup = pikaDeck.getLookupTable(data.cards, 'id');
-
-                $(document).trigger('get_deck_done', [data.cards, lookup]);
-
+                pikaDeck.store.push('deck', data.cards);
             },
             error: function(xhr, status, error) {
                 console.log([xhr, status, error]);
@@ -60,19 +48,24 @@ pikaDeck.ctrl.deck = {};
 
         }
 
-        $(document).trigger('draw_deck_done');
+        // TODO: deck.draw_done?
+        $(document).trigger('deck.draw_done');
 
+    };
+
+    this.drawCount = function (deckList) {
+        $('.count', '#view_deck').html('(' + deckList.length + ')');
+        $(document).trigger('deckCount.draw_done');
     };
 
     this.getUniqueList = function (longList) {
 
         return longList.filter(function(item, pos) {
             return longList.indexOf(item) === pos;
-        });
+        }).sort();
 
     };
 
-    // getShortList
     this.getShortList = function (longList) {
 
         return JSON.stringify(_getCounts(longList))
@@ -84,7 +77,25 @@ pikaDeck.ctrl.deck = {};
     };
 
     this.getLongList = function (shortList) {
-        return _getArray(JSON.parse('{"' + shortList.replace(/~/g,'":').replace(/[|]/g,',"')  + '}'));
+        return _getArray(JSON.parse('{"' + shortList.replace(/~/g,'":').replace(/[|]/g,',"')  + '}')).sort();
+    };
+
+    this.storeDeck = function (value) {
+
+        var route = pikaDeck.store.get('route');
+
+        if (route === 'deck' && value && value.list && value.list.length > 0) {
+
+            pikaDeck.store.push('deckShort', value.list.join('|'));
+
+            var deckList = pikaDeck.ctrl.deck.getLongList(value.list.join('|'));
+            pikaDeck.store.push('deckList', deckList);
+
+            var deckUnique = pikaDeck.ctrl.deck.getUniqueList(deckList);
+            pikaDeck.store.push('deckUnique', deckUnique);
+
+        }
+
     };
 
     var _getCounts = function (list) {
@@ -117,7 +128,5 @@ pikaDeck.ctrl.deck = {};
         return list;
 
     };
-
-
 
 }).apply(pikaDeck.ctrl.deck);

@@ -54,7 +54,7 @@ var pikaDeck = pikaDeck || {};
 
         inCart = inCart + 1;
 
-        $('.count', '#view_deck').html('(' + cart.length + ')');
+
 
         var text = data.name + ' Added';
         if (!isBasicEnergy) {

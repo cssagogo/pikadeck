@@ -20,6 +20,8 @@ pikaDeck.hb = {};
         var footer = Handlebars.compile($('#hb_footer_main').html());
         $('#footer_main').html(footer());
 
+        $(document).trigger('view.draw_done');
+
     };
 
     var _initHelpers =  function () {

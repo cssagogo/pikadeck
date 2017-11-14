@@ -70,7 +70,7 @@ pikaDeck.router =  {};
 
             var value = decodeURIComponent(item[1]);
 
-            value = value.split('|');
+            value = value.split('|').sort();
 
             queryObj[name] = value;
 

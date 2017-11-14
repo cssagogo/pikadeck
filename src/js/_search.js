@@ -94,7 +94,7 @@ pikaDeck.search = {};
             templateSelection: _getSelect2SetOptions
         });
 
-        $(document).trigger('draw_sets_done');
+        $(document).trigger('set.draw_done');
 
     };
 
@@ -107,7 +107,7 @@ pikaDeck.search = {};
             allowClear: true
         });
 
-        $(document).trigger('draw_types_done');
+        $(document).trigger('types.draw_done');
 
     };
     this.drawSubtypes = function (items) {
@@ -119,7 +119,7 @@ pikaDeck.search = {};
             allowClear: true
         });
 
-        $(document).trigger('draw_subtypes_done');
+        $(document).trigger('subtypes.draw_done');
 
     };
     this.drawSupertypes = function (items) {
@@ -131,7 +131,7 @@ pikaDeck.search = {};
             allowClear: true
         });
 
-        $(document).trigger('draw_supertypes_done');
+        $(document).trigger('supertypes.draw_done');
 
     };
 

@@ -50,7 +50,8 @@ module.exports = function (grunt) {
                         'node_modules/store/dist/store.modern.min.js',
                         'node_modules/jspdf/dist/jspdf.min.js',
                         'node_modules/lazysizes/lazysizes.min.js',
-                        'node_modules/handlebars/dist/handlebars.min.js'
+                        'node_modules/handlebars/dist/handlebars.min.js',
+                        'node_modules/chart.js/dist/Chart.min.js'
                     ]
                 }
             },

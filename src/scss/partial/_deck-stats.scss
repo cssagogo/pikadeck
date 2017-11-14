@@ -1,0 +1,62 @@
+// = Local Variables
+// ---------------------------------
+// TODO: Colors here need to be refactored.
+
+@import 'variables';
+
+$card-shadow-color: rgba(255, 136, 136, .5);
+
+$card-btn-background: #fff8d1;
+$card-btn-border: $card-btn-background;
+$card-btn-text: #f0ad4e;
+$card-btn-text: darken($card-btn-text, 10%);
+
+$card-btn-background-hover: #f0ad4e;
+$card-btn-border-hover: $card-btn-background;
+$card-btn-text-hover: #fff8d1;
+
+$tab-border-active: #ddd;
+
+
+// = Deck Stats
+// ---------------------------------
+
+.deck-stats {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    color: $card-btn-text;
+    font-size: 1.5rem;
+  }
+
+  .card-header {
+    background: $card-btn-background;
+    color: $card-btn-text;
+  }
+
+  .nav-link {
+    background: $card-btn-background;
+    border-color: $card-btn-background $card-btn-background $tab-border-active;
+    color: $card-btn-text;
+  }
+
+  .nav-link:focus,
+  .nav-link:hover {
+    background: $card-btn-background-hover;
+    border-color: $card-btn-text $card-btn-text $tab-border-active;
+    color: $card-btn-text-hover;
+  }
+
+  .nav-item.show .nav-link,
+  .nav-item.show .nav-link:hover,
+  .nav-link.active,
+  .nav-link.active:hover {
+    background-color: $light-color;
+    border-color: $tab-border-active $tab-border-active $light-color;
+    color: $card-btn-text;
+  }
+
+
+}

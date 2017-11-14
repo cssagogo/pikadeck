@@ -13,18 +13,19 @@ $card-btn-background-hover: #f0ad4e;
 $card-btn-border-hover: $card-btn-background;
 $card-btn-text-hover: #fff8d1;
 
-
-// = Card Tile
+// = Card Tile & Aside
 // ---------------------------------
-
-.card--tile {
+.card--tile,
+.card--aside {
   animation-duration: .5s;
   border-radius: 10px;
   box-shadow: 0 2px 2px 0 $card-shadow-color;
   overflow: hidden;
   transform: translateY(0);
   transition: .35s cubic-bezier(.4, 0, .2, 1);
+}
 
+.card--tile {
   &:hover {
     box-shadow: 0 6px 12px 0 $card-shadow-color;
     transform: translateY(-5px);
