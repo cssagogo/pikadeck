@@ -72,15 +72,13 @@ pikaDeck.events = {};
 
             // Create and store ordered deck...
 
-            //debugger;
-
-            // // Create lookup table...
-            // var lookup = pikaDeck.getLookupTable(data.cards, 'id');
-            // $(document).trigger('get_deck_done', [data.cards, lookup]);
-
             pikaDeck.ctrl.deck.draw(value);
 
         });
+
+        // $(document).on('cardsLookup', function (e, key, value) {
+        //     pikaDeck.ctrl.deck.processDeck(value);
+        // });
 
 
 
@@ -182,7 +180,7 @@ pikaDeck.events = {};
 
             // TODO: Move this into a draw statement...
             var id = $(this).data().zoom;
-            var cards = pikaDeck.store.get('cards');
+            var cards = pikaDeck.store.get('cardsLookup');
             var card = cards[id];
 
             $('[data-zoomed]', '.modal--zoomed').attr('src', card.imageUrlHiRes);

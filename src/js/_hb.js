@@ -26,6 +26,18 @@ pikaDeck.hb = {};
 
     var _initHelpers =  function () {
 
+
+        Handlebars.registerHelper('deckCount', function(id) {
+
+            id = Handlebars.Utils.escapeExpression(id);
+
+            // TODO: Should check for existence of nodes in object...
+            var deckCount = pikaDeck.store.get('deckCounts');
+            var value = deckCount[id];
+
+            return new Handlebars.SafeString(value);
+        });
+
         Handlebars.registerHelper('setData', function(setCode, key) {
 
             setCode = Handlebars.Utils.escapeExpression(setCode);

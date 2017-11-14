@@ -13,6 +13,9 @@ $card-btn-background-hover: #f0ad4e;
 $card-btn-border-hover: $card-btn-background;
 $card-btn-text-hover: #fff8d1;
 
+$card-count-bg: #efac57;
+$card-count-text-shadow: rgba(0, 0, 0, .5);
+
 // = Card Tile & Aside
 // ---------------------------------
 .card--tile,
@@ -20,7 +23,8 @@ $card-btn-text-hover: #fff8d1;
   animation-duration: .5s;
   border-radius: 10px;
   box-shadow: 0 2px 2px 0 $card-shadow-color;
-  overflow: hidden;
+  //overflow: hidden;
+  position: relative;
   transform: translateY(0);
   transition: .35s cubic-bezier(.4, 0, .2, 1);
 }
@@ -56,6 +60,20 @@ $card-btn-text-hover: #fff8d1;
       color: $card-btn-text-hover;
     }
 
+  }
+
+  .card__count {
+    background: $card-count-bg;
+    box-shadow: 0 2px 2px 0 darken($card-shadow-color, 50%);
+    height: 2rem;
+    left: -.7rem;
+    line-height: 2;
+    position: absolute;
+    text-align: center;
+    text-shadow: 1px 1px 2px $card-count-text-shadow;
+    top: 3rem;
+    transform: rotate(-7deg);
+    width: 2rem;
   }
 
 }

@@ -5,10 +5,10 @@
             <header id="header_main"></header>
 
             <div class="row gutter-16">
-                <div class="col-12 col-sm-8">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-7 col-xl-8">
                     <main id="deck_cards" class="row gutter-16 mt-3"></main>
                 </div>
-                <div class="col-12 col-sm-4">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-xl-4">
                     <aside id="deck_stats" class="deck-stats mt-3">
                         <div class="card card--aside">
 
@@ -24,7 +24,7 @@
                                        aria-controls="nav-deck-stats"
                                        aria-selected="true">
                                         <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                                        Deck Stats
+                                        Stats
                                     </a>
 
                                     <a class="nav-item nav-link btn--icon-tada"
@@ -35,7 +35,18 @@
                                        aria-controls="nav-deck-list"
                                        aria-selected="false">
                                         <i class="fa fa-list-ul" aria-hidden="true"></i>
-                                        Deck List
+                                        List
+                                    </a>
+
+                                    <a class="nav-item nav-link btn--icon-tada"
+                                       id="nav-deck-share-tab"
+                                       data-toggle="tab"
+                                       href="#nav-deck-share"
+                                       role="tab"
+                                       aria-controls="nav-deck-share"
+                                       aria-selected="false">
+                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                        Share
                                     </a>
 
                                 </nav>
@@ -106,6 +117,17 @@
                                             <li>7 Water</li>
                                             <li>4 Double Colorless</li>
                                         </ul>
+
+                                    </div>
+
+
+                                    <div class="tab-pane fade pt-3 pb-3"
+                                         id="nav-deck-share"
+                                         role="tabpanel"
+                                         aria-labelledby="nav-deck-share-tab">
+
+                                        <h2>Coming Soon!</h2>
+
 
                                     </div>
 

@@ -76,8 +76,12 @@ pikaDeck.ctrl.deck = {};
 
     };
 
+    this.getCountList = function (shortList) {
+        return JSON.parse('{"' + shortList.replace(/~/g,'":').replace(/[|]/g,',"')  + '}');
+    };
+
     this.getLongList = function (shortList) {
-        return _getArray(JSON.parse('{"' + shortList.replace(/~/g,'":').replace(/[|]/g,',"')  + '}')).sort();
+        return _getArray(this.getCountList(shortList)).sort();
     };
 
     this.storeDeck = function (value) {
@@ -88,10 +92,13 @@ pikaDeck.ctrl.deck = {};
 
             pikaDeck.store.push('deckShort', value.list.join('|'));
 
-            var deckList = pikaDeck.ctrl.deck.getLongList(value.list.join('|'));
+            var deckCounts = this.getCountList(value.list.join('|'));
+            pikaDeck.store.push('deckCounts', deckCounts);
+
+            var deckList = this.getLongList(value.list.join('|'));
             pikaDeck.store.push('deckList', deckList);
 
-            var deckUnique = pikaDeck.ctrl.deck.getUniqueList(deckList);
+            var deckUnique = this.getUniqueList(deckList);
             pikaDeck.store.push('deckUnique', deckUnique);
 
         }
