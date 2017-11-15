@@ -26,7 +26,7 @@ pikaDeck.router =  {};
     };
 
     var _getRoute = function (hash) {
-        return _splitHash(hash)[0] || '';
+        return _splitHash(hash)[0] || 'index';
     };
 
     var _getPath = function (hash) {
@@ -34,7 +34,7 @@ pikaDeck.router =  {};
     };
 
     var _getQuery = function (hash, search) {
-        return _queryToObject((hash) ? hash : search);
+        return (hash) ? _queryToObject(hash) : ((search) ? _queryToObject(search) : '');
     };
 
     var _inRoutes = function (hash) {
@@ -93,8 +93,6 @@ pikaDeck.router =  {};
     };
 
     // this.pushQuery = function (params) {
-    //
-    //     // TODO: Look at params coming in.  This might be the place to convert multiple items to single with ~NUM?
     //
     //     // TODO: Need to swap this out with router.
     //     queryString.removeAll();

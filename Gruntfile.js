@@ -45,6 +45,7 @@ module.exports = function (grunt) {
                     ],
                     'app/assets/js/plugins.js': [
                         'src/lib/querystring/dist/querystring.js',
+                        'src/lib/animatecss/dist/animate.css.js',
                         'node_modules/select2/dist/js/select2.min.js',
                         'node_modules/toastr/build/toastr.min.js',
                         'node_modules/store/dist/store.modern.min.js',

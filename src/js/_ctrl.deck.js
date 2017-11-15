@@ -17,17 +17,17 @@ pikaDeck.ctrl.deck = {};
     this.get = function (deck) {
 
         // TODO: loading_deck or deck.loading maybe?
-        $(document).trigger('getting_deck');
+        $(document).trigger('deck.loading');
 
         // TODO: Handle when no IDs are passed.
         // TODO: Pass params as data.
         $.ajax({
             dataType: 'json',
             url: pikaDeck.apiPath + 'cards?id=' + ((deck) ? deck.join('|') : ''),
-            success: function(data) {
+            success: function (data) {
                 pikaDeck.store.push('deck', data.cards);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.log([xhr, status, error]);
             }
         });
@@ -54,8 +54,10 @@ pikaDeck.ctrl.deck = {};
     };
 
     this.drawCount = function (deckList) {
-        $('.count', '#view_deck').html('(' + deckList.length + ')');
-        $(document).trigger('deckCount.draw_done');
+        if (deckList) {
+            $('.count', '#view_deck').html('(' + deckList.length + ')');
+            $(document).trigger('deckCount.draw_done');
+        }
     };
 
     this.getUniqueList = function (longList) {
@@ -84,18 +86,19 @@ pikaDeck.ctrl.deck = {};
         return _getArray(this.getCountList(shortList)).sort();
     };
 
-    this.storeDeck = function (value) {
+    this.storeDeck = function () {
 
+        var query = pikaDeck.store.get('query');
         var route = pikaDeck.store.get('route');
 
-        if (route === 'deck' && value && value.list && value.list.length > 0) {
+        if (route === 'deck' && query && query.list && query.list.length > 0) {
 
-            pikaDeck.store.push('deckShort', value.list.join('|'));
+            pikaDeck.store.push('deckShort', query.list.join('|'));
 
-            var deckCounts = this.getCountList(value.list.join('|'));
+            var deckCounts = this.getCountList(query.list.join('|'));
             pikaDeck.store.push('deckCounts', deckCounts);
 
-            var deckList = this.getLongList(value.list.join('|'));
+            var deckList = this.getLongList(query.list.join('|'));
             pikaDeck.store.push('deckList', deckList);
 
             var deckUnique = this.getUniqueList(deckList);

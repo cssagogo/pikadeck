@@ -12,6 +12,59 @@ pikaDeck.search = {};
 
     };
 
+    this.drawSearchOptionsCount = function (query) {
+
+        var queryCount = Object.keys(query).length;
+
+        if (queryCount === 1 && !query.name || queryCount >= 2) {
+
+            var count = (query.name) ? queryCount - 1 : queryCount;
+
+            $('#search_options_count').html(' ('+ count +')');
+
+        } else {
+
+            $('#search_options_count').html('');
+
+        }
+
+    };
+
+    this.getParams = function () {
+
+        var data = $('#pika_filters').serializeArray();
+
+        if (data && data.length > 0) {
+
+            var newData = {};
+
+            for (var i = 0; i < data.length; i++) {
+
+                if (newData[data[i].name]) {
+
+                    newData[data[i].name] = newData[data[i].name] + '|' + data[i].value;
+
+                } else {
+
+                    if (data[i].value) {
+
+                        newData[data[i].name] = data[i].value;
+
+                    }
+                }
+
+            }
+
+            newData = $.param(newData, true);
+
+            return newData;
+
+        }
+
+        return null;
+
+    };
+
     this.getSets = function () {
 
         // Else get new data...
@@ -38,7 +91,6 @@ pikaDeck.search = {};
         });
 
     };
-
     this.getSimpleData = function (endpoint) {
 
         // TODO: Consider checking localStore and load into memory store if it exists and not out of date.
@@ -65,7 +117,6 @@ pikaDeck.search = {};
         });
 
     };
-
     this.getTypeOptions = function (data) {
 
         if (data && data.length > 0) {
@@ -82,7 +133,6 @@ pikaDeck.search = {};
         return null;
 
     };
-
     this.drawSets = function (data) {
 
         var items = _getSetOptions(data);
@@ -97,7 +147,6 @@ pikaDeck.search = {};
         $(document).trigger('set.draw_done');
 
     };
-
     this.drawTypes = function (items) {
 
         items = pikaDeck.search.getTypeOptions(items);
@@ -134,8 +183,6 @@ pikaDeck.search = {};
         $(document).trigger('supertypes.draw_done');
 
     };
-
-
     this.drawQuerySet = function (setCode) {
         $('#poke_set').val(setCode).trigger('change');
     };
@@ -148,7 +195,6 @@ pikaDeck.search = {};
     this.drawQuerySupertype = function (supertype) {
         $('#poke_supertype').val(supertype).trigger('change');
     };
-
 
     var _getSelect2SetOptions = function(state) {
 

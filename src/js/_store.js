@@ -3,18 +3,18 @@ pikaDeck.store = {};
 (function() {
     "use strict";
 
-    var data = {};
+    var _data = {};
 
     this.push = function(key, value) {
 
-        var current = data;
+        var current = JSON.parse(JSON.stringify(_data));
         var updated = _updateObject(current, key, value);
 
         if (!_sameObject(current, updated)) {
 
             // TODO: Add a history for an undo feature.
 
-            data = updated;
+            _data = updated;
 
             $(document).trigger(key + '.store_updated', [key, value]);
 
@@ -23,6 +23,7 @@ pikaDeck.store = {};
     };
 
     this.get = function (key) {
+        var data = JSON.parse(JSON.stringify(_data));
         return (key) ? data[key] : data;
     };
 
