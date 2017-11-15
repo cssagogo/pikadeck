@@ -14,10 +14,12 @@ pikaDeck.ctrl.deck = {};
 
     };
 
-    this.viewDeck = function () {
+    this.view = function () {
         var deckList = pikaDeck.store.get('deckList');
         deckList = this.getShortList(deckList);
         window.location.href = "/#!deck?list=" + deckList;
+
+        // TODO: Look into navigating without page reload. Calling init might do it?
         location.reload();
     };
 

@@ -138,7 +138,7 @@ pikaDeck.events = {};
         });
 
         $(document).on('click', 'button#view_deck', function() {
-            pikaDeck.ctrl.deck.viewDeck();
+            pikaDeck.ctrl.deck.view();
         });
 
         $(document).on('click', 'a[data-info]', function() {
