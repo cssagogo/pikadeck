@@ -138,9 +138,7 @@ pikaDeck.events = {};
         });
 
         $(document).on('click', 'button#view_deck', function() {
-            var cart = pikaDeck.store.get('cart');
-            cart = cart.join('|');
-            location.href = "/#!deck?deck=" + cart;
+            pikaDeck.ctrl.deck.viewDeck();
         });
 
         $(document).on('click', 'a[data-info]', function() {

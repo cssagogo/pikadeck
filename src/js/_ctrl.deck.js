@@ -14,6 +14,13 @@ pikaDeck.ctrl.deck = {};
 
     };
 
+    this.viewDeck = function () {
+        var deckList = pikaDeck.store.get('deckList');
+        deckList = this.getShortList(deckList);
+        window.location.href = "/#!deck?list=" + deckList;
+        location.reload();
+    };
+
     this.get = function (deck) {
 
         // TODO: loading_deck or deck.loading maybe?
