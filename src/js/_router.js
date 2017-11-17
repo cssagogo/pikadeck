@@ -8,13 +8,19 @@ pikaDeck.router =  {};
         var hash   = window.location.hash.split('?');
         var search = window.location.search.replace('?', '');
 
-        var query  = _getQuery(hash[1], search);
-        var route  = _getRoute(hash[0]);
-        var path   = _getPath(hash[0]);
+        var rawQuery    = _getQuery(hash[1], search);
+        var query       = _queryToObject(rawQuery);
+        var route       = _getRoute(hash[0]);
+        var path        = _getPath(hash[0]);
 
         pikaDeck.store.push('route', route);
         pikaDeck.store.push('path',  path);
+        pikaDeck.store.push('rawQuery', rawQuery);
         pikaDeck.store.push('query', query);
+
+        pikaDeck.hb.drawShell();
+
+        pikaDeck.store.push('deckList', store.get('deckList'));
 
         if (!(_inRoutes(hash[0]))) {
             pikaDeck.ctrl.index.init();
@@ -34,7 +40,7 @@ pikaDeck.router =  {};
     };
 
     var _getQuery = function (hash, search) {
-        return (hash) ? _queryToObject(hash) : ((search) ? _queryToObject(search) : '');
+        return (hash) ? hash : ((search) ? search : '');
     };
 
     var _inRoutes = function (hash) {
@@ -91,33 +97,6 @@ pikaDeck.router =  {};
     var _splitHash = function (hash) {
         return (hash) ? hash.toLowerCase().replace('#!','').split('/') : '';
     };
-
-    // this.pushQuery = function (params) {
-    //
-    //     // TODO: Need to swap this out with router.
-    //     queryString.removeAll();
-    //
-    //     params = params.split('&');
-    //
-    //     for (var i = 0; i < params.length; i++) {
-    //
-    //         var item = params[i].split('=');
-    //
-    //         var name = item[0];
-    //
-    //         var value = decodeURIComponent(item[1]);
-    //
-    //         // TODO: Need to swap this out with router.
-    //         queryString.push(name, value);
-    //
-    //     }
-    //
-    //     $(document).trigger('push_query_done');
-    //
-    // };
-
-
-
 
 
     // Start - For Unit Testing Only

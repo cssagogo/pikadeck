@@ -7,16 +7,20 @@ pikaDeck.store = {};
 
     this.push = function(key, value) {
 
-        var current = JSON.parse(JSON.stringify(_data));
-        var updated = _updateObject(current, key, value);
+        if (key && value) {
 
-        if (!_sameObject(current, updated)) {
+            var current = JSON.parse(JSON.stringify(_data));
+            var updated = _updateObject(current, key, value);
 
-            // TODO: Add a history for an undo feature.
+            if (!_sameObject(current, updated)) {
 
-            _data = updated;
+                // TODO: Add a history for an undo feature.
 
-            $(document).trigger(key + '.store_updated', [key, value]);
+                _data = updated;
+
+                $(document).trigger(key + '.store_updated', [key, value]);
+
+            }
 
         }
 

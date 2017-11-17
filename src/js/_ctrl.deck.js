@@ -6,21 +6,21 @@ pikaDeck.ctrl.deck = {};
 
     this.init = function() {
 
+        document.title = document.title + " - Untitled Deck";
+
         pikaDeck.hb.drawView('#hb_view_deck');
-
-        pikaDeck.search.init();
-
         pikaDeck.drawDeckButtonDisabled();
 
     };
 
     this.view = function () {
+
         var deckList = pikaDeck.store.get('deckList');
         deckList = this.getShortList(deckList);
-        window.location.href = "/#!deck?list=" + deckList;
 
-        // TODO: Look into navigating without page reload. Calling init might do it?
-        location.reload();
+        window.location.href = "/#!deck?list=" + deckList;
+        window.location.reload();
+
     };
 
     this.get = function (deck) {

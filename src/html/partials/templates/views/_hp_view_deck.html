@@ -1,147 +1,142 @@
 <!-- Handlebars: View Deck -->
 <script id="hb_view_deck" type="text/x-handlebars-template">
-    <div class="wrapper">
-        <div class="container">
-            <header id="header_main"></header>
 
-            <div class="row gutter-16">
-                <div class="col-12 col-sm-12 col-md-6 col-lg-7 col-xl-8">
-                    <main id="deck_cards" class="row gutter-16 mt-3"></main>
-                </div>
-                <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-xl-4">
-                    <aside id="deck_stats" class="deck-stats mt-3">
-                        <div class="card card--aside">
+    <div class="row gutter-16">
+        <div class="col-12 col-sm-12 col-md-6 col-lg-7 col-xl-8">
+            <main id="deck_cards" class="row gutter-16 mt-3"></main>
+        </div>
+        <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-xl-4">
+            <aside id="deck_stats" class="deck-stats mt-3">
+                <div class="card card--aside">
 
-                            <div class="card-header">
+                    <div class="card-header">
 
-                                <nav class="nav nav-tabs nav-justified card-header-tabs" id="deck_stats_tabs" role="tablist">
+                        <nav class="nav nav-tabs nav-justified card-header-tabs" id="deck_stats_tabs" role="tablist">
 
-                                    <a class="nav-item nav-link active btn--icon-tada"
-                                       id="nav-deck-stats-tab"
-                                       data-toggle="tab"
-                                       href="#nav-deck-stats"
-                                       role="tab"
-                                       aria-controls="nav-deck-stats"
-                                       aria-selected="true">
-                                        <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                                        Stats
-                                    </a>
+                            <a class="nav-item nav-link active btn--icon-tada"
+                               id="nav-deck-stats-tab"
+                               data-toggle="tab"
+                               href="#nav-deck-stats"
+                               role="tab"
+                               aria-controls="nav-deck-stats"
+                               aria-selected="true">
+                                <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                                Stats
+                            </a>
 
-                                    <a class="nav-item nav-link btn--icon-tada"
-                                       id="nav-deck-list-tab"
-                                       data-toggle="tab"
-                                       href="#nav-deck-list"
-                                       role="tab"
-                                       aria-controls="nav-deck-list"
-                                       aria-selected="false">
-                                        <i class="fa fa-list-ul" aria-hidden="true"></i>
-                                        List
-                                    </a>
+                            <a class="nav-item nav-link btn--icon-tada"
+                               id="nav-deck-list-tab"
+                               data-toggle="tab"
+                               href="#nav-deck-list"
+                               role="tab"
+                               aria-controls="nav-deck-list"
+                               aria-selected="false">
+                                <i class="fa fa-list-ul" aria-hidden="true"></i>
+                                List
+                            </a>
 
-                                    <a class="nav-item nav-link btn--icon-tada"
-                                       id="nav-deck-share-tab"
-                                       data-toggle="tab"
-                                       href="#nav-deck-share"
-                                       role="tab"
-                                       aria-controls="nav-deck-share"
-                                       aria-selected="false">
-                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
-                                        Share
-                                    </a>
+                            <a class="nav-item nav-link btn--icon-tada"
+                               id="nav-deck-share-tab"
+                               data-toggle="tab"
+                               href="#nav-deck-share"
+                               role="tab"
+                               aria-controls="nav-deck-share"
+                               aria-selected="false">
+                                <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                Share
+                            </a>
 
-                                </nav>
+                        </nav>
+
+                    </div>
+                    <div class="card-body">
+
+                        <div class="tab-content" id="nav-tabContent">
+
+                            <div class="tab-pane fade pt-3 pb-3 show active"
+                                 id="nav-deck-stats"
+                                 role="tabpanel"
+                                 aria-labelledby="nav-deck-stats-tab">
+
+                                <h2>Types</h2>
+                                <img src="http://via.placeholder.com/350x350">
+
+                                <h2>Supertypes</h2>
+                                <img src="http://via.placeholder.com/350x150">
+
+                                <h2>Tournament</h2>
+                                <img src="http://via.placeholder.com/350x100">
+
 
                             </div>
-                            <div class="card-body">
 
-                                <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade pt-3 pb-3"
+                                 id="nav-deck-list"
+                                 role="tabpanel"
+                                 aria-labelledby="nav-deck-list-tab">
 
-                                    <div class="tab-pane fade pt-3 pb-3 show active"
-                                         id="nav-deck-stats"
-                                         role="tabpanel"
-                                         aria-labelledby="nav-deck-stats-tab">
+                                <h2>Pokemon – 14</h2>
+                                <ul>
+                                    <li>4 Alolan Vulpix GRI</li>
+                                    <li>3 Alolan Ninetales GX</li>
+                                    <li>1 Remoraid BKT</li>
+                                    <li>1 Octillery BKT</li>
+                                    <li>1 Hoopa STS</li>
+                                    <li>1 Sudowoodo GRI</li>
+                                    <li>2 Tapu Lele GX</li>
+                                    <li>1 Shaymin EX</li>
+                                </ul>
 
-                                        <h2>Types</h2>
-                                        <img src="http://via.placeholder.com/350x350">
+                                <h2>Trainers – 35</h2>
+                                <ul>
+                                    <li>3 Professor Sycamore</li>
+                                    <li>2 N</li>
+                                    <li>1 Brigette</li>
+                                    <li>1 Professor Kukui</li>
+                                    <li>1 Pokemon Center Lady</li>
+                                    <li>1 Judge</li>
+                                    <li>1 Hex Maniac</li>
+                                    <li>1 Delinquent</li>
+                                    <li>2 Lysandre</li>
+                                    <li>4 Ultra Ball</li>
+                                    <li>1 Dive Ball</li>
+                                    <li>4 VS Seeker</li>
+                                    <li>4 Aqua Patch</li>
+                                    <li>1 Field Blower</li>
+                                    <li>1 Rescue Stretcher</li>
+                                    <li>2 Choice Band</li>
+                                    <li>2 Float Stone</li>
+                                    <li>3 Rough Seas</li>
+                                </ul>
 
-                                        <h2>Supertypes</h2>
-                                        <img src="http://via.placeholder.com/350x150">
+                                <h2>Energy – 11</h2>
+                                <ul>
+                                    <li>7 Water</li>
+                                    <li>4 Double Colorless</li>
+                                </ul>
 
-                                        <h2>Tournament</h2>
-                                        <img src="http://via.placeholder.com/350x100">
-
-
-                                    </div>
-
-                                    <div class="tab-pane fade pt-3 pb-3"
-                                         id="nav-deck-list"
-                                         role="tabpanel"
-                                         aria-labelledby="nav-deck-list-tab">
-
-                                        <h2>Pokemon – 14</h2>
-                                        <ul>
-                                            <li>4 Alolan Vulpix GRI</li>
-                                            <li>3 Alolan Ninetales GX</li>
-                                            <li>1 Remoraid BKT</li>
-                                            <li>1 Octillery BKT</li>
-                                            <li>1 Hoopa STS</li>
-                                            <li>1 Sudowoodo GRI</li>
-                                            <li>2 Tapu Lele GX</li>
-                                            <li>1 Shaymin EX</li>
-                                        </ul>
-
-                                        <h2>Trainers – 35</h2>
-                                        <ul>
-                                            <li>3 Professor Sycamore</li>
-                                            <li>2 N</li>
-                                            <li>1 Brigette</li>
-                                            <li>1 Professor Kukui</li>
-                                            <li>1 Pokemon Center Lady</li>
-                                            <li>1 Judge</li>
-                                            <li>1 Hex Maniac</li>
-                                            <li>1 Delinquent</li>
-                                            <li>2 Lysandre</li>
-                                            <li>4 Ultra Ball</li>
-                                            <li>1 Dive Ball</li>
-                                            <li>4 VS Seeker</li>
-                                            <li>4 Aqua Patch</li>
-                                            <li>1 Field Blower</li>
-                                            <li>1 Rescue Stretcher</li>
-                                            <li>2 Choice Band</li>
-                                            <li>2 Float Stone</li>
-                                            <li>3 Rough Seas</li>
-                                        </ul>
-
-                                        <h2>Energy – 11</h2>
-                                        <ul>
-                                            <li>7 Water</li>
-                                            <li>4 Double Colorless</li>
-                                        </ul>
-
-                                    </div>
+                            </div>
 
 
-                                    <div class="tab-pane fade pt-3 pb-3"
-                                         id="nav-deck-share"
-                                         role="tabpanel"
-                                         aria-labelledby="nav-deck-share-tab">
+                            <div class="tab-pane fade pt-3 pb-3"
+                                 id="nav-deck-share"
+                                 role="tabpanel"
+                                 aria-labelledby="nav-deck-share-tab">
 
-                                        <h2>Coming Soon!</h2>
+                                <h2>Coming Soon!</h2>
 
-
-                                    </div>
-
-                                </div>
 
                             </div>
 
                         </div>
-                    </aside>
+
+                    </div>
+
                 </div>
-            </div>
-            <footer id="footer_main"></footer>
+            </aside>
         </div>
     </div>
+
 </script>
 
 <!--

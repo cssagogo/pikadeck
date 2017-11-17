@@ -7,7 +7,10 @@ pikaDeck.pdf = {};
         console.log(deck);
     };
 
-    this.printPlaySet = function (card) {
+    this.printPlaySet = function (id) {
+
+        var cards = pikaDeck.store.get('cardsLookup');
+        var card = cards[id];
 
         var imgUrl = card.imageUrlHiRes;
 

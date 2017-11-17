@@ -20,6 +20,9 @@ pikaDeck.events = {};
         $(document).on('view.draw_done', function() {
             var deckList = pikaDeck.store.get('deckList');
             pikaDeck.ctrl.deck.drawCount(deckList);
+
+            var query = pikaDeck.store.get('query');
+            pikaDeck.search.drawSearchOptionsCount(query);
         });
 
         $(document).on('set.draw_done', function() {
@@ -48,9 +51,6 @@ pikaDeck.events = {};
 
     var _storeEvents = function () {
 
-        // $(document).on('query.store_updated', function (e, key, value) {
-        // });
-
         $(document).on('tournamentSets.store_updated', function () {
             // TODO: Consider how best to handle different routes.
             pikaDeck.ctrl.deck.storeDeck();
@@ -62,6 +62,7 @@ pikaDeck.events = {};
         });
 
         $(document).on('deckList.store_updated', function (e, key, value) {
+            store.set('deckList', value);
             pikaDeck.ctrl.deck.drawCount(value);
         });
 
@@ -107,25 +108,11 @@ pikaDeck.events = {};
         //     pikaDeck.ctrl.deck.processDeck(value);
         // });
 
-        // $(document).on('cart.store_updated', function (e, key) {
-        //     console.log(key);
-        // });
-        //
-
-        // $(document).on('query.store_updated', function (e, key, value) {
-        //     console.log(key);
-        //     console.log(value);
-        // });
-
-        // $(document).on('route.store_updated', function (e, key) {
-        //     console.log(key);
-        // });
-        //
-
-        // $(document).on('tournamentSets.store_updated', function (e, key) {
-        //     console.log(key);
-        // });
-
+        // $(document).on('query.store_updated', function (e, key, value) {});
+        // $(document).on('cart.store_updated', function (e, key) {});
+        // $(document).on('query.store_updated', function (e, key, value) {});
+        // $(document).on('route.store_updated', function (e, key) {});
+        // $(document).on('tournamentSets.store_updated', function (e, key) {});
 
     };
 
@@ -133,8 +120,7 @@ pikaDeck.events = {};
     var _clickEvents = function () {
 
         $(document).on('click', 'button#search_cards', function() {
-            //pikaDeck.hb.drawView('#hb_view_index');
-            pikaDeck.ctrl.index.getSearchResults();
+            pikaDeck.ctrl.index.view();
         });
 
         $(document).on('click', 'button#view_deck', function() {
@@ -142,15 +128,8 @@ pikaDeck.events = {};
         });
 
         $(document).on('click', 'a[data-info]', function() {
-
-            // TODO: Move this into a draw statement...
             var id = $(this).data().info;
-            var cards = pikaDeck.store.get('cardsLookup');
-            var card = cards[id];
-
-            var template = Handlebars.compile($('#hb_card_info').html());
-            $('.modal-content', '.modal--info').html(template(card));
-
+            pikaDeck.drawInfoModal(id);
         });
 
         $(document).on('click', 'button[data-add]', function() {
@@ -158,24 +137,23 @@ pikaDeck.events = {};
         });
 
         $(document).on('click', 'button[data-print]', function() {
-
             var id = $(this).data().print;
-            var cards = pikaDeck.store.get('cardsLookup');
-            var card = cards[id];
-
-            pikaDeck.pdf.printPlaySet(card);
-
+            pikaDeck.pdf.printPlaySet(id);
         });
 
         $(document).on('click', 'button[data-zoom]', function() {
-
-            // TODO: Move this into a draw statement...
             var id = $(this).data().zoom;
-            var cards = pikaDeck.store.get('cardsLookup');
-            var card = cards[id];
+            pikaDeck.drawZoomModal(id);
+        });
 
-            $('[data-zoomed]', '.modal--zoomed').attr('src', card.imageUrlHiRes);
+        $(document).on('click', 'a[href^="/#!"]', function (e) {
+            e.preventDefault();
+            window.location.href = $(this).attr('href');
+            window.location.reload();
+        });
 
+        $(window).on('popstate', function () {
+            window.location.reload();
         });
 
     };

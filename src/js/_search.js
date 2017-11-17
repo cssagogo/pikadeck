@@ -5,28 +5,10 @@ pikaDeck.search = {};
 
     this.init = function() {
 
-        pikaDeck.search.getSimpleData('types');
-        pikaDeck.search.getSimpleData('subtypes');
-        pikaDeck.search.getSimpleData('supertypes');
-        pikaDeck.search.getSets();
-
-    };
-
-    this.drawSearchOptionsCount = function (query) {
-
-        var queryCount = Object.keys(query).length;
-
-        if (queryCount === 1 && !query.name || queryCount >= 2) {
-
-            var count = (query.name) ? queryCount - 1 : queryCount;
-
-            $('#search_options_count').html(' ('+ count +')');
-
-        } else {
-
-            $('#search_options_count').html('');
-
-        }
+        this.getSimpleData('types');
+        this.getSimpleData('subtypes');
+        this.getSimpleData('supertypes');
+        this.getSets();
 
     };
 
@@ -194,6 +176,24 @@ pikaDeck.search = {};
     };
     this.drawQuerySupertype = function (supertype) {
         $('#poke_supertype').val(supertype).trigger('change');
+    };
+
+    this.drawSearchOptionsCount = function (query) {
+
+        var queryCount = Object.keys(query).length;
+
+        if (queryCount === 1 && !query.name || queryCount >= 2) {
+
+            var count = (query.name) ? queryCount - 1 : queryCount;
+
+            $('#search_options_count').html(' ('+ count +')');
+
+        } else {
+
+            $('#search_options_count').html('');
+
+        }
+
     };
 
     var _getSelect2SetOptions = function(state) {

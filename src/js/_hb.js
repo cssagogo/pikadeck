@@ -9,16 +9,27 @@ pikaDeck.hb = {};
 
     };
 
-    this.drawView = function(id) {
+    this.drawShell = function () {
 
-        var view = Handlebars.compile($(id).html());
-        $('#app').html(view());
+        var shell = Handlebars.compile($('#hb_shell_main').html());
+        $('#app').html(shell());
 
         var header = Handlebars.compile($('#hb_header_main').html());
         $('#header_main').html(header());
 
         var footer = Handlebars.compile($('#hb_footer_main').html());
         $('#footer_main').html(footer());
+
+        pikaDeck.search.init();
+
+        $(document).trigger('shell.draw_done');
+
+    };
+
+    this.drawView = function(id) {
+
+        var view = Handlebars.compile($(id).html());
+        $('#content_main').html(view());
 
         $(document).trigger('view.draw_done');
 

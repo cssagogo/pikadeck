@@ -62,7 +62,7 @@ var pikaDeck = pikaDeck || {};
 
     };
 
-    // TODO: Pure DOM updates
+    // Draw Functions
     // ------------------------------------------
     this.drawDeckButtonDisabled = function () {
 
@@ -84,9 +84,21 @@ var pikaDeck = pikaDeck || {};
         var loader = Handlebars.compile($('#hb_loading_cards').html());
         $target.html(loader());
     };
+    this.drawInfoModal = function (id) {
+        var cards = pikaDeck.store.get('cardsLookup');
+        var card = cards[id];
+        var template = Handlebars.compile($('#hb_card_info').html());
+        $('.modal-content', '.modal--info').html(template(card));
+    };
+    this.drawZoomModal = function (id) {
+        var cards = pikaDeck.store.get('cardsLookup');
+        var card = cards[id];
+        $('[data-zoomed]', '.modal--zoomed').attr('src', card.imageUrlHiRes);
+    };
 
-    // TODO: Add Unit Tests
+    // Pure Functions
     // ------------------------------------------
+    // TODO: Add Unit Tests
     this.getLookupTable = function (data, lookupKey) {
 
         var lookup = {};
