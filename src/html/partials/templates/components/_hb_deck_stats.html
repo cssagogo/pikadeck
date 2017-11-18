@@ -1,0 +1,131 @@
+<!-- Handlebars: Deck Stats -->
+<script id="hb_deck_stats" type="text/x-handlebars-template">
+
+    <div class="card card--aside">
+
+        <div class="card-header">
+
+            <nav class="nav nav-tabs nav-justified card-header-tabs" id="deck_stats_tabs" role="tablist">
+
+                <a class="nav-item nav-link active btn--icon-tada"
+                   id="nav-deck-stats-tab"
+                   data-toggle="tab"
+                   href="#nav-deck-stats"
+                   role="tab"
+                   aria-controls="nav-deck-stats"
+                   aria-selected="true">
+                    <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                    Stats
+                </a>
+
+                <a class="nav-item nav-link btn--icon-tada"
+                   id="nav-deck-list-tab"
+                   data-toggle="tab"
+                   href="#nav-deck-list"
+                   role="tab"
+                   aria-controls="nav-deck-list"
+                   aria-selected="false">
+                    <i class="fa fa-list-ul" aria-hidden="true"></i>
+                    List
+                </a>
+
+                <a class="nav-item nav-link btn--icon-tada"
+                   id="nav-deck-share-tab"
+                   data-toggle="tab"
+                   href="#nav-deck-share"
+                   role="tab"
+                   aria-controls="nav-deck-share"
+                   aria-selected="false">
+                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                    Share
+                </a>
+
+            </nav>
+
+        </div>
+        <div class="card-body">
+
+            <div class="tab-content" id="nav-tabContent">
+
+                <div class="tab-pane fade pt-3 pb-3 show active"
+                     id="nav-deck-stats"
+                     role="tabpanel"
+                     aria-labelledby="nav-deck-stats-tab">
+
+                    <div class="chart-container" style="position: relative; height:250px; width:100%">
+                        <canvas id="supertypeChart"></canvas>
+                    </div>
+
+                    {{#if hp}}
+                    <h4 class="card-title">
+                        <small>HP</small>{{hp}}
+
+                    </h4>
+                    {{/if}}
+
+
+
+
+                    <h2>Energy Types</h2>
+                    {{#if types}}
+                    {{#each types}}{{energyType this}} {{/each}}
+                    {{/if}}
+
+
+
+
+                    <h2>Tournament</h2>
+                    <img src="http://via.placeholder.com/350x100">
+
+
+                </div>
+
+                <div class="tab-pane fade pt-3 pb-3"
+                     id="nav-deck-list"
+                     role="tabpanel"
+                     aria-labelledby="nav-deck-list-tab">
+
+                    <h2>Pokemon – {{counts.supertype.pokemon}}</h2>
+                    <ul>
+                        {{#each pctgoList.pokemon}}
+                            <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+
+                    <h2>Trainers – {{counts.supertype.trainer}}</h2>
+                    <ul>
+                        {{#each pctgoList.trainer}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+
+                    <h2>Energy – {{counts.supertype.energy}}</h2>
+                    <ul>
+                        {{#each pctgoList.energy}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
+
+                </div>
+
+
+                <div class="tab-pane fade pt-3 pb-3"
+                     id="nav-deck-share"
+                     role="tabpanel"
+                     aria-labelledby="nav-deck-share-tab">
+
+                    <h2>Coming Soon!</h2>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</script>

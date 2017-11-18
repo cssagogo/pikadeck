@@ -69,17 +69,22 @@ pikaDeck.ctrl.deck = {};
         }
     };
 
-    this.getUniqueList = function (longList) {
+    this.drawStats = function (data) {
+        if (data.length !== 0) {
 
-        return longList.filter(function(item, pos) {
-            return longList.indexOf(item) === pos;
-        }).sort();
+            var template = Handlebars.compile($('#hb_deck_stats').html());
+            $('#deck_stats').html(template(data));
 
+        }
+
+        $(document).trigger('deckStats.draw_done');
     };
+
+
 
     this.getShortList = function (longList) {
 
-        return JSON.stringify(_getCounts(longList))
+        return JSON.stringify(pikaDeck.getCounts(longList))
             .replace(/,"/g,'|')
             .replace(/":/g,'~')
             .replace(/{"/g,'')
@@ -110,23 +115,10 @@ pikaDeck.ctrl.deck = {};
             var deckList = this.getLongList(query.list.join('|'));
             pikaDeck.store.push('deckList', deckList);
 
-            var deckUnique = this.getUniqueList(deckList);
+            var deckUnique = pikaDeck.getUniqueList(deckList);
             pikaDeck.store.push('deckUnique', deckUnique);
 
         }
-
-    };
-
-    var _getCounts = function (list) {
-
-        var counts = {};
-
-        for (var i = 0; i < list.length; i++) {
-            var num = list[i];
-            counts[num] = counts[num] ? counts[num] + 1 : 1;
-        }
-
-        return counts;
 
     };
 

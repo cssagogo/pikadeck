@@ -153,6 +153,30 @@ var pikaDeck = pikaDeck || {};
         return data;
     };
 
+    this.getUniqueList = function (longList) {
+
+        return longList.filter(function(item, pos) {
+            return longList.indexOf(item) === pos;
+        }).sort();
+
+    };
+
+
+    this.getCounts = function (list) {
+
+        var counts = {};
+
+        for (var i = 0; i < list.length; i++) {
+            var num = list[i];
+            counts[num] = counts[num] ? counts[num] + 1 : 1;
+        }
+
+        return counts;
+
+    };
+
+
+
 }).apply(pikaDeck);
 
 

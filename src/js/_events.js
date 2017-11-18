@@ -45,6 +45,11 @@ pikaDeck.events = {};
             pikaDeck.search.drawQuerySupertype(supertype);
         });
 
+        $(document).on('deckStats.draw_done', function() {
+            pikaDeck.chart.supertype();
+        });
+
+
         //$(document).on('deck.draw_done', function() {});
 
     };
@@ -73,10 +78,17 @@ pikaDeck.events = {};
             pikaDeck.store.push('cardsLookup', cardsLookup);
 
             // Create and store deck stats...
+            pikaDeck.stats.init();
 
             // Create and store ordered deck...
 
             pikaDeck.ctrl.deck.draw(value);
+
+        });
+
+        $(document).on('deckStats.store_updated', function (e, key, value) {
+
+            pikaDeck.ctrl.deck.drawStats(value);
 
         });
 
@@ -134,6 +146,12 @@ pikaDeck.events = {};
 
         $(document).on('click', 'button[data-add]', function() {
             pikaDeck.addCardToDeck($(this));
+        });
+
+        $(document).on('click', 'button[data-remove]', function() {
+            var id = $(this).data().print;
+            // TODO: Need to setup remove option.
+            console.log(id);
         });
 
         $(document).on('click', 'button[data-print]', function() {
