@@ -49,6 +49,18 @@ pikaDeck.hb = {};
             return new Handlebars.SafeString(value);
         });
 
+        Handlebars.registerHelper('cardData', function(id, key) {
+
+            id = Handlebars.Utils.escapeExpression(id);
+            key = Handlebars.Utils.escapeExpression(key);
+
+            // TODO: Should check for existence of nodes in object...
+            var cardsLookup = pikaDeck.store.get('cardsLookup');
+            var value = cardsLookup[id][key];
+
+            return new Handlebars.SafeString(value);
+        });
+
         Handlebars.registerHelper('setData', function(setCode, key) {
 
             setCode = Handlebars.Utils.escapeExpression(setCode);

@@ -80,7 +80,40 @@ pikaDeck.ctrl.deck = {};
         $(document).trigger('deckStats.draw_done');
     };
 
+    this.getDeckSorted = function () {
 
+        var deckCounts  = pikaDeck.store.get('deckCounts');
+        var deckSorted  = pikaDeck.sortObjects(pikaDeck.objectToObjectArray(deckCounts), 'value');
+        var cardsLookup = pikaDeck.store.get('cardsLookup');
+
+        var pokemon = [];
+        var trainer = [];
+        var energy  = [];
+
+        for (var i = 0; i < deckSorted.length; i++) {
+
+            var id = deckSorted[i].name;
+            var supertype = cardsLookup[id].supertype;
+
+            if (supertype === 'Energy') {
+                energy.push(id);
+            }
+
+            if (supertype === 'Trainer') {
+                trainer.push(id);
+            }
+
+            if (supertype === 'Pokémon') {
+                pokemon.push(id);
+            }
+
+        }
+
+        deckSorted = pokemon.concat(trainer).concat(energy);
+
+        pikaDeck.store.push('deckSorted', deckSorted);
+
+    };
 
     this.getShortList = function (longList) {
 

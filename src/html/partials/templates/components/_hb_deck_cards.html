@@ -3,21 +3,21 @@
     {{#each .}}
     <div class="col-6 col-sm-4 col-md-6 col-lg-4 col-xl-3 mb-3">
         <div class="card card--tile p-1">
-            <a href="#" data-info="{{id}}" data-toggle="modal" data-target=".modal--info">
-                <img class="lazyload card-img-top" data-src="{{imageUrl}}" src="https://images.pokemontcg.io/xy0/symbol.png">
+            <a href="#" data-info="{{this}}" data-toggle="modal" data-target=".modal--info">
+                <img class="lazyload card-img-top" data-src="{{cardData this 'imageUrl'}}" src="https://images.pokemontcg.io/xy0/symbol.png">
             </a>
-            <div class="card__count rounded-circle text-light">{{deckCount id}}x</div>
+            <div class="card__count rounded-circle text-light">{{deckCount this}}x</div>
             <div class="card__btn-group btn-group mt-1" role="group" aria-label="...">
 
-                <button data-remove="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Remove from Deck">
+                <button data-remove="{{this}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Remove from Deck">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
 
-                <button data-print="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Print Play Set">
+                <button data-print="{{this}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Print Play Set">
                     <i class="fa fa-print" aria-hidden="true"></i>
                 </button>
 
-                <button data-zoom="{{id}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="modal" data-target=".modal--zoomed" data-toggle="tooltip" title="Detialed View">
+                <button data-zoom="{{this}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="modal" data-target=".modal--zoomed" data-toggle="tooltip" title="Detialed View">
                     <i class="fa fa-search-plus" aria-hidden="true"></i>
                 </button>
 

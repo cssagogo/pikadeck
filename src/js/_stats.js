@@ -55,9 +55,6 @@ pikaDeck.stats = {};
                     item += ' ' + setData.ptcgoCode + ' ' + card.number;
                 }
 
-
-
-
                 //= Deck List
                 if (pctgoList[supertype].indexOf(item) < 0) {
                     pctgoList[supertype].push(item);
