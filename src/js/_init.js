@@ -175,6 +175,26 @@ var pikaDeck = pikaDeck || {};
 
     };
 
+    this.objectToObjectArray = function (obj) {
+
+        var objectArray = [];
+
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                var item = {};
+                item.name = prop;
+                item.value = obj[prop];
+                objectArray.push(item);
+            }
+        }
+
+        return objectArray;
+    };
+
+    this.sortObjects = function (objs, key) {
+        return objs.sort(function (a, b) {return (a[key] < b[key]) ? 1 : ((b[key] < a[key]) ? -1 : 0);});
+    };
+
 
 
 }).apply(pikaDeck);

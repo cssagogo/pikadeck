@@ -34,29 +34,48 @@ $tab-border-active: #ddd;
   .card-header {
     background: $card-btn-background;
     color: $card-btn-text;
+
+    .nav-link {
+      background: $card-btn-background;
+      border-color: $card-btn-background $card-btn-background $tab-border-active;
+      color: $card-btn-text;
+    }
+
+    .nav-link:focus,
+    .nav-link:hover {
+      background: $card-btn-background-hover;
+      border-color: $card-btn-text $card-btn-text $tab-border-active;
+      color: $card-btn-text-hover;
+    }
+
+    .nav-link.active,
+    .nav-link.active:hover {
+      background-color: $light-color;
+      border-color: $tab-border-active $tab-border-active $light-color;
+      color: $card-btn-text;
+    }
+
   }
 
-  .nav-link {
-    background: $card-btn-background;
-    border-color: $card-btn-background $card-btn-background $tab-border-active;
-    color: $card-btn-text;
-  }
+  .card-body {
 
-  .nav-link:focus,
-  .nav-link:hover {
-    background: $card-btn-background-hover;
-    border-color: $card-btn-text $card-btn-text $tab-border-active;
-    color: $card-btn-text-hover;
-  }
+    .nav-link {
+      border-bottom: 2px solid lighten($dark-color, 70%);
+      color: lighten($dark-color, 50%);
+    }
 
-  .nav-item.show .nav-link,
-  .nav-item.show .nav-link:hover,
-  .nav-link.active,
-  .nav-link.active:hover {
-    background-color: $light-color;
-    border-color: $tab-border-active $tab-border-active $light-color;
-    color: $card-btn-text;
-  }
+    .nav-link:focus,
+    .nav-link:hover {
+      color: lighten($dark-color, 30%);
+    }
 
+    .nav-link.active,
+    .nav-link.active:hover {
+      border-bottom: 2px solid $card-btn-text;
+      color: $dark-color;
+
+    }
+
+  }
 
 }

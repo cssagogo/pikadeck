@@ -62,7 +62,7 @@
                         </div>
                         <div class="col-7 text-right">
                             {{#if types}}
-                            {{#each types}}{{energyType this}} {{/each}}
+                                {{#each types}}{{energyType this}} {{/each}}
                             {{/if}}
                         </div>
                     </div>
@@ -70,6 +70,90 @@
                     <div class="chart-container" style="position: relative; width:100%">
                         <canvas id="supertypeChart"></canvas>
                     </div>
+
+
+                    <nav class="nav nav-justified mb-3 mt-3" id="stats_sub_tabs" role="tablist">
+                        <a class="nav-item nav-link active"
+                           id="nav-sets-tab"
+                           data-toggle="pill"
+                           href="#nav-sets"
+                           role="tab"
+                           aria-controls="nav-sets"
+                           aria-selected="true">Set Details</a>
+                        <a class="nav-item nav-link"
+                           id="nav-rarity-tab"
+                           data-toggle="pill"
+                           href="#nav-rarity"
+                           role="tab"
+                           aria-controls="nav-rarity"
+                           aria-selected="false">Rarity</a>
+                        <a class="nav-item nav-link"
+                           id="nav-subtypes-tab"
+                           data-toggle="pill"
+                           href="#nav-subtypes"
+                           role="tab"
+                           aria-controls="nav-subtypes"
+                           aria-selected="false">Subtypes</a>
+                    </nav>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="nav-sets" role="tabpanel" aria-labelledby="nav-sets-tab">
+                            {{#each setCode}}
+                            <div class="row mb-2">
+                                <div class="col-8">
+                                    <img class="icon-set" src="{{setSymbolUrl name}}">
+                                    {{setData name "name"}}
+                                </div>
+                                <div class="col-4 text-right">{{value}}</div>
+                            </div>
+                            {{/each}}
+                        </div>
+                        <div class="tab-pane fade" id="nav-rarity" role="tabpanel" aria-labelledby="nav-rarity-tab">
+                            {{#each rarity}}
+                            <div class="row mb-2">
+                                <div class="col-8">{{name}}</div>
+                                <div class="col-4 text-right">{{value}}</div>
+                            </div>
+                            {{/each}}
+                        </div>
+                        <div class="tab-pane fade" id="nav-subtypes" role="tabpanel" aria-labelledby="nav-subtypes-tab">
+                            {{#each subtypes}}
+                            <div class="row mb-2">
+                                <div class="col-8">{{name}}</div>
+                                <div class="col-4 text-right">{{value}}</div>
+                            </div>
+                            {{/each}}
+                        </div>
+                    </div>
+
+
+                    <div class="card mb-3 mt-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    {{#if weaknesses}}
+                                    <h5>Weaknesses</h5>
+                                    {{#each weaknesses}}{{energyType this}} {{/each}}
+                                    {{/if}}
+                                </div>
+                                <div class="col-6">
+                                    {{#if resistances}}
+                                    <h5>Resistances</h5>
+                                    {{#each resistances}}{{energyType this}} {{/each}}
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                    <h4>Artists</h4>
+                    <small>{{#each artists}}{{this}}, {{/each}}</small>
 
 
 

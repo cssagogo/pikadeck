@@ -7,7 +7,7 @@ pikaDeck.chart = {};
 
         var ctx = $("#supertypeChart");
 
-        var supertype = pikaDeck.store.get('deckStats').counts.supertype;
+        var supertype = pikaDeck.store.get('deckStats').supertypes;
 
         var options = {
             type: 'bar',
@@ -38,15 +38,7 @@ pikaDeck.chart = {};
                             beginAtZero:true
                         }
                     }]
-                },
-                // layout: {
-                //     padding: {
-                //         left: 0,
-                //         right: 0,
-                //         top: 0,
-                //         bottom: 0
-                //     }
-                // }
+                }
             }
         };
 
