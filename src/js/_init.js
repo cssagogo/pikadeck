@@ -15,7 +15,24 @@ var pikaDeck = pikaDeck || {};
 
     };
 
-    this.addCardToDeck = function ($target) {
+    this.removeFromDeck = function ($target) {
+
+        var deckList = pikaDeck.store.get('deckList');
+        var index = deckList.indexOf($target);
+
+        if (index > 0) {
+
+            deckList.splice(index, 1);
+
+            pikaDeck.store.push('deckList', deckList);
+
+            pikaDeck.ctrl.deck.view();
+
+        }
+
+    };
+
+    this.addToDeck = function ($target) {
 
         var deckList = pikaDeck.store.get('deckList') || [];
         var cardsLookup = pikaDeck.store.get('cardsLookup') || {};
@@ -61,6 +78,8 @@ var pikaDeck = pikaDeck || {};
         toastr.success(text);
 
     };
+
+
 
     // Draw Functions
     // ------------------------------------------
@@ -110,6 +129,7 @@ var pikaDeck = pikaDeck || {};
         return lookup;
 
     };
+
     this.getTournamentSets = function (data) {
 
         var standard = [];
@@ -133,6 +153,7 @@ var pikaDeck = pikaDeck || {};
         };
 
     };
+
     this.countInArray = function (array, what) {
         var count = 0;
         for (var i = 0; i < array.length; i++) {
@@ -142,6 +163,7 @@ var pikaDeck = pikaDeck || {};
         }
         return count;
     };
+
     this.removeFromArray = function (data, item) {
 
         var index = data.indexOf(item);
@@ -160,7 +182,6 @@ var pikaDeck = pikaDeck || {};
         }).sort();
 
     };
-
 
     this.getCounts = function (list) {
 

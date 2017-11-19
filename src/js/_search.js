@@ -182,9 +182,9 @@ pikaDeck.search = {};
 
         var queryCount = Object.keys(query).length;
 
-        if (queryCount === 1 && !query.name || queryCount >= 2) {
+        if (queryCount === 1 && !query.name && !query.list || queryCount >= 2) {
 
-            var count = (query.name) ? queryCount - 1 : queryCount;
+            var count = (query.name || query.list) ? queryCount - 1 : queryCount;
 
             $('#search_options_count').html(' ('+ count +')');
 

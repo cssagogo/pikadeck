@@ -78,13 +78,18 @@ pikaDeck.events = {};
             pikaDeck.store.push('cardsLookup', cardsLookup);
         });
 
-        $(document).on('cardsLookup.store_updated', function (e, key, value) {
+        $(document).on('cardsLookup.store_updated', function () {
 
-            // Create and store deck stats...
-            pikaDeck.stats.init();
+            var route = pikaDeck.store.get('route');
 
-            // Create and store ordered deck...
-            pikaDeck.ctrl.deck.getDeckSorted();
+            if (route === 'deck') {
+
+                // Create and store deck stats...
+                pikaDeck.stats.init();
+
+                // Create and store ordered deck...
+                pikaDeck.ctrl.deck.getDeckSorted();
+            }
 
         });
 
@@ -97,7 +102,6 @@ pikaDeck.events = {};
         });
 
         $(document).on('cards.store_updated', function (e, key, value) {
-
             var cardsLookup = pikaDeck.getLookupTable(value, 'id');
             pikaDeck.store.push('cardsLookup', cardsLookup);
 
@@ -147,13 +151,12 @@ pikaDeck.events = {};
         });
 
         $(document).on('click', 'button[data-add]', function() {
-            pikaDeck.addCardToDeck($(this));
+            pikaDeck.addToDeck($(this));
         });
 
         $(document).on('click', 'button[data-remove]', function() {
-            var id = $(this).data().print;
-            // TODO: Need to setup remove option.
-            console.log(id);
+            var id = $(this).data().remove;
+            pikaDeck.removeFromDeck(id);
         });
 
         $(document).on('click', 'button[data-print]', function() {
