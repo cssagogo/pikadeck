@@ -1,13 +1,13 @@
-body,
-.wrapper {
-  background-image: linear-gradient(135deg, $background-start 10%, $background-end 100%);
-  min-height: 100%;
+body {
+  background: $background-start;
 }
 
+//body,
+//.wrapper {
+//  background-image: linear-gradient(135deg, $background-start 10%, $background-end 100%);
+//  min-height: 100%;
+//}
 
-
-
-
-
-
-
+//body {
+//  background-image: url('/assets/img/purty_wood/purty_wood.png');
+//}

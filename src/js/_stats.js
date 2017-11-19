@@ -49,7 +49,14 @@ pikaDeck.stats = {};
 
                 var setData = sets[card.setCode];
                 var supertype = (card.supertype).toLowerCase().replace('é','e');
-                var item = count + ' ' + card.name + ' ' + setData.ptcgoCode;
+                var item = count + ' ' + card.name;
+
+                if (supertype === 'pokemon') {
+                    item += ' ' + setData.ptcgoCode + ' ' + card.number;
+                }
+
+
+
 
                 //= Deck List
                 if (pctgoList[supertype].indexOf(item) < 0) {

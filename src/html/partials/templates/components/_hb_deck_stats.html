@@ -29,16 +29,16 @@
                     List
                 </a>
 
-                <a class="nav-item nav-link btn--icon-tada"
-                   id="nav-deck-share-tab"
-                   data-toggle="tab"
-                   href="#nav-deck-share"
-                   role="tab"
-                   aria-controls="nav-deck-share"
-                   aria-selected="false">
-                    <i class="fa fa-share-alt" aria-hidden="true"></i>
-                    Share
-                </a>
+                <!--<a class="nav-item nav-link btn&#45;&#45;icon-tada"-->
+                   <!--id="nav-deck-share-tab"-->
+                   <!--data-toggle="tab"-->
+                   <!--href="#nav-deck-share"-->
+                   <!--role="tab"-->
+                   <!--aria-controls="nav-deck-share"-->
+                   <!--aria-selected="false">-->
+                    <!--<i class="fa fa-share-alt" aria-hidden="true"></i>-->
+                    <!--Share-->
+                <!--</a>-->
 
             </nav>
 
@@ -146,17 +146,12 @@
                         </div>
                     </div>
 
-
-
-
-
-
-
                     <h4>Artists</h4>
-                    <small>{{#each artists}}{{this}}, {{/each}}</small>
-
-
-
+                    <ul class="ul-csv text-secondary">
+                        {{#each artists}}
+                        <li>{{this}}</li>
+                        {{/each}}
+                    </ul>
 
                 </div>
 
@@ -165,21 +160,21 @@
                      role="tabpanel"
                      aria-labelledby="nav-deck-list-tab">
 
-                    <h2>Pokemon – {{counts.supertype.pokemon}}</h2>
+                    <h2>Pokemon – {{supertypes.pokemon}}</h2>
                     <ul>
                         {{#each pctgoList.pokemon}}
                             <li>{{this}}</li>
                         {{/each}}
                     </ul>
 
-                    <h2>Trainers – {{counts.supertype.trainer}}</h2>
+                    <h2>Trainers – {{supertypes.trainer}}</h2>
                     <ul>
                         {{#each pctgoList.trainer}}
                         <li>{{this}}</li>
                         {{/each}}
                     </ul>
 
-                    <h2>Energy – {{counts.supertype.energy}}</h2>
+                    <h2>Energy – {{supertypes.energy}}</h2>
                     <ul>
                         {{#each pctgoList.energy}}
                         <li>{{this}}</li>
