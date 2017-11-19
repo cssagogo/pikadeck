@@ -63,17 +63,22 @@ $card-count-text-shadow: rgba(0, 0, 0, .5);
   }
 
   .card__count {
-    background: $card-count-bg;
+    background-image: url('/assets/img/cream_pixels/cream_pixels.png');
+    border: 1px solid darken($light-color, 10%);
     box-shadow: 0 2px 2px 0 darken($card-shadow-color, 50%);
+    color: darken($light-color, 50%);
     height: 2rem;
     left: -.7rem;
     line-height: 2;
     position: absolute;
     text-align: center;
-    text-shadow: 1px 1px 2px $card-count-text-shadow;
     top: 3rem;
     transform: rotate(-7deg);
     width: 2rem;
   }
 
+}
+
+.card--cream-pixels {
+  background-image: url('/assets/img/cream_pixels/cream_pixels.png');
 }
