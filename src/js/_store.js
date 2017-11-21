@@ -26,6 +26,28 @@ pikaDeck.store = {};
 
     };
 
+    this.remove = function (key) {
+
+        if (key) {
+
+            var current = JSON.parse(JSON.stringify(_data));
+            var updated = JSON.parse(JSON.stringify(current));
+
+            delete updated[key];
+
+            if (!_sameObject(current, updated)) {
+
+                // TODO: Add a history for an undo feature.
+
+                _data = updated;
+
+                $(document).trigger(key + '.store_removed', [key]);
+
+            }
+
+        }
+    };
+
     this.get = function (key) {
         var data = JSON.parse(JSON.stringify(_data));
         return (key) ? data[key] : data;

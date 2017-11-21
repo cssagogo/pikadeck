@@ -25,7 +25,6 @@ pikaDeck.ctrl.deck = {};
 
     this.get = function (deck) {
 
-        // TODO: loading_deck or deck.loading maybe?
         $(document).trigger('deck.loading');
 
         // TODO: Handle when no IDs are passed.
@@ -57,7 +56,6 @@ pikaDeck.ctrl.deck = {};
 
         }
 
-        // TODO: deck.draw_done?
         $(document).trigger('deck.draw_done');
 
     };
@@ -81,6 +79,8 @@ pikaDeck.ctrl.deck = {};
     };
 
     this.getDeckSorted = function () {
+
+        // TODO: Rename to getDeckSortedUnique
 
         var deckCounts  = pikaDeck.store.get('deckCounts');
         var deckSorted  = pikaDeck.sortObjects(pikaDeck.objectToObjectArray(deckCounts), 'value');
@@ -112,6 +112,24 @@ pikaDeck.ctrl.deck = {};
         deckSorted = pokemon.concat(trainer).concat(energy);
 
         pikaDeck.store.push('deckSorted', deckSorted);
+
+    };
+
+    this.getDeckSortedFull = function () {
+
+        var deckCounts  = pikaDeck.store.get('deckCounts');
+        var deckSorted  = pikaDeck.store.get('deckSorted');
+
+        var deckSortedFull = [];
+
+        for (var i = 0; i < deckSorted.length; i++) {
+            var count = deckCounts[deckSorted[i]];
+            for (var x = 0; x < count; x++) {
+                deckSortedFull.push(deckSorted[i]);
+            }
+        }
+
+        pikaDeck.store.push('deckSortedFull', deckSortedFull);
 
     };
 

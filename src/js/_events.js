@@ -51,12 +51,24 @@ pikaDeck.events = {};
             pikaDeck.chart.supertype();
         });
 
-
-        //$(document).on('deck.draw_done', function() {});
+        $(document).on('pdfDeck.draw_done', function() {
+            pikaDeck.pdf.resetButton($('button#print_deck'));
+        });
 
     };
 
     var _storeEvents = function () {
+
+        $(document).on('deckDataUrls.store_updated', function () {
+            pikaDeck.store.remove('deckDataUrlsIds');
+            pikaDeck.store.remove('deckDataUrlsTemp');
+
+            pikaDeck.pdf.printDeckPDF();
+        });
+
+        $(document).on('deckDataUrlsIds.store_updated', function () {
+            pikaDeck.pdf.drawLoadingCounter();
+        });
 
         $(document).on('tournamentSets.store_updated', function () {
             // TODO: Consider how best to handle different routes.
@@ -94,6 +106,9 @@ pikaDeck.events = {};
         });
 
         $(document).on('deckSorted.store_updated', function (e, key, value) {
+
+            pikaDeck.ctrl.deck.getDeckSortedFull();
+
             pikaDeck.ctrl.deck.draw(value);
         });
 
@@ -124,8 +139,6 @@ pikaDeck.events = {};
             pikaDeck.search.drawSets(value);
         });
 
-
-
         // $(document).on('query.store_updated', function (e, key, value) {});
         // $(document).on('cart.store_updated', function (e, key) {});
         // $(document).on('query.store_updated', function (e, key, value) {});
@@ -133,7 +146,6 @@ pikaDeck.events = {};
         // $(document).on('tournamentSets.store_updated', function (e, key) {});
 
     };
-
 
     var _clickEvents = function () {
 
@@ -143,6 +155,14 @@ pikaDeck.events = {};
 
         $(document).on('click', 'button#view_deck', function() {
             pikaDeck.ctrl.deck.view();
+        });
+
+        $(document).on('click', 'button#print_deck', function() {
+
+            pikaDeck.pdf.loadingButton($(this));
+
+            pikaDeck.pdf.printDeck();
+
         });
 
         $(document).on('click', 'a[data-info]', function() {
@@ -191,6 +211,5 @@ pikaDeck.events = {};
             pikaDeck.drawPageLoader($('#deck_cards'));
         });
     };
-
 
 }).apply(pikaDeck.events);
