@@ -153,6 +153,12 @@ pikaDeck.events = {};
             pikaDeck.ctrl.index.view();
         });
 
+        $(document).on('keypress', 'input#poke_search', function (e) {
+            if(e.which === 13){
+                pikaDeck.ctrl.index.view();
+            }
+        });
+
         $(document).on('click', 'button#view_deck', function() {
             pikaDeck.ctrl.deck.view();
         });

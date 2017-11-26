@@ -35,7 +35,7 @@ pikaDeck.ctrl.index = {};
             var params = pikaDeck.store.get('rawQuery') || _getDefaultParams(tournamentSets.standard);
 
             // TODO: Pass params as data...
-            var endpoint = pikaDeck.apiPath + 'cards?pageSize=60&' + params;
+            var endpoint = pikaDeck.apiPath + 'cards?pageSize=500&' + params;
 
             // Else get new data...
             $.ajax({
