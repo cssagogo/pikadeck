@@ -61,10 +61,14 @@ pikaDeck.ctrl.deck = {};
     };
 
     this.drawCount = function (deckList) {
-        if (deckList) {
-            $('.count', '#view_deck').html('(' + deckList.length + ')');
-            $(document).trigger('deckCount.draw_done');
+
+        if (!deckList) {
+          return;
         }
+
+        $('.count', '#view_deck').html(deckList.length);
+        $(document).trigger('deckCount.draw_done');
+
     };
 
     this.drawStats = function (data) {
@@ -78,60 +82,60 @@ pikaDeck.ctrl.deck = {};
         $(document).trigger('deckStats.draw_done');
     };
 
-    this.getShortUrl =  function () {
-
-        var longUrl = 'https://pikadeck.net/' + window.location.hash;
-        var APIkey  = 'AIzaSyCwfab4e6gvelLf1mf_dg69IZI3tzr2GQQ';
-        var url     = 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=' + APIkey;
-
-        var data = {
-            "longDynamicLink": "https://pikadecklist.app.goo.gl/?link=" + longUrl,
-            "suffix": {
-                "option": "SHORT"
-            }
-        };
-
-
-        function postAjax(url, data, success) {
-            var params = typeof data === 'string' ? data : Object.keys(data).map(
-                function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]); }
-            ).join('&');
-
-            var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-            xhr.open('POST', url);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState>3 && xhr.status===200) { success(xhr.responseText); }
-            };
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(params);
-            return xhr;
-        }
-
-        postAjax(url, data, function(data){
-            console.log(data);
-        });
-
-
-
-        // var request = $.ajax({
-        //     url: url,
-        //     dataType: 'json',
-        //     type: 'post',
-        //     contentType: 'application/json',
-        //     data: JSON.stringify(data),
-        //     processData: false,
-        //     success: function( data, textStatus, jQxhr ){
-        //         console.log(data);
-        //         console.log(textStatus);
-        //         console.log(jQxhr);
-        //     },
-        //     error: function( jqXhr, textStatus, errorThrown ){
-        //         console.log( errorThrown );
-        //     }
-        // });
-
-    };
+    // this.getShortUrl =  function () {
+    //
+    //     var longUrl = 'https://pikadeck.net/' + window.location.hash;
+    //     var APIkey  = 'AIzaSyCwfab4e6gvelLf1mf_dg69IZI3tzr2GQQ';
+    //     var url     = 'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=' + APIkey;
+    //
+    //     var data = {
+    //         "longDynamicLink": "https://pikadecklist.app.goo.gl/?link=" + longUrl,
+    //         "suffix": {
+    //             "option": "SHORT"
+    //         }
+    //     };
+    //
+    //
+    //     function postAjax(url, data, success) {
+    //         var params = typeof data === 'string' ? data : Object.keys(data).map(
+    //             function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]); }
+    //         ).join('&');
+    //
+    //         var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    //         xhr.open('POST', url);
+    //         xhr.onreadystatechange = function() {
+    //             if (xhr.readyState>3 && xhr.status===200) { success(xhr.responseText); }
+    //         };
+    //         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    //         xhr.setRequestHeader('Content-Type', 'application/json');
+    //         xhr.send(params);
+    //         return xhr;
+    //     }
+    //
+    //     postAjax(url, data, function(data){
+    //         console.log(data);
+    //     });
+    //
+    //
+    //
+    //     // var request = $.ajax({
+    //     //     url: url,
+    //     //     dataType: 'json',
+    //     //     type: 'post',
+    //     //     contentType: 'application/json',
+    //     //     data: JSON.stringify(data),
+    //     //     processData: false,
+    //     //     success: function( data, textStatus, jQxhr ){
+    //     //         console.log(data);
+    //     //         console.log(textStatus);
+    //     //         console.log(jQxhr);
+    //     //     },
+    //     //     error: function( jqXhr, textStatus, errorThrown ){
+    //     //         console.log( errorThrown );
+    //     //     }
+    //     // });
+    //
+    // };
 
     this.getDeckSorted = function () {
 

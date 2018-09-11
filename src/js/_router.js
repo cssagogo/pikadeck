@@ -20,7 +20,17 @@ pikaDeck.router =  {};
 
         pikaDeck.hb.drawShell();
 
-        pikaDeck.store.push('deckList', store.get('deckList'));
+        var deckList = localStorage.getItem('deckList');
+
+        if (deckList) {
+
+          deckList = deckList.split(',');
+
+          if (deckList.length) {
+            pikaDeck.store.push('deckList', deckList);
+          }
+
+        }
 
         if (!(_inRoutes(hash[0]))) {
             pikaDeck.ctrl.index.init();

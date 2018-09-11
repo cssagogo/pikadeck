@@ -1,3 +1,13 @@
+
+
+$primary-disabled: lighten($primary-color, 25%);
+
+.btn.btn-primary.disabled,
+.btn.btn-primary:disabled {
+  color: $primary-disabled;
+  opacity: 1;
+}
+
 // = Tada Icons
 // ---------------------------------
 
@@ -7,4 +17,13 @@
     animation-fill-mode: both;
     animation-name: rubberBand;
   }
+}
+
+// = Button Badge
+// ---------------------------------
+
+.badge.badge-pill.badge-danger.position-absolute {
+  font-size: 65%;
+  right: -.3rem;
+  top: -.3rem;
 }

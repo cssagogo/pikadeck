@@ -81,7 +81,8 @@ pikaDeck.events = {};
         });
 
         $(document).on('deckList.store_updated', function (e, key, value) {
-            store.set('deckList', value);
+
+            localStorage.setItem('deckList', value);
             pikaDeck.ctrl.deck.drawCount(value);
         });
 
@@ -149,6 +150,8 @@ pikaDeck.events = {};
 
     var _clickEvents = function () {
 
+
+
         $(document).on('click', 'button#search_cards', function() {
             pikaDeck.ctrl.index.view();
         });
@@ -160,7 +163,33 @@ pikaDeck.events = {};
         });
 
         $(document).on('click', 'button#view_deck', function() {
+
+            // TODO: This is duplicated in clear deck.
+            var deckList = pikaDeck.store.get('deckList');
+            if (!deckList) {
+              toastr.warning('You have no cards in your deck yet.');
+              return;
+            }
+
             pikaDeck.ctrl.deck.view();
+
+        });
+
+        $(document).on('click', 'button#clear_deck', function (e) {
+
+            e.preventDefault();
+
+
+            // TODO: This is duplicated in view deck.
+            var deckList = pikaDeck.store.get('deckList');
+            if (!deckList) {
+              toastr.warning('You have no cards in your deck yet.');
+              return;
+            }
+
+            localStorage.removeItem('deckList');
+            window.location.href = '/';
+
         });
 
         $(document).on('click', 'button#print_deck', function() {

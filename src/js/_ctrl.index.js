@@ -42,7 +42,18 @@ pikaDeck.ctrl.index = {};
                 dataType: 'json',
                 url: endpoint,
                 success: function (data) {
-                    pikaDeck.store.push('cards', data.cards);
+
+                    if (data.cards && data.cards.length) {
+
+                      pikaDeck.store.push('cards', data.cards);
+
+                    } else {
+
+                      var nodata = Handlebars.compile($('#hb_no_results').html());
+                      $('#index_cards').html(nodata());
+
+                    }
+
                 },
                 error: function (xhr, status, error) {
                     console.log([xhr, status, error]);

@@ -17,7 +17,7 @@ $logo-shadow: $shadow-color;
   &__text {
     color: $logo-text;
     font-family: 'Ranchers', cursive;
-    font-size: 4rem;
+    font-size: 3rem;
     font-weight: 400;
     position: relative;
     text-shadow: 1px 1px 8px $logo-shadow;
@@ -26,8 +26,8 @@ $logo-shadow: $shadow-color;
   }
 
   &__bg {
-    height: 124px;
-    margin-bottom: -83px;
+    height: 100px;
+    margin-bottom: -63px;
 
     path {
       animation: .5s logo-filling linear forwards;

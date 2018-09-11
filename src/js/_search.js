@@ -186,7 +186,7 @@ pikaDeck.search = {};
 
             var count = (query.name || query.list) ? queryCount - 1 : queryCount;
 
-            $('#search_options_count').html(' ('+ count +')');
+            $('#search_options_count').html(count);
 
         } else {
 
