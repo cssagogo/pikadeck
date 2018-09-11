@@ -22,17 +22,19 @@ pikaDeck.search = {};
 
             for (var i = 0; i < data.length; i++) {
 
+                // TODO: This is a specific hack for the card N.
+                if (data[i].name === 'name' && data[i].value === 'N') {
+                    newData[data[i].name] = '"' + data[i].value + '"';
+                    continue;
+                }
+
                 if (newData[data[i].name]) {
-
                     newData[data[i].name] = newData[data[i].name] + '|' + data[i].value;
+                    continue;
+                }
 
-                } else {
-
-                    if (data[i].value) {
-
-                        newData[data[i].name] = data[i].value;
-
-                    }
+                if (data[i].value) {
+                    newData[data[i].name] = data[i].value;
                 }
 
             }
