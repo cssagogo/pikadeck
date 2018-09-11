@@ -6,7 +6,7 @@ pikaDeck.ctrl.deck = {};
 
     this.init = function() {
 
-        document.title = document.title + " - Untitled Deck";
+        document.title = document.title + " - Deck List";
 
         pikaDeck.hb.drawView('#hb_view_deck');
         pikaDeck.drawDeckButtonDisabled();
