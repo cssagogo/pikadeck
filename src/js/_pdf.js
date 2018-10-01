@@ -42,10 +42,19 @@ pikaDeck.pdf = {};
 
             };
 
-            reader.readAsDataURL(xhr.response);
+            if (xhr.readyState === 4 && xhr.status === 404 && imgUrl.indexOf('_hires')) {
+
+                pikaDeck.pdf.imgToBase64x2(id, imgUrl.replace('_hires', ''), scope);
+
+            } else {
+
+                reader.readAsDataURL(xhr.response);
+
+            }
+
         };
 
-        xhr.open('GET', imgUrl);
+        xhr.open('GET', imgUrl, true);
 
         xhr.responseType = 'blob';
 
