@@ -88,13 +88,11 @@ pikaDeck.ctrl.index = {};
         // TODO: Ugh. Some of the cards in the DB do not include a rarity. So either need to live with it, or
         // Pull back all raritys and then remove common and uncommon cards post get. :(
         // Removing Generations and Evolutions as artwork is ugly ;P
-        standardSets = pikaDeck.removeFromArray(standardSets, 'g1');
-        standardSets = pikaDeck.removeFromArray(standardSets, 'xy12');
         standardSets = standardSets.join('|');
 
         return 'supertype=Pokemon|Trainer' +
-            '&subtype=GX|EX|Mega|Supporter' +
-            '&rarity=Rare%20Ultra|Rare%20Holo%20gx|Rare%20Holo%20EX' +
+            '&subtype=GX|Supporter' +
+            '&rarity=Rare%20Ultra|Rare%20Holo%20gx' +
             '&setCode=' + standardSets;
 
     };
