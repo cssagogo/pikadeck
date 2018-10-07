@@ -20,65 +20,67 @@ $card-count-text-shadow: rgba(0, 0, 0, .5);
 // ---------------------------------
 .card--tile,
 .card--aside {
-  animation-duration: .5s;
-  border-radius: 10px;
-  box-shadow: 0 2px 2px 0 $card-shadow-color;
-  //overflow: hidden;
-  position: relative;
-  transform: translateY(0);
-  transition: .35s cubic-bezier(.4, 0, .2, 1);
+    animation-duration: .5s;
+    border-radius: 10px;
+    box-shadow: 0 2px 2px 0 $card-shadow-color;
+    //overflow: hidden;
+    position: relative;
+    transform: translateY(0);
+    transition: .35s cubic-bezier(.4, 0, .2, 1);
 }
 
 .card--tile {
-  &:hover {
-    box-shadow: 0 6px 12px 0 $card-shadow-color;
-    transform: translateY(-5px);
-  }
-
-  .card__btn-group {
-    border-collapse: separate;
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-  }
-
-  .card__btn-group-btn {
-    background: $card-btn-background;
-    border-color: $card-btn-border;
-    color: $card-btn-text;
-    display: table-cell;
-    float: none;
-    width: 33.3%;
-
-    &:first-child {
-      width: 33.4%;
-    }
-
     &:hover {
-      background: $card-btn-background-hover;
-      border-color: $card-btn-border-hover;
-      color: $card-btn-text-hover;
+        box-shadow: 0 6px 12px 0 $card-shadow-color;
+        transform: translateY(-5px);
     }
 
-  }
+    .card__btn {
+        background: $card-btn-background;
+        border-color: $card-btn-border;
+        color: $card-btn-text;
 
-  .card__count {
-    background-image: url('/assets/img/cream_pixels/cream_pixels.png');
-    border: 1px solid darken($light-color, 10%);
-    box-shadow: 0 2px 2px 0 darken($card-shadow-color, 50%);
-    color: darken($light-color, 50%);
-    height: 2rem;
-    left: -.7rem;
-    line-height: 2;
-    position: absolute;
-    text-align: center;
-    top: 3rem;
-    transform: rotate(-7deg);
-    width: 2rem;
-  }
+        &:hover {
+            background: $card-btn-background-hover;
+            border-color: $card-btn-border-hover;
+            color: $card-btn-text-hover;
+        }
+    }
+
+    .card__btn-group {
+        width: 100%;
+    }
+
+    .card__btn-group-child {
+        width: 33.3%;
+
+        .card__btn {
+            width: 100%;
+        }
+
+        &:first-child {
+            width: 33.4%;
+        }
+
+    }
+
+    .card__count {
+        background-image: url('/assets/img/cream_pixels/cream_pixels.png');
+        border: 1px solid darken($light-color, 10%);
+        box-shadow: 0 2px 2px 0 darken($card-shadow-color, 50%);
+        color: darken($light-color, 50%);
+        height: 2rem;
+        left: -.7rem;
+        line-height: 2;
+        position: absolute;
+        text-align: center;
+        top: 3rem;
+        transform: rotate(-7deg);
+        width: 2rem;
+    }
 
 }
 
 .card--cream-pixels {
-  background-image: url('/assets/img/cream_pixels/cream_pixels.png');
+    background-image: url('/assets/img/cream_pixels/cream_pixels.png');
 }

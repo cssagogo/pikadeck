@@ -217,6 +217,11 @@ pikaDeck.events = {};
             pikaDeck.removeFromDeck(id);
         });
 
+        $(document).on('click', 'button[data-remove-all]', function() {
+            var id = $(this).data().removeAll;
+            pikaDeck.removeFromDeck(id, true);
+        });
+
         $(document).on('click', 'button[data-print]', function() {
             var id = $(this).data().print;
             pikaDeck.pdf.printPlaySet(id);

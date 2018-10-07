@@ -3,14 +3,14 @@
 
 .lazyload,
 .lazyloading {
-  opacity: 0;
+    opacity: 0;
 }
 
 .lazyload {
-  background: url('/assets/img/ajax-loader.gif');
+    background: url('/assets/img/ajax-loader.gif');
 }
 
 .lazyloaded {
-  opacity: 1;
-  transition: opacity 300ms;
+    opacity: 1;
+    transition: opacity 300ms;
 }

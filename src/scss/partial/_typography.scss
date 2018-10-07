@@ -3,20 +3,20 @@
 // ---------------------------------
 
 .ul-csv {
-  display: inline;
-  list-style: none;
-  padding: 0;
-
-  li {
     display: inline;
     list-style: none;
     padding: 0;
 
-    &:not(:last-of-type)::after {
-      content: ',';
-      padding-right: 5px;
-    }
+    li {
+        display: inline;
+        list-style: none;
+        padding: 0;
 
-  }
+        &:not(:last-of-type)::after {
+            content: ',';
+            padding-right: 5px;
+        }
+
+    }
 
 }

@@ -11,52 +11,52 @@ $logo-shadow: $shadow-color;
 // ---------------------------------
 
 .logo {
-  display: inline-block;
-  text-align: center;
+    display: inline-block;
+    text-align: center;
 
-  &__text {
-    color: $logo-text;
-    font-family: 'Ranchers', cursive;
-    font-size: 3rem;
-    font-weight: 400;
-    position: relative;
-    text-shadow: 1px 1px 8px $logo-shadow;
-    z-index: 2;
+    &__text {
+        color: $logo-text;
+        font-family: 'Ranchers', cursive;
+        font-size: 3rem;
+        font-weight: 400;
+        position: relative;
+        text-shadow: 1px 1px 8px $logo-shadow;
+        z-index: 2;
 
-  }
-
-  &__bg {
-    height: 100px;
-    margin-bottom: -63px;
-
-    path {
-      animation: .5s logo-filling linear forwards;
-      animation-delay: .5s;
-      fill-opacity: 0;
     }
 
-  }
+    &__bg {
+        height: 100px;
+        margin-bottom: -63px;
 
-  &:hover,
-  &:active {
-    text-decoration: none;
+        path {
+            animation: .5s logo-filling linear forwards;
+            animation-delay: .5s;
+            fill-opacity: 0;
+        }
 
-    .logo__text,
-    .logo__bg {
-      animation-duration: 1s;
-      animation-fill-mode: both;
-      animation-iteration-count: 2;
     }
 
-    .logo__text {
-      animation-name: logo-tada;
-    }
+    &:hover,
+    &:active {
+        text-decoration: none;
 
-    .logo__bg {
-      animation-name: bounce;
-    }
+        .logo__text,
+        .logo__bg {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+            animation-iteration-count: 2;
+        }
 
-  }
+        .logo__text {
+            animation-name: logo-tada;
+        }
+
+        .logo__bg {
+            animation-name: bounce;
+        }
+
+    }
 
 }
 
@@ -66,13 +66,13 @@ $logo-shadow: $shadow-color;
 
 @keyframes logo-filling {
 
-  0% {
-    fill-opacity: 0;
-  }
+    0% {
+        fill-opacity: 0;
+    }
 
-  100% {
-    fill-opacity: 1;
-  }
+    100% {
+        fill-opacity: 1;
+    }
 
 }
 
@@ -80,24 +80,24 @@ $logo-shadow: $shadow-color;
 
 @keyframes logo-tada {
 
-  from {
-    transform: scale3d(1, 1, 1);
-  }
+    from {
+        transform: scale3d(1, 1, 1);
+    }
 
-  10%, 20% {
-    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -2deg);
-  }
+    10%, 20% {
+        transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -2deg);
+    }
 
-  30%, 50%, 70%, 90% {
-    transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, 2deg);
-  }
+    30%, 50%, 70%, 90% {
+        transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, 2deg);
+    }
 
-  40%, 60%, 80% {
-    transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, -2deg);
-  }
+    40%, 60%, 80% {
+        transform: scale3d(1.05, 1.05, 1.05) rotate3d(0, 0, 1, -2deg);
+    }
 
-  to {
-    transform: scale3d(1, 1, 1);
-  }
+    to {
+        transform: scale3d(1, 1, 1);
+    }
 
 }

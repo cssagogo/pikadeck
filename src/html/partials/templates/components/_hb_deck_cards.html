@@ -9,15 +9,28 @@
             <div class="card__count rounded-circle">{{deckCount this}}x</div>
             <div class="card__btn-group btn-group mt-1" role="group" aria-label="...">
 
-                <button data-remove="{{this}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Remove from Deck">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                </button>
+                <div class="btn-group dropup card__btn-group-child">
+                  <button type="button" class="card__btn btn btn--icon-tada dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <button data-add="{{this}}" class="dropdown-item" type="button">
+                      <i class="fa fa-arrow-up" aria-hidden="true"></i> Add One
+                    </button>
+                    <button data-remove="{{this}}" class="dropdown-item" type="button">
+                      <i class="fa fa-arrow-down" aria-hidden="true"></i> Remove One
+                    </button>
+                    <button data-remove-all="{{this}}" class="dropdown-item" type="button">
+                      <i class="fa fa-trash-o" aria-hidden="true"></i> Remove All
+                    </button>
+                  </div>
+                </div>
 
-                <button data-print="{{this}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="tooltip" title="Print Play Set">
+                <button data-print="{{this}}" type="button" class="card__btn card__btn-group-child btn btn--icon-tada" data-toggle="tooltip" title="Print Play Set">
                     <i class="fa fa-cloud-download" aria-hidden="true"></i>
                 </button>
 
-                <button data-zoom="{{this}}" type="button" class="card__btn-group-btn btn btn--icon-tada" data-toggle="modal" data-target=".modal--zoomed">
+                <button data-zoom="{{this}}" type="button" class="card__btn card__btn-group-child btn btn--icon-tada" data-toggle="modal" data-target=".modal--zoomed">
                     <i class="fa fa-search-plus" aria-hidden="true"></i>
                 </button>
 

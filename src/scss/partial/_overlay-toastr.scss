@@ -11,50 +11,50 @@ $toast-warning: #f89406;
 // ---------------------------------
 
 #toast-container > div {
-  color: $toast-text;
-  opacity: .9;
+    color: $toast-text;
+    opacity: .9;
 }
 
 #toast-container > .toast {
-  background-color: $light-color;
-  background-image: none !important;
+    background-color: $light-color;
+    background-image: none !important;
 }
 
 #toast-container > .toast::before {
-  float: left;
-  font-family: FontAwesome;
-  font-size: 24px;
-  line-height: 18px;
-  margin-left: -1.4em;
-  margin-top: 4px;
-  position: relative;
+    float: left;
+    font-family: FontAwesome;
+    font-size: 24px;
+    line-height: 18px;
+    margin-left: -1.4em;
+    margin-top: 4px;
+    position: relative;
 }
 
 #toast-container > .toast-warning::before {
-  color: $toast-warning;
-  content: '\f071';
+    color: $toast-warning;
+    content: '\f071';
 }
 
 #toast-container > .toast-error::before {
-  color: $toast-error;
-  content: '\f06a';
+    color: $toast-error;
+    content: '\f06a';
 }
 
 #toast-container > .toast-info::before {
-  color: $toast-info;
-  content: '\f05a';
+    color: $toast-info;
+    content: '\f05a';
 }
 
 #toast-container > .toast-success::before {
-  color: $toast-success;
-  content: '\f058';
+    color: $toast-success;
+    content: '\f058';
 }
 
 .toast-close-button {
-  color: $toast-text;
+    color: $toast-text;
 }
 
 .toast-close-button:hover,
 .toast-close-button:focus {
-  color: $dark-color;
+    color: $dark-color;
 }

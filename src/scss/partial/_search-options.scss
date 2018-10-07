@@ -10,14 +10,14 @@ $search-options-label: $light-color;
 // ---------------------------------
 
 .search-options {
-  background: $search-options-background;
-  border: $search-options-border;
-  padding: 10px;
+    background: $search-options-background;
+    border: $search-options-border;
+    padding: 10px;
 
-  label {
-    color: $search-options-label;
-    margin-bottom: 0;
-  }
+    label {
+        color: $search-options-label;
+        margin-bottom: 0;
+    }
 
 }
 
@@ -28,16 +28,16 @@ $search-options-label: $light-color;
 
 .img-set {
 
-  span {
-    display: inline-block;
-    width: 16px;
-  }
+    span {
+        display: inline-block;
+        width: 16px;
+    }
 
-  img {
-    max-height: 16px;
-    max-width: 16px;
-    vertical-align: baseline;
-  }
+    img {
+        max-height: 16px;
+        max-width: 16px;
+        vertical-align: baseline;
+    }
 
 }
 

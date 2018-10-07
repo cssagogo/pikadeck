@@ -15,14 +15,22 @@ var pikaDeck = pikaDeck || {};
 
     };
 
-    this.removeFromDeck = function ($target) {
+    this.removeFromDeck = function ($target, removeAll) {
 
         var deckList = pikaDeck.store.get('deckList');
         var index = deckList.indexOf($target);
 
         if (index > -1 && deckList.length > 1) {
 
-            deckList.splice(index, 1);
+            if (removeAll) {
+                for (var i = deckList.length - 1; i >= 0; i--) {
+                    if (deckList[i] === $target) {
+                        deckList.splice(i, 1);
+                    }
+                }
+            } else {
+                deckList.splice(index, 1);
+            }
 
             pikaDeck.store.push('deckList', deckList);
 
@@ -70,6 +78,10 @@ var pikaDeck = pikaDeck || {};
         deckList.push(id);
 
         pikaDeck.store.push('deckList', deckList);
+
+        if (pikaDeck.store.get().route === 'deck') {
+            pikaDeck.ctrl.deck.view();
+        }
 
         inCart = inCart + 1;
 
