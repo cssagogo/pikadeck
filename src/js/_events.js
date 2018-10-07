@@ -150,7 +150,10 @@ pikaDeck.events = {};
 
     var _clickEvents = function () {
 
-
+        $(document).on('click', '#add-standard-sets', function (e) {
+            e.preventDefault();
+            $('#poke_set').val(pikaDeck.store.get().tournamentSets.standard).trigger('change');
+        });
 
         $(document).on('click', 'button#search_cards', function() {
             pikaDeck.ctrl.index.view();

@@ -142,6 +142,12 @@ var pikaDeck = pikaDeck || {};
 
         for (var i = 0; i < data.length; i++) {
 
+            // TODO: This is a temp hack for an error in the pokemon TCG api.
+            if (data[i].code === 'xyp') {
+                expanded.push(data[i].code);
+                continue;
+            }
+
             if (data[i].standardLegal) {
                 standard.push(data[i].code);
             }
